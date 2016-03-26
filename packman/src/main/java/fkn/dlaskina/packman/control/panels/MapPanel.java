@@ -30,11 +30,10 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import fkn.dlaskina.packman.control.serial.PortReaderListener;
 import fkn.dlaskina.util.SettingMenuItem;
 import fkn.dlaskina.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
 
 
 /**
@@ -42,19 +41,14 @@ import org.slf4j.LoggerFactory;
  * @author VLaskin
  * @version 1.0
  */
-public class MapPanel extends JPanel
-    implements MouseMotionListener, KeyListener, FocusListener, MouseListener, MouseWheelListener, PortReaderListener {
+public class MapPanel extends JPanel implements KeyListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MapPanel.class);
+    private static final Logger LOG = LogManager.getLogger(MapPanel.class);
 
     /** серый цвет фона. */
     public static final Color PANEL_GRAY_COLOR = new Color(220, 220, 220);
-    /** цвет фона для выбранной панели. */
-    public static final Color PANEL_FOCUSED_COLOR = new Color(255, 220, 220);
-    /** светло-серый цвет фона. */
-    public static final Color PANEL_LIGHT_GRAY_COLOR = new Color(240, 240, 240);
     /** Размер зарамочного оформления. */
-    private static final int SIZE_BORDER = 15;
+    //private static final int SIZE_BORDER = 15;
     /** ссылка на MainFrame. */
     private MainFrame mainFrame = null;
 
@@ -71,18 +65,6 @@ public class MapPanel extends JPanel
     /** Если false, то принципиально не перерисовываем. */
     AtomicBoolean isAutoDraw = new AtomicBoolean(true);
 
-    /** Настройка выпадающего меню (пока только заготовка). */
-    private SettingMenuItem[] setPopUpMenu = {
-        new SettingMenuItem(
-            "Добавить животное", "openFile.gif", "Добавить выделенное животное в данное место",
-            MapPanel.this::addElement, null
-        ),
-    };
-
-    private void addElement(final ActionEvent actionEvent) {
-
-    }
-
     /**
      * Конструктор.
      */
@@ -91,13 +73,8 @@ public class MapPanel extends JPanel
             setBackground(Color.white);
             setBorder(BorderFactory.createLoweredBevelBorder());
             setLayout(new BorderLayout());
-            addMouseMotionListener(this);
-            addMouseListener(this);
-            addMouseWheelListener(this);
             addKeyListener(this);
-            addFocusListener(this);
-            setFocusable(true);
-            createPopupMenu();
+            LOG.info("загрузили MapPanel");
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
         }
@@ -109,32 +86,9 @@ public class MapPanel extends JPanel
      */
     public void paint(final Graphics gr) {
         final Dimension dim = getSize();
-        if (focused) {
-            gr.setColor(MapPanel.PANEL_FOCUSED_COLOR);
-        } else {
-            gr.setColor(MapPanel.PANEL_GRAY_COLOR);
-        }
-        gr.fillRect(0, 0, dim.width, dim.height);
-        gr.draw3DRect(
-            SIZE_BORDER,
-            SIZE_BORDER,
-            dim.width - (SIZE_BORDER * 2) - 1,
-            dim.height - (SIZE_BORDER * 2) - 1,
-            false
-        );
         gr.setColor(MapPanel.PANEL_GRAY_COLOR);
-        gr.fillRect(
-            SIZE_BORDER + 1,
-            SIZE_BORDER + 1,
-            dim.width - (SIZE_BORDER * 2) - 2,
-            dim.height - (SIZE_BORDER * 2) - 2
-        );
-        gr.clipRect(
-            SIZE_BORDER + 1,
-            SIZE_BORDER + 1,
-            dim.width - (SIZE_BORDER * 2) - 2,
-            dim.height - (SIZE_BORDER * 2) - 2
-        );
+        gr.fillRect(0, 0, dim.width, dim.height);
+
         if (isRedrawMap || grBackgroundImage == null) {
             grBackgroundImage = new BufferedImage(
                 dim.width, dim.height, BufferedImage.TYPE_INT_RGB
@@ -182,12 +136,6 @@ public class MapPanel extends JPanel
      */
     public void keyPressed(final KeyEvent e) {
         final Dimension dim = this.getBounds().getSize();
-        double multi;
-        if (e.isControlDown()) {
-            multi = 0.3;
-        } else {
-            multi = 0.1;
-        }
         switch (e.getKeyCode()) {
             case KeyEvent.VK_NUMPAD4 :
             case KeyEvent.VK_LEFT :
@@ -221,7 +169,6 @@ public class MapPanel extends JPanel
                 break;
         }
         if (isRedrawMap) {
-            showCoordinates(dim.width / 2, dim.height / 2);
             this.repaint();
         }
     }
@@ -232,153 +179,6 @@ public class MapPanel extends JPanel
      * a component.
      */
     public void keyReleased(final KeyEvent e) {
-    }
-
-    /**
-     * Invoked when the mouse wheel is rotated.
-     * @see MouseWheelEvent
-     * @param e MouseWheelEvent
-     */
-    public void mouseWheelMoved(final MouseWheelEvent e) {
-        final Dimension dim = this.getBounds().getSize();
-        //final int modif = e.getModifiersEx();
-        final int rotation = e.getWheelRotation();
-        Point mouspnt = e.getPoint();
-
-        //isRedrawMap = true;
-        showCoordinates(mouspnt.x, mouspnt.y);
-        this.repaint();
-    }
-
-    @Override
-    public void mouseDragged(final MouseEvent e) {
-    }
-
-    @Override
-    public void mouseMoved(final MouseEvent e) {
-        showCoordinates(e.getX(), e.getY());
-    }
-
-    /**
-     * Выводим координаты в StatusString.
-     * @param xScreen экранная координата X
-     * @param yScreen экранная координата Y
-     */
-    public void showCoordinates(final int xScreen, final int yScreen) {
-        // save current coordinates
-        currentXScreen = xScreen;
-        currentYScreen = yScreen;
-        final StringBuilder sb = new StringBuilder();
-        sb.append(xScreen).append("  ");
-        sb.append(yScreen);
-        outStatus(sb.toString(), 2);
-    }
-
-    /**
-     * Invoked when a mouse button has been pressed on a component.
-     * @param e MouseEvent
-     */
-    public void mousePressed(final MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1) {
-            boolean isRedraw = false;
-            final Rectangle rec = this.getBounds();
-            final Point mouspnt = e.getPoint();
-
-            if ((mouspnt.x < rec.x + SIZE_BORDER)
-                || (mouspnt.x > rec.x + rec.width - SIZE_BORDER)
-                || (mouspnt.y < rec.y + SIZE_BORDER)
-                || (mouspnt.y > rec.y + rec.height - SIZE_BORDER)
-            ) {
-                // Попали в обрамляющее поле. Переходим по стрелке
-                final Point cntrpnt = new Point(
-                    (rec.x + rec.width) / 2,
-                    (rec.y + rec.height) / 2
-                );
-                //outStatus("Move v");
-                requestFocusInWindow();
-                isRedrawMap = true;
-                isRedraw = true;
-            //} else {
-                // Попали в поле карты
-            }
-            if (isRedraw) {
-                showCoordinates(mouspnt.x, mouspnt.y);
-                repaint();
-            }
-        }
-    }
-
-    /**
-     * Invoked when a mouse button has been released on a component.
-     * @param e MouseEvent
-     */
-    public void mouseReleased(final MouseEvent e) {
-//        outStatus(e.paramString());
-    }
-
-    /**
-     * Invoked when the mouse button has been clicked (pressed
-     * and released) on a component.
-     * @param e MouseEvent
-     */
-    public void mouseClicked(final MouseEvent e) {
-//        outStatus(e.paramString());
-    }
-
-    /**
-     * Invoked when the mouse enters a component.
-     * @param e MouseEvent
-     */
-    public void mouseEntered(final MouseEvent e) {
-//        outStatus(e.paramString());
-    }
-
-    /**
-     * Invoked when the mouse exits a component.
-     * @param e MouseEvent
-     */
-    public void mouseExited(final MouseEvent e) {
-//        outStatus(e.paramString());
-    }
-
-    /**
-     * создаём и настраиваем выпадающее меню.
-     */
-    public void createPopupMenu() {
-
-        // создаём и настраиваем выпадающее меню
-        final JPopupMenu popup = new JPopupMenu();
-        for (SettingMenuItem aSetMenu : setPopUpMenu) {
-            popup.add(Util.createImageMenuItem(aSetMenu));
-        }
-
-        //Add listener to the text area so the popup menu can come up.
-        final MouseListener popupListener = new PopupListener(popup);
-        this.addMouseListener(popupListener);
-    }
-
-    /**
-     * Invoked when a component gains the keyboard focus.
-     * @param e A low-level event
-     */
-    public void focusGained(final FocusEvent e) {
-        focused = true;
-        final boolean oldRedrawMap = isRedrawMap;
-        isRedrawMap = false;
-        repaint();
-        isRedrawMap = oldRedrawMap;
-    }
-
-    /**
-     * Invoked when a component loses the keyboard focus.
-     * @param e A low-level event
-     */
-    public void focusLost(final FocusEvent e) {
-        focused = false;
-        final boolean oldRedrawMap = isRedrawMap;
-        isRedrawMap = false;
-        repaint();
-        isRedrawMap = oldRedrawMap;
     }
 
     /**
@@ -395,15 +195,5 @@ public class MapPanel extends JPanel
      */
     public void setAutoDraw(final boolean autoDraw) {
         isAutoDraw.getAndSet(autoDraw);
-    }
-
-    @Override
-    public void portReaderCarriageReturn(final String string) {
-
-    }
-
-    @Override
-    public void portReaderTrash(final String string) {
-
     }
 }

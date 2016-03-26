@@ -28,8 +28,8 @@ import fkn.dlaskina.component.StatusBar;
 import fkn.dlaskina.util.SettingMenuItem;
 import fkn.dlaskina.util.SettingToolBarItem;
 import fkn.dlaskina.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MainFrame extends JFrame implements ComponentListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MainFrame.class);
+    private static final Logger LOG = LogManager.getLogger(MainFrame.class);
     private static final Color WATCH_FOR_SELECTED_ON = new Color(200, 150, 150);
     private static final Color WATCH_FOR_SELECTED_OFF = new Color(240, 240, 240);
 
@@ -49,8 +49,6 @@ public class MainFrame extends JFrame implements ComponentListener {
     private StatusBar jStatusBar = new StatusBar(STATUS_BAR_SIZES);
     /** Панель с картой. */
     private MapPanel mapPanel = new MapPanel();
-    /** панель конфигурации. */
-    private ConfigPanel configPanel;
 
     /** ширина кнопки на главной панели инструментов. */
     private static final int TOOL_BAR_WIDTH = 27;
@@ -112,8 +110,6 @@ public class MainFrame extends JFrame implements ComponentListener {
                 toolBar.add(Util.createImageButton(aSetToolBar));
             }
             /* разделительная панелька */
-            final JSplitPane splitPane = new JSplitPane();
-            splitPane.setContinuousLayout(true);
             mapPanel.setMainFrame(this);
             mapPanel.addComponentListener(this);
             //Make textField get the focus whenever frame is activated.
@@ -124,20 +120,13 @@ public class MainFrame extends JFrame implements ComponentListener {
             });
             this.setJMenuBar(menuBar);
             contentPane.add(toolBar, BorderLayout.NORTH);
+            contentPane.add(mapPanel, BorderLayout.CENTER);
             contentPane.add(jStatusBar, BorderLayout.SOUTH);
-            contentPane.add(splitPane, BorderLayout.CENTER);
-            configPanel = new ConfigPanel();
-            configPanel.setMainFrame(this);
 
-            splitPane.add(configPanel, JSplitPane.RIGHT);
-            splitPane.add(mapPanel, JSplitPane.LEFT);
-            //splitPane.setLastDividerLocation(size.width - 300);
-            //splitPane.setDividerLocation(size.width - 300);
-            splitPane.setResizeWeight(1);
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
         }
-    } // constructor::MainFrame()
+    }
 
     /**
      * File | Exit action performed.
@@ -173,10 +162,6 @@ public class MainFrame extends JFrame implements ComponentListener {
      */
     protected void processWindowEvent(final WindowEvent e) {
         super.processWindowEvent(e);
-/*
-        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-        }
-*/
     }
 
     /**
@@ -194,14 +179,6 @@ public class MainFrame extends JFrame implements ComponentListener {
      */
     public MapPanel getMapPanel() {
         return mapPanel;
-    }
-
-    /**
-     * Вернуть панель конфигурации.
-     * @return панель конфигурации
-     */
-    public ConfigPanel getConfigPanel() {
-        return configPanel;
     }
 
     /**

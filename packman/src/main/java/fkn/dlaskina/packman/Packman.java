@@ -15,22 +15,22 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import fkn.dlaskina.packman.control.panels.MainFrame;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * The Class packmanControl.
  * @author Vladimir Laskin
  * @version 1.0
  */
-public final class packmanControl {
+public final class Packman {
 
-    private static final Logger LOG = LoggerFactory.getLogger(packmanControl.class);
+    private static final Logger LOG = LogManager.getLogger(Packman.class);
 
     /**
      * Construct the application.
      */
-    private packmanControl() {
+    private Packman() {
 
         final MainFrame frame = new MainFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -69,6 +69,6 @@ public final class packmanControl {
             LOG.error(ex.getMessage(), ex);
         }
 
-        new packmanControl();
+        new Packman();
     }
 }

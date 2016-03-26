@@ -23,8 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import fkn.dlaskina.util.Util;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MainFrameAboutBox extends JDialog implements ActionListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MainFrameAboutBox.class);
+    private static final Logger LOG = LogManager.getLogger(MainFrameAboutBox.class);
 
     private JButton button1 = new JButton();
 
