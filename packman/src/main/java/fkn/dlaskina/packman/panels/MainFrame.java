@@ -6,22 +6,18 @@
  * Copyright (c) 2012-2015 LasGIS Company. All Rights Reserved.
  */
 
-package fkn.dlaskina.packman.control.panels;
+package fkn.dlaskina.packman.panels;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import fkn.dlaskina.component.StatusBar;
@@ -37,11 +33,9 @@ import org.apache.log4j.LogManager;
  * @author VLaskin
  * @version 1.0
  */
-public class MainFrame extends JFrame implements ComponentListener {
+public class MainFrame extends JFrame/* implements ComponentListener*/ {
 
     private static final Logger LOG = LogManager.getLogger(MainFrame.class);
-    private static final Color WATCH_FOR_SELECTED_ON = new Color(200, 150, 150);
-    private static final Color WATCH_FOR_SELECTED_OFF = new Color(240, 240, 240);
 
     /** размеры строки состояния. */
     private static final int[] STATUS_BAR_SIZES = new int[] {0, 100, 200};
@@ -97,7 +91,7 @@ public class MainFrame extends JFrame implements ComponentListener {
             final JPanel contentPane = (JPanel) this.getContentPane();
             contentPane.setLayout(new BorderLayout());
             this.setSize(size);
-            this.setTitle("packmanControl packman support");
+            this.setTitle("Packman First Blood");
 
             /* настраиваем главное меню */
             final JMenuBar menuBar = new JMenuBar();
@@ -109,15 +103,9 @@ public class MainFrame extends JFrame implements ComponentListener {
             for (SettingToolBarItem aSetToolBar : toolBarSetting) {
                 toolBar.add(Util.createImageButton(aSetToolBar));
             }
-            /* разделительная панелька */
+
             mapPanel.setMainFrame(this);
-            mapPanel.addComponentListener(this);
-            //Make textField get the focus whenever frame is activated.
-            this.addWindowFocusListener(new WindowAdapter() {
-                public void windowGainedFocus(final WindowEvent e) {
-                    mapPanel.requestFocusInWindow();
-                }
-            });
+            //mapPanel.addComponentListener(this);
             this.setJMenuBar(menuBar);
             contentPane.add(toolBar, BorderLayout.NORTH);
             contentPane.add(mapPanel, BorderLayout.CENTER);

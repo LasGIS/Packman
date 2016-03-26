@@ -14,7 +14,7 @@ import javax.swing.WindowConstants;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import fkn.dlaskina.packman.control.panels.MainFrame;
+import fkn.dlaskina.packman.panels.MainFrame;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

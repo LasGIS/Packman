@@ -6,32 +6,19 @@
  * Copyright (c) 2012-2015 LasGIS Company. All Rights Reserved.
  */
 
-package fkn.dlaskina.packman.control.panels;
+package fkn.dlaskina.packman.panels;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import fkn.dlaskina.util.SettingMenuItem;
-import fkn.dlaskina.util.Util;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 
@@ -47,8 +34,6 @@ public class MapPanel extends JPanel implements KeyListener {
 
     /** серый цвет фона. */
     public static final Color PANEL_GRAY_COLOR = new Color(220, 220, 220);
-    /** Размер зарамочного оформления. */
-    //private static final int SIZE_BORDER = 15;
     /** ссылка на MainFrame. */
     private MainFrame mainFrame = null;
 
@@ -56,12 +41,6 @@ public class MapPanel extends JPanel implements KeyListener {
     private boolean isRedrawMap = true;
     /** сохраненное изображение. */
     private BufferedImage grBackgroundImage = null;
-    /** признак, что панель в фокусе. */
-    private boolean focused = false;
-    /** Текущая мышковая координата X для показа в инфо. */
-    int currentXScreen;
-    /** Текущая мышковая координата Y для показа в инфо. */
-    int currentYScreen;
     /** Если false, то принципиально не перерисовываем. */
     AtomicBoolean isAutoDraw = new AtomicBoolean(true);
 

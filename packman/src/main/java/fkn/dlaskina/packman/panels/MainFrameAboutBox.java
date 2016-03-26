@@ -6,7 +6,7 @@
  * Copyright (c) 2012-2015 LasGIS Company. All Rights Reserved.
  */
 
-package fkn.dlaskina.packman.control.panels;
+package fkn.dlaskina.packman.panels;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
