@@ -21,11 +21,11 @@ import java.awt.*;
 public final class Matrix {
 
     /** размер матрицы по вертикали (низ - ноль). */
-    public static final int MATRIX_SIZE_X = 20; // ResourceLoader.getInteger("matrix.latitude.size");
+    public static final int MATRIX_SIZE_X = 16; // ResourceLoader.getInteger("matrix.latitude.size");
     /** размер матрицы по горизонтали (лево - ноль). */
-    public static final int MATRIX_SIZE_Y = 20; //ResourceLoader.getInteger("matrix.longitude.size");
+    public static final int MATRIX_SIZE_Y = 10; //ResourceLoader.getInteger("matrix.longitude.size");
     /** размер элементарной ячейки в пикселях. */
-    public static final int CELL_SIZE = 20;
+    public static final int CELL_SIZE = 30;
     /** сама матрица. */
     private final Cell[][] cells = new Cell[MATRIX_SIZE_X][MATRIX_SIZE_Y];
     /** singleton матрицы. */
@@ -75,5 +75,9 @@ public final class Matrix {
                 cell.paint(gr);
             }
         }
+    }
+
+    public Dimension getSize() {
+        return new Dimension(MATRIX_SIZE_X * CELL_SIZE, MATRIX_SIZE_Y * CELL_SIZE);
     }
 }

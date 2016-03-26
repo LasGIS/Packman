@@ -12,7 +12,7 @@ public class Enemy extends Elemental {
     private static final Color FILL_COLOR = new Color(255, 0, 0);
     private static final Color BOUND_COLOR = new Color(125, 0, 0);
 
-    protected Enemy() {
+    public Enemy() {
         super(ElementalType.Enemy);
     }
 

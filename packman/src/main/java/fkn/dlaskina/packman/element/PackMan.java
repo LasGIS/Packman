@@ -3,7 +3,7 @@ package fkn.dlaskina.packman.element;
 import java.awt.*;
 
 /**
- * todo
+ * Definition of the PackMan class
  * @author VLaskin
  * @since 26.03.2016.
  */
@@ -20,8 +20,8 @@ public class PackMan extends Elemental {
     @Override
     public void paint(Graphics gr, Rectangle rect) {
         gr.setColor(FILL_COLOR);
-        gr.fillArc(rect.x + BORDER, rect.y + BORDER, rect.width - BORDER * 2, rect.height - BORDER * 2, 30, 330);
+        gr.fillArc(rect.x + BORDER, rect.y + BORDER, rect.width - BORDER * 2, rect.height - BORDER * 2, 60, 300);
         gr.setColor(BOUND_COLOR);
-        gr.drawArc(rect.x + BORDER, rect.y + BORDER, rect.width - BORDER * 2, rect.height - BORDER * 2, 30, 330);
+        gr.drawArc(rect.x + BORDER, rect.y + BORDER, rect.width - BORDER * 2, rect.height - BORDER * 2, 60, 300);
     }
 }

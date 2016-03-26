@@ -17,9 +17,7 @@ import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 import fkn.dlaskina.component.StatusBar;
 import fkn.dlaskina.util.SettingMenuItem;
@@ -34,7 +32,7 @@ import org.apache.log4j.LogManager;
  * @author VLaskin
  * @version 1.0
  */
-public class MainFrame extends JFrame/* implements ComponentListener*/ {
+public class MainFrame extends JFrame implements ComponentListener {
 
     private static final Logger LOG = LogManager.getLogger(MainFrame.class);
 
@@ -110,7 +108,7 @@ public class MainFrame extends JFrame/* implements ComponentListener*/ {
             final JSplitPane splitPane = new JSplitPane();
             splitPane.setContinuousLayout(true);
             mapPanel.setMainFrame(this);
-            //mapPanel.addComponentListener(this);
+            mapPanel.addComponentListener(this);
             this.setJMenuBar(menuBar);
             contentPane.add(toolBar, BorderLayout.NORTH);
             contentPane.add(jStatusBar, BorderLayout.SOUTH);
@@ -123,6 +121,7 @@ public class MainFrame extends JFrame/* implements ComponentListener*/ {
             //splitPane.setLastDividerLocation(size.width - 300);
             //splitPane.setDividerLocation(size.width - 300);
             splitPane.setResizeWeight(1);
+            mapPanel.requestFocusInWindow();
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
         }

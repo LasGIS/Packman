@@ -9,6 +9,7 @@
 package fkn.dlaskina.packman.map;
 
 import fkn.dlaskina.packman.element.Elemental;
+import fkn.dlaskina.packman.element.Enemy;
 import fkn.dlaskina.packman.element.PackMan;
 import fkn.dlaskina.packman.element.Surprise;
 
@@ -162,11 +163,13 @@ public class Cell {
         return "Cell{X=" + indX + ", Y=" + indY + '}';
     }
 
-    final Elemental test = new Surprise();
+    private static final Elemental[] test = {new PackMan(), new Surprise(), new Enemy(), new Surprise()};
+    private static int TEST_NUM = 0;
 
     public void paint(Graphics gr) {
         final Rectangle rect = new Rectangle(indX * CELL_SIZE, indY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        test.paint(gr, rect);
+        test[TEST_NUM].paint(gr, rect);
+        TEST_NUM = TEST_NUM == 3 ? 0 : TEST_NUM + 1;
         for (Elemental elm : elements) {
             elm.paint(gr, rect);
         }
