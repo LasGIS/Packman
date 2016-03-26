@@ -8,29 +8,29 @@
 
 package fkn.dlaskina.packman;
 
+import fkn.dlaskina.packman.panels.MainFrame;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import fkn.dlaskina.packman.panels.MainFrame;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 /**
- * The Class packmanControl.
+ * PackMan runs in cells of Peace, with a keyboard controls, eats prizes and dodging enemies.
  * @author Vladimir Laskin
  * @version 1.0
  */
-public final class Packman {
+public final class Run {
 
-    private static final Logger LOG = LogManager.getLogger(Packman.class);
+    private static final Logger LOG = LogManager.getLogger(Run.class);
 
     /**
      * Construct the application.
      */
-    private Packman() {
+    private Run() {
 
         final MainFrame frame = new MainFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -69,6 +69,6 @@ public final class Packman {
             LOG.error(ex.getMessage(), ex);
         }
 
-        new Packman();
+        new Run();
     }
 }

@@ -11,6 +11,7 @@ package fkn.dlaskina.packman.panels;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -43,6 +44,8 @@ public class MainFrame extends JFrame/* implements ComponentListener*/ {
     private StatusBar jStatusBar = new StatusBar(STATUS_BAR_SIZES);
     /** Панель с картой. */
     private MapPanel mapPanel = new MapPanel();
+    /** панель конфигурации. */
+    private ConfigPanel configPanel;
 
     /** ширина кнопки на главной панели инструментов. */
     private static final int TOOL_BAR_WIDTH = 27;
@@ -91,7 +94,7 @@ public class MainFrame extends JFrame/* implements ComponentListener*/ {
             final JPanel contentPane = (JPanel) this.getContentPane();
             contentPane.setLayout(new BorderLayout());
             this.setSize(size);
-            this.setTitle("Packman First Blood");
+            this.setTitle("Run First Blood");
 
             /* настраиваем главное меню */
             final JMenuBar menuBar = new JMenuBar();
@@ -103,14 +106,23 @@ public class MainFrame extends JFrame/* implements ComponentListener*/ {
             for (SettingToolBarItem aSetToolBar : toolBarSetting) {
                 toolBar.add(Util.createImageButton(aSetToolBar));
             }
-
+            /* разделительная панелька */
+            final JSplitPane splitPane = new JSplitPane();
+            splitPane.setContinuousLayout(true);
             mapPanel.setMainFrame(this);
             //mapPanel.addComponentListener(this);
             this.setJMenuBar(menuBar);
             contentPane.add(toolBar, BorderLayout.NORTH);
-            contentPane.add(mapPanel, BorderLayout.CENTER);
             contentPane.add(jStatusBar, BorderLayout.SOUTH);
+            contentPane.add(splitPane, BorderLayout.CENTER);
+            configPanel = new ConfigPanel();
+            configPanel.setMainFrame(this);
 
+            splitPane.add(configPanel, JSplitPane.RIGHT);
+            splitPane.add(mapPanel, JSplitPane.LEFT);
+            //splitPane.setLastDividerLocation(size.width - 300);
+            //splitPane.setDividerLocation(size.width - 300);
+            splitPane.setResizeWeight(1);
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
         }
@@ -167,6 +179,14 @@ public class MainFrame extends JFrame/* implements ComponentListener*/ {
      */
     public MapPanel getMapPanel() {
         return mapPanel;
+    }
+
+    /**
+     * Вернуть панель конфигурации.
+     * @return панель конфигурации
+     */
+    public ConfigPanel getConfigPanel() {
+        return configPanel;
     }
 
     /**

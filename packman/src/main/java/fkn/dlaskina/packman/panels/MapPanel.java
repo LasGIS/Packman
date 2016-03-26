@@ -19,6 +19,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import fkn.dlaskina.packman.map.Matrix;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 
@@ -75,6 +76,7 @@ public class MapPanel extends JPanel implements KeyListener {
             final Graphics bckGr = grBackgroundImage.getGraphics();
             bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
             bckGr.fillRect(0, 0, dim.width, dim.height);
+            Matrix.getMatrix().paint(bckGr);
             isRedrawMap = false;
         }
         gr.drawImage(grBackgroundImage, 0, 0, dim.width, dim.height, null);
