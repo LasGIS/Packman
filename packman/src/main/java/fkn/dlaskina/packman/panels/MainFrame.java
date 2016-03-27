@@ -188,37 +188,19 @@ public class MainFrame extends JFrame implements ComponentListener {
         return configPanel;
     }
 
-    /**
-     * Invoked when the component's size changes.
-     * @param e event which indicates that a component moved
-     */
+    @Override
     public void componentResized(final ComponentEvent e) {
         if (e.getComponent().equals(mapPanel)) {
             mapPanel.setRedrawMap(true);
         }
     }
 
-    /**
-     * Invoked when the component's position changes.
-     * @param e event which indicates that a component moved
-     */
-    public void componentMoved(final ComponentEvent e) {
+    @Override
+    public void componentMoved(final ComponentEvent e) {}
 
-    }
+    @Override
+    public void componentShown(final ComponentEvent e) {}
 
-    /**
-     * Invoked when the component has been made visible.
-     * @param e event which indicates that a component moved
-     */
-    public void componentShown(final ComponentEvent e) {
-
-    }
-
-    /**
-     * Invoked when the component has been made invisible.
-     * @param e event which indicates that a component moved
-     */
-    public void componentHidden(final ComponentEvent e) {
-
-    }
+    @Override
+    public void componentHidden(final ComponentEvent e) {}
 }

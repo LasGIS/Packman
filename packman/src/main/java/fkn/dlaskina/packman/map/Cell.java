@@ -37,8 +37,8 @@ public class Cell {
 
     /**
      * Создание ячейки по нижнему левому углу.
-     * @param indexX индекс ячейки по широте (от низа - юг)
-     * @param indexY индекс ячейки по долготе (от левого края - запад)
+     * @param indexX индекс ячейки (справа - налево)
+     * @param indexY индекс ячейки (сверху - вниз)
      */
     public Cell(final int indexX, final int indexY) {
         this.indX = indexX;
@@ -46,16 +46,14 @@ public class Cell {
     }
 
     /**
-     * Вернуть индекс ячейки по широте (от низа - юг).
-     * @return индекс ячейки по широте
+     * @return индекс ячейки (справа - налево)
      */
     public int getIndX() {
         return indX;
     }
 
     /**
-     * Вернуть индекс ячейки по долготе (от левого края - запад).
-     * @return индекс ячейки по долготе
+     * @return индекс ячейки (сверху - вниз)
      */
     public int getIndY() {
         return indY;
@@ -63,23 +61,13 @@ public class Cell {
 
     /**
      * Вернуть ячейку, по смещениям относительно данной ячейки.
-     * @param delX смещение по x
-     * @param delY смещение по y
+     * @param delX смещение по оси X
+     * @param delY смещение по оси Y
      * @return ячейка, смещенная от этой
      */
-    public final Cell offset(final int delX, final int delY) {
-        return this.getCell(indX + delX, indY + delY);
-    }
-
-    /**
-     * Вернуть ячейку, по смещениям относительно данной ячейки.
-     * @param delX смещение по оси X (положительное смещение вверх)
-     * @param delY смещение по оси Y (положительное смещение вправо)
-     * @return ячейка
-     */
     public final Cell getCell(final int delX, final int delY) {
-        final int nx = (Matrix.MATRIX_SIZE_X + indX + delX) % Matrix.MATRIX_SIZE_X;
-        final int ny = (Matrix.MATRIX_SIZE_Y + indY + delY) % Matrix.MATRIX_SIZE_Y;
+        final int nx = indX + delX;
+        final int ny = indY + delY;
         return Matrix.getMatrix().getCell(nx, ny);
     }
 
@@ -101,14 +89,6 @@ public class Cell {
     }
 
     /**
-     * возвращаем Уникальный ключ ячейки.
-     * @return ключ ячейки
-     */
-    public String getKey() {
-        return "" + getIndX() + "_" + getIndY();
-    }
-
-    /**
      * Получить доступ к животным в данной ячейке.
      * Добавлять или удалять животных можно только через Cell.
      * @return список животных в этой ячейке
@@ -124,7 +104,6 @@ public class Cell {
      * @return <tt>true</tt> if the element was added
      */
     public boolean addAnimal(final Elemental animal) {
-
         return elements.add(animal);
     }
 
@@ -163,13 +142,10 @@ public class Cell {
         return "Cell{X=" + indX + ", Y=" + indY + '}';
     }
 
-    private static final Elemental[] test = {new PackMan(), new Surprise(), new Enemy(), new Surprise()};
-    private static int TEST_NUM = 0;
-
     public void paint(Graphics gr) {
         final Rectangle rect = new Rectangle(indX * CELL_SIZE, indY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        test[TEST_NUM].paint(gr, rect);
-        TEST_NUM = TEST_NUM == 3 ? 0 : TEST_NUM + 1;
+        gr.setColor(Color.black);
+        gr.drawRect(rect.x, rect.y, rect.width, rect.height);
         for (Elemental elm : elements) {
             elm.paint(gr, rect);
         }

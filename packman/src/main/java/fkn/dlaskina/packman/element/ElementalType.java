@@ -8,6 +8,8 @@ public enum ElementalType {
     PackMan,
     /** приз. */
     Surprise,
-    /** враг. */
-    Enemy
+     /** враг. */
+    Enemy,
+    /** стена. */
+    Stone
 }
