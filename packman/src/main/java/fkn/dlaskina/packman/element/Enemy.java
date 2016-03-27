@@ -1,5 +1,7 @@
 package fkn.dlaskina.packman.element;
 
+import fkn.dlaskina.packman.map.Cell;
+
 import java.awt.*;
 
 /**
@@ -7,7 +9,7 @@ import java.awt.*;
  * @author VLaskin
  * @since 26.03.2016.
  */
-public class Enemy extends Elemental {
+public class Enemy extends ActiveElemental {
 
     private static final Color FILL_COLOR = new Color(255, 0, 0);
     private static final Color BOUND_COLOR = new Color(125, 0, 0);
@@ -22,5 +24,10 @@ public class Enemy extends Elemental {
         gr.fillArc(rect.x, rect.y, rect.width, rect.height, 30, 330);
         gr.setColor(BOUND_COLOR);
         gr.drawArc(rect.x, rect.y, rect.width, rect.height, 30, 330);
+    }
+
+    @Override
+    public void act(Cell cell) {
+
     }
 }
