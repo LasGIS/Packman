@@ -16,7 +16,7 @@ public class Stone extends Elemental {
     }
 
     @Override
-    public void paint(Graphics gr, Rectangle rect) {
+    public void paint(Graphics gr, Rectangle rect, final int frame) {
         gr.setColor(FILL_COLOR);
         gr.fillRect(rect.x, rect.y, rect.width, rect.height);
     }

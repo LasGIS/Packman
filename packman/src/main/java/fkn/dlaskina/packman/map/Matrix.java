@@ -8,18 +8,22 @@
 
 package fkn.dlaskina.packman.map;
 
-import fkn.dlaskina.packman.element.*;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import fkn.dlaskina.packman.element.ActiveElemental;
+import fkn.dlaskina.packman.element.Enemy;
+import fkn.dlaskina.packman.element.PackMan;
+import fkn.dlaskina.packman.element.Stone;
+import fkn.dlaskina.packman.element.Surprise;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * Матрица элементов карты.
@@ -63,12 +67,19 @@ public final class Matrix {
                 final Cell cell = new Cell(x, y);
                 final char ch = list.get(y).charAt(x);
                 switch (ch) {
-                    case 'p':
-                        cell.addAnimal(new PackMan());
+                    case 'p': {
+                        final PackMan packMan = new PackMan(cell);
+                        cell.addAnimal(packMan);
+                        this.packMan = packMan;
+                        animals.add(packMan);
                         break;
-                    case 'e':
-                        cell.addAnimal(new Enemy());
+                    }
+                    case 'e': {
+                        final Enemy enemy = new Enemy(cell);
+                        cell.addAnimal(enemy);
+                        animals.add(enemy);
                         break;
+                    }
                     case 's':
                         cell.addAnimal(new Stone());
                         break;
@@ -122,7 +133,7 @@ public final class Matrix {
      * @return ячейка или NULL если вышли из диапазона
      */
     public Cell getCell(final int x, final int y) {
-        return isValidIndex(x, y) ? cells[x][y] : null;
+        return isValidIndex(x, y) ? cells[y][x] : null;
     }
 
     /**
@@ -135,10 +146,10 @@ public final class Matrix {
         return x >= 0 && x < MATRIX_SIZE_X && y >= 0 && y < MATRIX_SIZE_Y;
     }
 
-    public void paint(Graphics gr) {
+    public void paint(final Graphics gr, final int frame) {
         for (final Cell[] yCells : cells) {
             for (final Cell cell : yCells) {
-                cell.paint(gr);
+                cell.paint(gr, frame);
             }
         }
     }

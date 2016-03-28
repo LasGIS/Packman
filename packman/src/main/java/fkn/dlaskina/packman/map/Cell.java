@@ -8,14 +8,13 @@
 
 package fkn.dlaskina.packman.map;
 
-import fkn.dlaskina.packman.element.Elemental;
-import fkn.dlaskina.packman.element.Enemy;
-import fkn.dlaskina.packman.element.PackMan;
-import fkn.dlaskina.packman.element.Surprise;
-
-import java.awt.*;
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import fkn.dlaskina.packman.element.Elemental;
 
 import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
 
@@ -33,7 +32,7 @@ public class Cell {
     /** индекс долгота ячейки 0 - это запад, 100 - это восток. */
     private int indY;
     /** список сущьностей, населяющих ячейку. */
-    private List<Elemental> elements = new ArrayList<>();
+    private CopyOnWriteArrayList<Elemental> elements = new CopyOnWriteArrayList<>();
 
     /**
      * Создание ячейки по нижнему левому углу.
@@ -104,7 +103,7 @@ public class Cell {
      * @return <tt>true</tt> if the element was added
      */
     public boolean addAnimal(final Elemental animal) {
-        return elements.add(animal);
+        return elements.addIfAbsent(animal);
     }
 
     /**
@@ -142,12 +141,12 @@ public class Cell {
         return "Cell{X=" + indX + ", Y=" + indY + '}';
     }
 
-    public void paint(Graphics gr) {
+    public void paint(final Graphics gr, final int frame) {
         final Rectangle rect = new Rectangle(indX * CELL_SIZE, indY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         gr.setColor(Color.black);
         gr.drawRect(rect.x, rect.y, rect.width, rect.height);
         for (Elemental elm : elements) {
-            elm.paint(gr, rect);
+            elm.paint(gr, rect, frame);
         }
     }
 }

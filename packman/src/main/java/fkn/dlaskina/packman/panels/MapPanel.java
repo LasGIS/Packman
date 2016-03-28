@@ -16,13 +16,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.atomic.AtomicBoolean;
 
+import fkn.dlaskina.packman.element.MoveType;
+import fkn.dlaskina.packman.element.PackMan;
 import fkn.dlaskina.packman.map.Matrix;
-import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -43,38 +43,37 @@ public class MapPanel extends JPanel {
     private boolean isRedrawMap = true;
     /** сохраненное изображение. */
     private BufferedImage grBackgroundImage = null;
+    /** номер кадра. */
+    private int frame = 0;
 
     /** Ловим нажатие кнопочек. */
     private final KeyAdapter keyAdapter = new KeyAdapter() {
         @Override
         public void keyReleased(KeyEvent e) {
-            boolean isRedraw = false;
+            final PackMan packMan = Matrix.getMatrix().getPackMan();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_NUMPAD4 :
                 case KeyEvent.VK_LEFT :
                     // влево
-                    isRedraw = true;
+                    packMan.setMove(MoveType.LEFT);
                     break;
                 case KeyEvent.VK_NUMPAD6:
                 case KeyEvent.VK_RIGHT:
                     // вправо
-                    isRedraw = true;
+                    packMan.setMove(MoveType.RIGHT);
                     break;
                 case KeyEvent.VK_NUMPAD8:
                 case KeyEvent.VK_UP:
                     // вверх
-                    isRedraw = true;
+                    packMan.setMove(MoveType.UP);
                     break;
                 case KeyEvent.VK_NUMPAD2:
                 case KeyEvent.VK_DOWN:
                     // вниз
-                    isRedraw = true;
+                    packMan.setMove(MoveType.DOWN);
                     break;
                 default:
                     break;
-            }
-            if (isRedraw) {
-                setRedrawMap(true);
             }
             LOG.info("keyReleased = " + e.getKeyCode());
         }
@@ -112,7 +111,7 @@ public class MapPanel extends JPanel {
             final Graphics bckGr = grBackgroundImage.getGraphics();
             bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
             bckGr.fillRect(0, 0, mDim.width, mDim.height);
-            Matrix.getMatrix().paint(bckGr);
+            Matrix.getMatrix().paint(bckGr, frame);
             isRedrawMap = false;
             requestFocusInWindow();
         }
@@ -150,5 +149,9 @@ public class MapPanel extends JPanel {
      */
     public void setRedrawMap(final boolean redrawMap) {
         this.isRedrawMap = redrawMap;
+    }
+
+    public void setFrame(final int frame) {
+        this.frame = frame;
     }
 }

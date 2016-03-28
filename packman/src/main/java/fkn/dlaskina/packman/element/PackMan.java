@@ -1,8 +1,10 @@
 package fkn.dlaskina.packman.element;
 
-import fkn.dlaskina.packman.map.Cell;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
-import java.awt.*;
+import fkn.dlaskina.packman.map.Cell;
 
 /**
  * Definition of the PackMan class
@@ -15,20 +17,44 @@ public class PackMan extends ActiveElemental {
     private static final Color BOUND_COLOR = new Color(0, 125, 0);
     private static final int BORDER = 2;
 
-    public PackMan() {
-        super(ElementalType.PackMan);
+    public PackMan(final Cell cell) {
+        super(ElementalType.PackMan, cell);
     }
 
     @Override
-    public void paint(Graphics gr, Rectangle rect) {
+    public void paint(Graphics gr, Rectangle rect, final int frame) {
+        final int x = rect.x + BORDER;
+        final int y = rect.y + BORDER;
+        final int width =  rect.width - BORDER * 2;
+        final int height = rect.height - BORDER * 2;
+
         gr.setColor(FILL_COLOR);
-        gr.fillArc(rect.x + BORDER, rect.y + BORDER, rect.width - BORDER * 2, rect.height - BORDER * 2, 60, 300);
+        gr.fillArc(x, y, width, height, 60, 300);
         gr.setColor(BOUND_COLOR);
-        gr.drawArc(rect.x + BORDER, rect.y + BORDER, rect.width - BORDER * 2, rect.height - BORDER * 2, 60, 300);
+        gr.drawArc(x, y, width, height, 60, 300);
     }
 
     @Override
-    public void act(Cell cell) {
-
+    public void act() {
+        Cell newCell = null;
+        switch (moveType) {
+            case DOWN:
+                newCell = cell.getCell(0, 1);
+                break;
+            case UP:
+                newCell = cell.getCell(0, -1);
+                break;
+            case RIGHT:
+                newCell = cell.getCell(1, 0);
+                break;
+            case LEFT:
+                newCell = cell.getCell(-1, 0);
+                break;
+        }
+        if (newCell != null) {
+            cell.removeAnimal(this);
+            newCell.addAnimal(this);
+            cell = newCell;
+        }
     }
 }

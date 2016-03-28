@@ -9,13 +9,21 @@ import fkn.dlaskina.packman.map.Cell;
  */
 public abstract class ActiveElemental extends Elemental {
 
-    protected ActiveElemental(ElementalType type) {
+    /** ячейка, в которой находится существо */
+    protected Cell cell;
+    protected MoveType moveType = MoveType.NONE;
+
+    protected ActiveElemental(ElementalType type, final Cell cell) {
         super(type);
+        this.cell = cell;
     }
 
     /**
      * Перемещение и взаимодействие
-     * @param cell текущая ячеёка
      */
-    public abstract void act(final Cell cell);
+    public abstract void act();
+
+    public void setMove(MoveType moveType) {
+        this.moveType = moveType;
+    }
 }

@@ -17,14 +17,20 @@ import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.WindowEvent;
+import java.util.Timer;
 
 import fkn.dlaskina.component.StatusBar;
+import fkn.dlaskina.packman.map.Matrix;
+import fkn.dlaskina.packman.map.TimeRun;
 import fkn.dlaskina.util.SettingMenuItem;
 import fkn.dlaskina.util.SettingToolBarItem;
 import fkn.dlaskina.util.Util;
-import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -121,6 +127,11 @@ public class MainFrame extends JFrame implements ComponentListener {
             //splitPane.setLastDividerLocation(size.width - 300);
             //splitPane.setDividerLocation(size.width - 300);
             splitPane.setResizeWeight(1);
+
+            // вызывая матрицу первый раз неявно задаём её инициализацию
+            Matrix.getMatrix();
+            (new Timer()).schedule(new TimeRun(mapPanel), 40, 40);
+
             mapPanel.requestFocusInWindow();
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);

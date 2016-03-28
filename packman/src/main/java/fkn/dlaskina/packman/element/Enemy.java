@@ -1,8 +1,10 @@
 package fkn.dlaskina.packman.element;
 
-import fkn.dlaskina.packman.map.Cell;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
-import java.awt.*;
+import fkn.dlaskina.packman.map.Cell;
 
 /**
  * Definition of the Enemy class
@@ -14,12 +16,12 @@ public class Enemy extends ActiveElemental {
     private static final Color FILL_COLOR = new Color(255, 0, 0);
     private static final Color BOUND_COLOR = new Color(125, 0, 0);
 
-    public Enemy() {
-        super(ElementalType.Enemy);
+    public Enemy(final Cell cell) {
+        super(ElementalType.Enemy, cell);
     }
 
     @Override
-    public void paint(Graphics gr, Rectangle rect) {
+    public void paint(Graphics gr, Rectangle rect, final int frame) {
         gr.setColor(FILL_COLOR);
         gr.fillArc(rect.x, rect.y, rect.width, rect.height, 30, 330);
         gr.setColor(BOUND_COLOR);
@@ -27,7 +29,7 @@ public class Enemy extends ActiveElemental {
     }
 
     @Override
-    public void act(Cell cell) {
+    public void act() {
 
     }
 }
