@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import fkn.dlaskina.packman.map.Cell;
+import fkn.dlaskina.packman.map.GameOverException;
 
 /**
  * Definition of the Enemy class
@@ -29,7 +30,76 @@ public class Enemy extends ActiveElemental {
     }
 
     @Override
-    public void act() {
+    public void act() throws GameOverException {
+        // альтернативные перемещения
+        Cell alterCell[] = new Cell[4];
+        MoveType alterMoveType[] = new MoveType[4];
+        final int alterCount = findAlternativeCells(alterCell, alterMoveType);
+        Cell newCell;
+        if (alterCount > 2) {
+            // есть много путей
+            int ind = (int) Math.floor(Math.random() * alterCount);
+            newCell = alterCell[ind];
+            moveType = alterMoveType[ind];
+        } else if (alterCount > 0) {
+            // только один путь - вперёд!
+            newCell = alterCell[0];
+            moveType = alterMoveType[0];
+        } else {
+            // нет выхода
+            newCell = null;
+        }
+        if (newCell != null) {
+            cell.removeAnimal(this);
+            newCell.addAnimal(this);
+            cell = newCell;
 
+            // проверяем на packman`a
+            if (newCell.contains(ElementalType.PackMan)) {
+                throw new GameOverException("Враг наехал на рокемона");
+            }
+        }
+    }
+
+    private int findAlternativeCells(final Cell[] alterCell, final MoveType[] alterMoveType) {
+        int count = 0;
+        final Cell[] tempCell = new Cell[4];
+        final MoveType[] tempMoveType = new MoveType[4];
+        switch (moveType) {
+            case DOWN:
+                tempCell[0] = cell.getCell( 0,  1); tempMoveType[0] = MoveType.DOWN;
+                tempCell[1] = cell.getCell( 1,  0); tempMoveType[1] = MoveType.RIGHT;
+                tempCell[2] = cell.getCell(-1,  0); tempMoveType[2] = MoveType.LEFT;
+                tempCell[3] = cell.getCell( 0, -1); tempMoveType[3] = MoveType.UP;
+                break;
+            case NONE:
+            case UP:
+                tempCell[0] = cell.getCell( 0, -1); tempMoveType[0] = MoveType.UP;
+                tempCell[1] = cell.getCell(-1,  0); tempMoveType[1] = MoveType.LEFT;
+                tempCell[2] = cell.getCell( 1,  0); tempMoveType[2] = MoveType.RIGHT;
+                tempCell[3] = cell.getCell( 0,  1); tempMoveType[3] = MoveType.DOWN;
+                break;
+            case RIGHT:
+                tempCell[0] = cell.getCell( 1,  0); tempMoveType[0] = MoveType.RIGHT;
+                tempCell[1] = cell.getCell( 0,  1); tempMoveType[1] = MoveType.DOWN;
+                tempCell[2] = cell.getCell( 0, -1); tempMoveType[2] = MoveType.UP;
+                tempCell[3] = cell.getCell(-1,  0); tempMoveType[3] = MoveType.LEFT;
+                break;
+            case LEFT:
+                tempCell[0] = cell.getCell(-1,  0); tempMoveType[0] = MoveType.LEFT;
+                tempCell[1] = cell.getCell( 0, -1); tempMoveType[1] = MoveType.UP;
+                tempCell[2] = cell.getCell( 0,  1); tempMoveType[2] = MoveType.DOWN;
+                tempCell[3] = cell.getCell( 1,  0); tempMoveType[3] = MoveType.RIGHT;
+                break;
+        }
+        for (int i = 0; i < 4; i++) {
+            final Cell testCell = tempCell[i];
+            if (testCell != null && !testCell.isStone() && !testCell.contains(ElementalType.Enemy)) {
+                alterCell[count] = tempCell[i];
+                alterMoveType[count] = tempMoveType[i];
+                count++;
+            }
+        }
+        return count;
     }
 }
