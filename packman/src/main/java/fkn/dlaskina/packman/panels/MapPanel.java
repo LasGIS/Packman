@@ -49,7 +49,7 @@ public class MapPanel extends JPanel {
     /** Ловим нажатие кнопочек. */
     private final KeyAdapter keyAdapter = new KeyAdapter() {
         @Override
-        public void keyReleased(KeyEvent e) {
+        public void keyPressed(KeyEvent e) {
             final PackMan packMan = Matrix.getMatrix().getPackMan();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_NUMPAD4 :
@@ -75,7 +75,7 @@ public class MapPanel extends JPanel {
                 default:
                     break;
             }
-            LOG.info("keyReleased = " + e.getKeyCode());
+            //LOG.info("keyPressed = " + e.getKeyCode());
         }
     };
 

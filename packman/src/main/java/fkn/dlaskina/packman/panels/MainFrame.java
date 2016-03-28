@@ -25,7 +25,8 @@ import java.util.Timer;
 
 import fkn.dlaskina.component.StatusBar;
 import fkn.dlaskina.packman.map.Matrix;
-import fkn.dlaskina.packman.map.TimeRun;
+import fkn.dlaskina.packman.map.TimerTaskAction;
+import fkn.dlaskina.packman.map.TimerTaskRedraw;
 import fkn.dlaskina.util.SettingMenuItem;
 import fkn.dlaskina.util.SettingToolBarItem;
 import fkn.dlaskina.util.Util;
@@ -130,7 +131,8 @@ public class MainFrame extends JFrame implements ComponentListener {
 
             // вызывая матрицу первый раз неявно задаём её инициализацию
             Matrix.getMatrix();
-            (new Timer()).schedule(new TimeRun(mapPanel), 40, 40);
+            (new Timer()).schedule(new TimerTaskRedraw(mapPanel), 40, 40);
+            (new Timer()).schedule(new TimerTaskAction(), 400, 400);
 
             mapPanel.requestFocusInWindow();
         } catch (final Exception ex) {
