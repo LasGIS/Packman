@@ -1,8 +1,3 @@
-/**
- * @(#)TimerTaskRedraw.java Title: DA CME Web Application Description: Программная система DA "Ассистент Доктора". Входит в
- * состав  КМЭ - Комплекс медицинский экспертный. Copyright (c) 2016 CME CWISS AG Company. All Rights Reserved.
- */
-
 package fkn.dlaskina.packman.map;
 
 import java.awt.Graphics;

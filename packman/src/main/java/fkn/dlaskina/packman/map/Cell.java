@@ -1,11 +1,3 @@
-/**
- * @(#)Cell.java 1.0
- *
- * Title: LG Evolution powered by Java
- * Description: Program for imitation of evolutions process.
- * Copyright (c) 2012-2015 LasGIS Company. All Rights Reserved.
- */
-
 package fkn.dlaskina.packman.map;
 
 import java.awt.Color;
@@ -15,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fkn.dlaskina.packman.element.Elemental;
+import fkn.dlaskina.packman.element.ElementalType;
 
 import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
 
@@ -148,5 +141,18 @@ public class Cell {
         for (Elemental elm : elements) {
             elm.paint(gr, rect, frame);
         }
+    }
+
+    public boolean isStone() {
+        return contains(ElementalType.Stone);
+    }
+
+    public boolean contains(final ElementalType type) {
+        for (final Elemental elm : elements) {
+            if (elm.getType() == type) {
+                return true;
+            }
+        }
+        return false;
     }
 }

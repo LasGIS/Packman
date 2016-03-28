@@ -1,6 +1,7 @@
 package fkn.dlaskina.packman.element;
 
 import fkn.dlaskina.packman.map.Cell;
+import fkn.dlaskina.packman.map.GameOverException;
 
 /**
  * Definition of the ActiveElemental class
@@ -21,7 +22,7 @@ public abstract class ActiveElemental extends Elemental {
     /**
      * Перемещение и взаимодействие
      */
-    public abstract void act();
+    public abstract void act() throws GameOverException;
 
     public void setMove(MoveType moveType) {
         this.moveType = moveType;

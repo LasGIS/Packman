@@ -1,11 +1,3 @@
-/**
- * @(#)Matrix.java 1.0
- *
- * Title: LG Evolution powered by Java
- * Description: Program for imitation of evolutions process.
- * Copyright (c) 2012-2015 LasGIS Company. All Rights Reserved.
- */
-
 package fkn.dlaskina.packman.map;
 
 import java.awt.Dimension;

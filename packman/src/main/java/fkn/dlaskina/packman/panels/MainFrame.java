@@ -1,11 +1,3 @@
-/**
- * @(#)MainFrame.java 1.0
- *
- * Title: LG Evolution powered by Java
- * Description: Program for imitation of evolutions process.
- * Copyright (c) 2012-2015 LasGIS Company. All Rights Reserved.
- */
-
 package fkn.dlaskina.packman.panels;
 
 import javax.swing.JFrame;
@@ -132,7 +124,7 @@ public class MainFrame extends JFrame implements ComponentListener {
             // вызывая матрицу первый раз неявно задаём её инициализацию
             Matrix.getMatrix();
             (new Timer()).schedule(new TimerTaskRedraw(mapPanel), 40, 40);
-            (new Timer()).schedule(new TimerTaskAction(), 400, 400);
+            (new Timer()).schedule(new TimerTaskAction(this), 500, 500);
 
             mapPanel.requestFocusInWindow();
         } catch (final Exception ex) {

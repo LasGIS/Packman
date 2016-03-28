@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import fkn.dlaskina.packman.map.Cell;
+import fkn.dlaskina.packman.map.GameOverException;
 
 /**
  * Definition of the PackMan class
@@ -35,7 +36,7 @@ public class PackMan extends ActiveElemental {
     }
 
     @Override
-    public void act() {
+    public void act() throws GameOverException {
         Cell newCell = null;
         switch (moveType) {
             case DOWN:
@@ -51,10 +52,23 @@ public class PackMan extends ActiveElemental {
                 newCell = cell.getCell(-1, 0);
                 break;
         }
-        if (newCell != null) {
+        if (newCell != null && !newCell.isStone()) {
             cell.removeAnimal(this);
             newCell.addAnimal(this);
             cell = newCell;
+            // забираем призы и проверяем на злодея
+            for (Elemental elm : newCell.getElements()) {
+                switch (elm.getType()) {
+                    case Surprise:
+                        newCell.removeAnimal(elm);
+                        break;
+                    case Enemy: {
+                        throw new GameOverException("Сам наехал на врага");
+                    }
+                }
+            }
+        } else {
+            moveType = MoveType.NONE;
         }
     }
 }

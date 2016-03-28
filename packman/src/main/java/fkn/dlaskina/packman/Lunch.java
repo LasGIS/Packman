@@ -1,16 +1,4 @@
-/**
- * @(#)packmanControl.java 1.0
- *
- * Title: LG Evolution powered by Java
- * Description: Program for imitation of evolutions process.
- * Copyright (c) 2012-2015 LasGIS Company. All Rights Reserved.
- */
-
 package fkn.dlaskina.packman;
-
-import fkn.dlaskina.packman.panels.MainFrame;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -18,19 +6,23 @@ import javax.swing.WindowConstants;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import fkn.dlaskina.packman.panels.MainFrame;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 /**
  * PackMan runs in cells of Peace, with a keyboard controls, eats prizes and dodging enemies.
  * @author Vladimir Laskin
  * @version 1.0
  */
-public final class Run {
+public final class Lunch {
 
-    private static final Logger LOG = LogManager.getLogger(Run.class);
+    private static final Logger LOG = LogManager.getLogger(Lunch.class);
 
     /**
      * Construct the application.
      */
-    private Run() {
+    private Lunch() {
 
         final MainFrame frame = new MainFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -69,6 +61,6 @@ public final class Run {
             LOG.error(ex.getMessage(), ex);
         }
 
-        new Run();
+        new Lunch();
     }
 }
