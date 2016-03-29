@@ -13,12 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
-import java.util.Timer;
 
 import fkn.dlaskina.component.StatusBar;
 import fkn.dlaskina.packman.map.Matrix;
-import fkn.dlaskina.packman.map.TimerTaskAction;
-import fkn.dlaskina.packman.map.TimerTaskRedraw;
+import fkn.dlaskina.packman.timers.TimersControl;
 import fkn.dlaskina.util.SettingMenuItem;
 import fkn.dlaskina.util.SettingToolBarItem;
 import fkn.dlaskina.util.Util;
@@ -76,6 +74,10 @@ public class MainFrame extends JFrame implements ComponentListener {
             TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, MainFrame.this::jMenuHelpAboutAction
         ),
         new SettingToolBarItem(
+            "Game Over Dialog", null, "Game Over Dialog",
+            TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, MainFrame.this::jMenuGameOverAction
+        ),
+        new SettingToolBarItem(
             "Exit", null, "Exit from programm",
             TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, MainFrame.this::jMenuFileExitAction
         )
@@ -121,10 +123,10 @@ public class MainFrame extends JFrame implements ComponentListener {
             //splitPane.setDividerLocation(size.width - 300);
             splitPane.setResizeWeight(1);
 
-            // вызывая матрицу первый раз неявно задаём её инициализацию
-            Matrix.getMatrix();
-            (new Timer()).schedule(new TimerTaskRedraw(mapPanel), 40, 40);
-            (new Timer()).schedule(new TimerTaskAction(this), 500, 500);
+            // создаём матрицу и запускаем
+            Matrix.createMatrix("matrix.txt");
+            TimersControl.setMainFrame(this);
+            TimersControl.startTimers();
 
             mapPanel.requestFocusInWindow();
         } catch (final Exception ex) {
@@ -148,6 +150,24 @@ public class MainFrame extends JFrame implements ComponentListener {
      */
     public void jMenuHelpAboutAction(final ActionEvent event) {
         final MainFrameAboutBox dlg = new MainFrameAboutBox(this);
+        final Dimension dlgSize = dlg.getPreferredSize();
+        final Dimension frmSize = getSize();
+        final Point loc = getLocation();
+        dlg.setLocation(
+            (frmSize.width - dlgSize.width) / 2 + loc.x,
+            (frmSize.height - dlgSize.height) / 2 + loc.y
+        );
+        dlg.setModal(true);
+        dlg.pack();
+        dlg.setVisible(true);
+    }
+
+    /**
+     * Help | About action performed.
+     * @param event Action Event
+     */
+    public void jMenuGameOverAction(final ActionEvent event) {
+        final GameOverDialog dlg = new GameOverDialog();
         final Dimension dlgSize = dlg.getPreferredSize();
         final Dimension frmSize = getSize();
         final Point loc = getLocation();

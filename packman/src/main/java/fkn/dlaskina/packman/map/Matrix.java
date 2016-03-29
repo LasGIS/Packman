@@ -30,7 +30,7 @@ public final class Matrix {
     /** размер элементарной ячейки в пикселях. */
     public static final int CELL_SIZE = 30;
     /** singleton матрицы. */
-    private static final Matrix MATRIX = new Matrix("matrix.txt");
+    private static Matrix MATRIX;
 
     /** размер матрицы по горизонтали. */
     public static int MATRIX_SIZE_X;
@@ -109,6 +109,14 @@ public final class Matrix {
         }
         retMaxX[0] = maxX;
         return list;
+    }
+
+    /**
+     * @return выдаем singleton матрицы по первому требованию.
+     */
+    public static Matrix createMatrix(final String matrixName) {
+        MATRIX = new Matrix(matrixName);
+        return MATRIX;
     }
 
     /**

@@ -1,4 +1,4 @@
-package fkn.dlaskina.packman.map;
+package fkn.dlaskina.packman.timers;
 
 import javax.swing.JFrame;
 import java.awt.Dimension;
@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.util.TimerTask;
 
 import fkn.dlaskina.packman.element.ActiveElemental;
+import fkn.dlaskina.packman.map.GameOverException;
+import fkn.dlaskina.packman.map.Matrix;
 import fkn.dlaskina.packman.panels.GameOverDialog;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

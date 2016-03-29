@@ -1,4 +1,4 @@
-package fkn.dlaskina.packman.map;
+package fkn.dlaskina.packman.timers;
 
 import java.awt.Graphics;
 import java.util.TimerTask;

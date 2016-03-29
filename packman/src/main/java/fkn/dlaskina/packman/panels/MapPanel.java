@@ -1,6 +1,5 @@
 package fkn.dlaskina.packman.panels;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -37,6 +36,8 @@ public class MapPanel extends JPanel {
     private BufferedImage grBackgroundImage = null;
     /** номер кадра. */
     private int frame = 0;
+    /** Стереть фон. */
+    private boolean isClear = true;
 
     /** Ловим нажатие кнопочек. */
     private final KeyAdapter keyAdapter = new KeyAdapter() {
@@ -76,8 +77,6 @@ public class MapPanel extends JPanel {
      */
     public MapPanel() {
         try {
-            setBackground(Color.white);
-            setBorder(BorderFactory.createLineBorder(Color.blue));
             setLayout(new BorderLayout());
             addKeyListener(keyAdapter);
             setFocusable(true);
@@ -93,27 +92,29 @@ public class MapPanel extends JPanel {
     public void paint(final Graphics gr) {
         final Dimension dim = getSize();
         final Dimension mDim = Matrix.getMatrix().getSize();
-        //gr.setColor(MapPanel.PANEL_GRAY_COLOR);
-        //gr.fillRect(0, 0, dim.width, dim.height);
-
-        if (isRedrawMap || grBackgroundImage == null) {
-            grBackgroundImage = new BufferedImage(
-                mDim.width, mDim.height, BufferedImage.TYPE_INT_RGB
+        if (isClear) {
+            gr.setColor(this.getBackground());
+            gr.fillRect(0, 0, dim.width, dim.height);
+            isClear = false;
+        } else {
+            if (isRedrawMap || grBackgroundImage == null) {
+                grBackgroundImage = new BufferedImage(
+                    mDim.width, mDim.height, BufferedImage.TYPE_INT_RGB
+                );
+                final Graphics bckGr = grBackgroundImage.getGraphics();
+                bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
+                bckGr.fillRect(0, 0, mDim.width, mDim.height);
+                Matrix.getMatrix().paint(bckGr, frame);
+                isRedrawMap = false;
+                requestFocusInWindow();
+            }
+            gr.drawImage(
+                grBackgroundImage,
+                (dim.width - mDim.width) / 2,
+                (dim.height - mDim.height) / 2,
+                mDim.width, mDim.height, null
             );
-            final Graphics bckGr = grBackgroundImage.getGraphics();
-            bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
-            bckGr.fillRect(0, 0, mDim.width, mDim.height);
-            Matrix.getMatrix().paint(bckGr, frame);
-            isRedrawMap = false;
-            requestFocusInWindow();
         }
-        gr.drawImage(
-            grBackgroundImage,
-            (dim.width - mDim.width) / 2,
-            (dim.height - mDim.height) / 2,
-            mDim.width, mDim.height, null
-        );
-        //drawing.grid();
     }
 
     /**
@@ -145,5 +146,9 @@ public class MapPanel extends JPanel {
 
     public void setFrame(final int frame) {
         this.frame = frame;
+    }
+
+    public void clearBackground() {
+        isClear = true;
     }
 }

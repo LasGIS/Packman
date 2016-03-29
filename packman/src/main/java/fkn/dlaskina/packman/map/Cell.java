@@ -3,7 +3,7 @@ package fkn.dlaskina.packman.map;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fkn.dlaskina.packman.element.Elemental;
@@ -85,7 +85,7 @@ public class Cell {
      * Добавлять или удалять животных можно только через Cell.
      * @return список животных в этой ячейке
      */
-    public final List<Elemental> getElements() {
+    public final Collection<Elemental> getElements() {
         return elements;
     }
 
