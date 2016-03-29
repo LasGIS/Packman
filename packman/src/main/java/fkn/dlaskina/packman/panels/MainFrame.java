@@ -73,10 +73,12 @@ public class MainFrame extends JFrame implements ComponentListener {
             "Помощь", "help.gif", "Help",
             TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, MainFrame.this::jMenuHelpAboutAction
         ),
+/*
         new SettingToolBarItem(
             "Game Over Dialog", null, "Game Over Dialog",
             TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, MainFrame.this::jMenuGameOverAction
         ),
+*/
         new SettingToolBarItem(
             "Exit", null, "Exit from programm",
             TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, MainFrame.this::jMenuFileExitAction
