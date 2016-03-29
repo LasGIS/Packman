@@ -42,23 +42,23 @@ public class Enemy extends ActiveElemental {
         switch (moveType) {
             case DOWN:
                 return new Polygon(
-                    new int[] {x1, x2, x2, x2-dx, x0, x1+dx, x1},
-                    new int[] {y1, y1, y2, y2, y0, y2, y2}, 7
+                    new int[] {x1, x2, x2-dx, x0, x1+dx},
+                    new int[] {y1, y1, y2, y0, y2}, 5
                 );
             case UP:
                 return new Polygon(
-                    new int[] {x1, x1+dx, x0, x2-dx, x2, x2, x1},
-                    new int[] {y1, y1, y0, y1, y1, y2, y2}, 7
+                    new int[] {x1+dx, x0, x2-dx, x2, x1},
+                    new int[] {y1, y0, y1, y2, y2}, 5
                 );
             case LEFT:
                 return new Polygon(
-                    new int[] {x1, x2, x2, x1, x1, x0, x1},
-                    new int[] {y1, y1, y2, y2, y2-dy, y0, y1+dy}, 7
+                    new int[] {x2, x2, x1, x0, x1},
+                    new int[] {y1, y2, y2-dy, y0, y1+dy}, 5
                 );
             case RIGHT:
                 return new Polygon(
-                    new int[] {x1, x2, x2, x0, x2, x2, x1},
-                    new int[] {y1, y1, y1+dy, y0, y2-dy, y2, y2}, 7
+                    new int[] {x1, x2, x0, x2, x1},
+                    new int[] {y1, y1+dy, y0, y2-dy, y2}, 5
                 );
             default:
                 return new Polygon(new int[] {x1, x2, x2, x1}, new  int[] {y1, y1, y2, y2}, 4);
