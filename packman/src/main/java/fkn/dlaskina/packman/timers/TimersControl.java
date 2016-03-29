@@ -17,7 +17,7 @@ public class TimersControl {
 
     public static void startTimers() {
         redrawTimer = new Timer();
-        redrawTimer.schedule(new TimerTaskRedraw(mainFrame.getMapPanel()), 40, 40);
+        redrawTimer.schedule(new TimerTaskRedraw(mainFrame.getMapPanel()), 33, 33);
         actionTimer = new Timer();
         actionTimer.schedule(new TimerTaskAction(mainFrame), 500, 500);
         mainFrame.getMapPanel().clearBackground();
