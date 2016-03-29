@@ -7,7 +7,14 @@ package fkn.dlaskina.packman.map;
  */
 public class GameOverException extends Exception {
 
-    public GameOverException(final String message) {
+    public final boolean win;
+
+    public GameOverException(final boolean isWin, final String message) {
         super(message);
+        win = isWin;
+    }
+
+    public boolean isWin() {
+        return win;
     }
 }

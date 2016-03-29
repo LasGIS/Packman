@@ -37,7 +37,13 @@ public class TimerTaskAction extends TimerTask {
                 }
             }
         } catch (final GameOverException ex) {
-            final GameOverDialog dlg = new GameOverDialog();
+            // делаем паузу и даём переместиться на следующу клетку
+            try {
+                Thread.sleep(100l);
+            } catch (InterruptedException exc) {
+                LOG.error(exc.getMessage(), exc);
+            }
+            final GameOverDialog dlg = new GameOverDialog(ex);
             final Dimension dlgSize = dlg.getPreferredSize();
             final Dimension frmSize = frame.getSize();
             final Point loc = frame.getLocation();

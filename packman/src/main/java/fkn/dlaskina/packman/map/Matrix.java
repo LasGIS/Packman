@@ -54,6 +54,7 @@ public final class Matrix {
         MATRIX_SIZE_X = sizeX[0];
         MATRIX_SIZE_Y = list.size();
         cells = new Cell[MATRIX_SIZE_Y][MATRIX_SIZE_X];
+        int bonusCountMax = 0;
         for (int y = 0; y < MATRIX_SIZE_Y; y++) {
             for (int x = 0; x < MATRIX_SIZE_X; x++) {
                 final Cell cell = new Cell(x, y);
@@ -69,6 +70,8 @@ public final class Matrix {
                     case 'e': {
                         final Enemy enemy = new Enemy(cell);
                         cell.addAnimal(enemy);
+                        cell.addAnimal(new Surprise());
+                        bonusCountMax++;
                         animals.add(enemy);
                         break;
                     }
@@ -77,10 +80,14 @@ public final class Matrix {
                         break;
                     case '1':
                         cell.addAnimal(new Surprise());
+                        bonusCountMax++;
                         break;
                 }
                 cells[y][x] = cell;
             }
+        }
+        if (packMan != null) {
+            packMan.setBonusCountMax(bonusCountMax);
         }
     }
 

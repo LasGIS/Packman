@@ -92,7 +92,7 @@ public class Enemy extends ActiveElemental {
 
             // проверяем на packman`a
             if (newCell.contains(ElementalType.PackMan)) {
-                throw new GameOverException("Враг наехал на рокемона");
+                throw new GameOverException(false, "Враг наехал на рокемона");
             }
         }
     }

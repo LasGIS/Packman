@@ -15,6 +15,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 
 import fkn.dlaskina.component.StatusBar;
+import fkn.dlaskina.packman.map.GameOverException;
 import fkn.dlaskina.packman.map.Matrix;
 import fkn.dlaskina.packman.timers.TimersControl;
 import fkn.dlaskina.util.SettingMenuItem;
@@ -169,7 +170,7 @@ public class MainFrame extends JFrame implements ComponentListener {
      * @param event Action Event
      */
     public void jMenuGameOverAction(final ActionEvent event) {
-        final GameOverDialog dlg = new GameOverDialog();
+        final GameOverDialog dlg = new GameOverDialog(new GameOverException(false, "from menu"));
         final Dimension dlgSize = dlg.getPreferredSize();
         final Dimension frmSize = getSize();
         final Point loc = getLocation();

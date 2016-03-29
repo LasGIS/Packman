@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
 
+import fkn.dlaskina.packman.map.GameOverException;
 import fkn.dlaskina.packman.map.Matrix;
 import fkn.dlaskina.packman.timers.TimersControl;
 import org.apache.log4j.LogManager;
@@ -28,8 +29,9 @@ public class GameOverDialog extends JDialog {
 
     /**
      * Create and show dialog.
+     * @param goExc
      */
-    public GameOverDialog() {
+    public GameOverDialog(GameOverException goExc) {
         super();
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         Matrix.createMatrix("matrix.txt");
@@ -41,7 +43,10 @@ public class GameOverDialog extends JDialog {
             c.fill = GridBagConstraints.BOTH;
             c.gridx = 0;
             c.gridy = 0;
-            labelPanel.add(new JLabel("Game Over!"), c);
+            labelPanel.add(new JLabel(goExc.isWin() ? "Win!!!" : "Game Over"), c);
+            c.gridx = 0;
+            c.gridy = 1;
+            labelPanel.add(new JLabel(goExc.getMessage()), c);
 
             final JPanel buttonPanel = new JPanel(new GridBagLayout());
             c.gridx = 0;

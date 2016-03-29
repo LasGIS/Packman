@@ -21,6 +21,10 @@ public class PackMan extends ActiveElemental {
     private static final Color FILL_COLOR = new Color(0, 255, 0);
     private static final Color BOUND_COLOR = new Color(0, 125, 0);
     private static final int BORDER = 2;
+    /** число полученых подарков. */
+    private int bonusCount = 0;
+    /** общее число подарков. */
+    private int bonusCountMax;
 
     public PackMan(final Cell cell) {
         super(ElementalType.PackMan, cell);
@@ -74,14 +78,30 @@ public class PackMan extends ActiveElemental {
                 switch (elm.getType()) {
                     case Surprise:
                         newCell.removeAnimal(elm);
+                        bonusCount++;
+                        if (bonusCount == bonusCountMax) {
+                            throw new GameOverException(true, "Победа!");
+                        }
                         break;
                     case Enemy: {
-                        throw new GameOverException("Сам наехал на врага");
+                        throw new GameOverException(false, "Сам наехал на врага");
                     }
                 }
             }
         } else {
             moveType = MoveType.NONE;
         }
+    }
+
+    public int getBonusCount() {
+        return bonusCount;
+    }
+
+    public int getBonusCountMax() {
+        return bonusCountMax;
+    }
+
+    public void setBonusCountMax(int bonusCountMax) {
+        this.bonusCountMax = bonusCountMax;
     }
 }
