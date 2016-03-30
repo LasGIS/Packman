@@ -4,7 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.AWTEvent;
+import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -33,7 +33,8 @@ public class GameOverDialog extends JDialog {
      */
     public GameOverDialog(GameOverException goExc) {
         super();
-        enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        //setUndecorated(true);
         TimersControl.stopTimers();
         try {
             final JPanel labelPanel = new JPanel(new GridBagLayout());
@@ -82,6 +83,7 @@ public class GameOverDialog extends JDialog {
      */
     protected void processWindowEvent(final WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            TimersControl.startTimers();
             dispose();
         }
         super.processWindowEvent(e);

@@ -1,5 +1,6 @@
 package fkn.dlaskina.packman.panels;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -8,6 +9,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -86,6 +89,20 @@ public class ConfigPanel extends JPanel {
         lblBonus.setFont(digitFont);
         lblBonus.setForeground(Color.RED);
         controlPanel.add(lblBonus, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        final JButton button = new JButton("Выход");
+        controlPanel.add(button, c);
+        button.addActionListener(
+            new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    System.exit(0);
+                }
+            }
+        );
 
         setLayout(new BorderLayout());
         add(controlPanel, BorderLayout.NORTH);
