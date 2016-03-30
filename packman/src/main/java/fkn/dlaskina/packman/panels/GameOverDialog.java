@@ -82,6 +82,7 @@ public class GameOverDialog extends JDialog {
      */
     protected void processWindowEvent(final WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            TimersControl.startTimers();
             dispose();
         }
         super.processWindowEvent(e);
