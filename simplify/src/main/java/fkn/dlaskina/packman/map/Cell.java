@@ -134,12 +134,12 @@ public class Cell {
         return "Cell{X=" + indX + ", Y=" + indY + '}';
     }
 
-    public void paint(final Graphics gr, final int frame) {
+    public void paint(final Graphics gr) {
         final Rectangle rect = new Rectangle(indX * CELL_SIZE, indY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         gr.setColor(Color.black);
         gr.drawRect(rect.x, rect.y, rect.width, rect.height);
         for (Elemental elm : elements) {
-            elm.paint(gr, rect, frame);
+            elm.paint(gr, rect);
         }
     }
 

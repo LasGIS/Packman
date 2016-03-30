@@ -34,8 +34,6 @@ public class MapPanel extends JPanel {
     private boolean isRedrawMap = true;
     /** сохраненное изображение. */
     private BufferedImage grBackgroundImage = null;
-    /** номер кадра. */
-    private int frame = 0;
     /** Стереть фон. */
     private boolean isClear = true;
 
@@ -104,7 +102,7 @@ public class MapPanel extends JPanel {
                 final Graphics bckGr = grBackgroundImage.getGraphics();
                 bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
                 bckGr.fillRect(0, 0, mDim.width, mDim.height);
-                Matrix.getMatrix().paint(bckGr, frame);
+                Matrix.getMatrix().paint(bckGr);
                 isRedrawMap = false;
                 requestFocusInWindow();
             }
@@ -131,10 +129,6 @@ public class MapPanel extends JPanel {
      */
     public void setRedrawMap(final boolean redrawMap) {
         this.isRedrawMap = redrawMap;
-    }
-
-    public void setFrame(final int frame) {
-        this.frame = frame;
     }
 
     public void clearBackground() {

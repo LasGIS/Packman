@@ -30,7 +30,6 @@ public abstract class Elemental {
      * Нарисовать изображение сущьности.
      * @param gr graphics contexts
      * @param rect рамка
-     * @param frame номер кадра (один из 40)
      */
-    public abstract void paint(final Graphics gr, final Rectangle rect, final int frame);
+    public abstract void paint(final Graphics gr, final Rectangle rect);
 }

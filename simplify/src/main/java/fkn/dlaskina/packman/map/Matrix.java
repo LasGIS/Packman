@@ -153,10 +153,10 @@ public final class Matrix {
         return x >= 0 && x < MATRIX_SIZE_X && y >= 0 && y < MATRIX_SIZE_Y;
     }
 
-    public void paint(final Graphics gr, final int frame) {
+    public void paint(final Graphics gr) {
         for (final Cell[] yCells : cells) {
             for (final Cell cell : yCells) {
-                cell.paint(gr, frame);
+                cell.paint(gr);
             }
         }
     }

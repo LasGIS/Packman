@@ -1,7 +1,7 @@
 package fkn.dlaskina.packman.timers;
 
-import javax.swing.JFrame;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.TimerTask;
 
@@ -9,6 +9,8 @@ import fkn.dlaskina.packman.element.ActiveElemental;
 import fkn.dlaskina.packman.map.GameOverException;
 import fkn.dlaskina.packman.map.Matrix;
 import fkn.dlaskina.packman.panels.GameOverDialog;
+import fkn.dlaskina.packman.panels.MainFrame;
+import fkn.dlaskina.packman.panels.MapPanel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -21,9 +23,9 @@ public class TimerTaskAction extends TimerTask {
 
     private static final Logger LOG = LogManager.getLogger(TimerTaskAction.class);
 
-    final JFrame frame;
+    final MainFrame frame;
 
-    public TimerTaskAction(final JFrame frame) {
+    public TimerTaskAction(final MainFrame frame) {
         this.frame = frame;
     }
 
@@ -35,6 +37,12 @@ public class TimerTaskAction extends TimerTask {
                 for (final ActiveElemental elm : matrix.getAnimals()) {
                     elm.act();
                 }
+            }
+            final MapPanel mapPanel = frame.getMapPanel();
+            final Graphics gr = mapPanel.getGraphics();
+            if (gr != null) {
+                mapPanel.setRedrawMap(true);
+                mapPanel.update(gr);
             }
         } catch (final GameOverException ex) {
             // делаем паузу и даём переместиться на следующу клетку
