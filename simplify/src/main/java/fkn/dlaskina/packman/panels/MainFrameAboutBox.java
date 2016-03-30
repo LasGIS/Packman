@@ -36,8 +36,6 @@ public class MainFrameAboutBox extends JDialog implements ActionListener {
         super(parent);
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         try {
-            //final JLabel imageLabel = new JLabel();
-            //imageLabel.setIcon(Util.loadImageIcon("Evolution.GIF"));
             this.setTitle("About");
             final JPanel panel1 = new JPanel();
             panel1.setLayout(new BorderLayout());
@@ -69,8 +67,6 @@ public class MainFrameAboutBox extends JDialog implements ActionListener {
             insetsPanel3.setBorder(BorderFactory.createEmptyBorder(10, 60, 10, 10));
             button1.setText("Ok");
             button1.addActionListener(this);
-            //insetsPanel2.add(imageLabel, null);
-            //panel2.add(insetsPanel2, BorderLayout.WEST);
             this.getContentPane().add(panel1, null);
             insetsPanel3.add(label1, null);
             insetsPanel3.add(label2, null);

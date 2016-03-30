@@ -29,12 +29,11 @@ public class GameOverDialog extends JDialog {
 
     /**
      * Create and show dialog.
-     * @param goExc
+     * @param goExc Game Over Exception
      */
     public GameOverDialog(GameOverException goExc) {
         super();
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-        Matrix.createMatrix("matrix.txt");
         TimersControl.stopTimers();
         try {
             final JPanel labelPanel = new JPanel(new GridBagLayout());

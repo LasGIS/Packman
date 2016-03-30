@@ -32,7 +32,7 @@ public class TimerTaskAction extends TimerTask {
         try {
             final Matrix matrix = Matrix.getMatrix();
             if (matrix != null) {
-                for (final ActiveElemental elm : matrix.getAnimals()) {
+                for (final ActiveElemental elm : matrix.getElements()) {
                     elm.act();
                 }
             }

@@ -86,8 +86,8 @@ public class Enemy extends ActiveElemental {
             newCell = null;
         }
         if (newCell != null) {
-            cell.removeAnimal(this);
-            newCell.addAnimal(this);
+            cell.removeElement(this);
+            newCell.addElement(this);
             cell = newCell;
 
             // проверяем на packman`a
