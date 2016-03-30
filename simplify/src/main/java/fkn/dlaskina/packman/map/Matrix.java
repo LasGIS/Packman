@@ -14,6 +14,7 @@ import fkn.dlaskina.packman.element.Enemy;
 import fkn.dlaskina.packman.element.PackMan;
 import fkn.dlaskina.packman.element.Stone;
 import fkn.dlaskina.packman.element.Surprise;
+import fkn.dlaskina.packman.panels.ConfigPanel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -42,7 +43,7 @@ public final class Matrix {
     /** pokemon. */
     private PackMan packMan = null;
     /** pokemon. */
-    private List<ActiveElemental> animals = new ArrayList<>();
+    private List<ActiveElemental> elements = new ArrayList<>();
 
     /**
      * Создаем и заполняем матрицу.
@@ -62,33 +63,31 @@ public final class Matrix {
                 switch (ch) {
                     case 'p': {
                         final PackMan packMan = new PackMan(cell);
-                        cell.addAnimal(packMan);
+                        cell.addElement(packMan);
                         this.packMan = packMan;
-                        animals.add(packMan);
+                        elements.add(packMan);
                         break;
                     }
                     case 'e': {
                         final Enemy enemy = new Enemy(cell);
-                        cell.addAnimal(enemy);
-                        cell.addAnimal(new Surprise());
+                        cell.addElement(enemy);
+                        cell.addElement(new Surprise());
                         bonusCountMax++;
-                        animals.add(enemy);
+                        elements.add(enemy);
                         break;
                     }
                     case 's':
-                        cell.addAnimal(new Stone());
+                        cell.addElement(new Stone());
                         break;
                     case '1':
-                        cell.addAnimal(new Surprise());
+                        cell.addElement(new Surprise());
                         bonusCountMax++;
                         break;
                 }
                 cells[y][x] = cell;
             }
         }
-        if (packMan != null) {
-            packMan.setBonusCountMax(bonusCountMax);
-        }
+        ConfigPanel.setBonusCountMax(bonusCountMax);
     }
 
     /**
@@ -169,7 +168,7 @@ public final class Matrix {
         return packMan;
     }
 
-    public List<ActiveElemental> getAnimals() {
-        return animals;
+    public List<ActiveElemental> getElements() {
+        return elements;
     }
 }

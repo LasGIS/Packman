@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
+import fkn.dlaskina.packman.panels.ConfigPanel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -21,10 +22,6 @@ public class PackMan extends ActiveElemental {
     private static final Color FILL_COLOR = new Color(0, 255, 0);
     private static final Color BOUND_COLOR = new Color(0, 125, 0);
     private static final int BORDER = 2;
-    /** число полученых подарков. */
-    private int bonusCount = 0;
-    /** общее число подарков. */
-    private int bonusCountMax;
 
     public PackMan(final Cell cell) {
         super(ElementalType.PackMan, cell);
@@ -60,16 +57,15 @@ public class PackMan extends ActiveElemental {
                 break;
         }
         if (newCell != null && !newCell.isStone()) {
-            cell.removeAnimal(this);
-            newCell.addAnimal(this);
+            cell.removeElement(this);
+            newCell.addElement(this);
             cell = newCell;
             // забираем призы и проверяем на злодея
             for (Elemental elm : newCell.getElements()) {
                 switch (elm.getType()) {
                     case Surprise:
-                        newCell.removeAnimal(elm);
-                        bonusCount++;
-                        if (bonusCount == bonusCountMax) {
+                        newCell.removeElement(elm);
+                        if (ConfigPanel.addBonus()) {
                             throw new GameOverException(true, "Победа!");
                         }
                         break;
@@ -81,17 +77,5 @@ public class PackMan extends ActiveElemental {
         } else {
             moveType = MoveType.NONE;
         }
-    }
-
-    public int getBonusCount() {
-        return bonusCount;
-    }
-
-    public int getBonusCountMax() {
-        return bonusCountMax;
-    }
-
-    public void setBonusCountMax(int bonusCountMax) {
-        this.bonusCountMax = bonusCountMax;
     }
 }

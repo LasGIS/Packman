@@ -34,23 +34,13 @@ public class TimerTaskAction extends TimerTask {
         try {
             final Matrix matrix = Matrix.getMatrix();
             if (matrix != null) {
-                for (final ActiveElemental elm : matrix.getAnimals()) {
+                for (final ActiveElemental elm : matrix.getElements()) {
                     elm.act();
                 }
             }
-            final MapPanel mapPanel = frame.getMapPanel();
-            final Graphics gr = mapPanel.getGraphics();
-            if (gr != null) {
-                mapPanel.setRedrawMap(true);
-                mapPanel.update(gr);
-            }
+            redrawMap();
         } catch (final GameOverException ex) {
-            // делаем паузу и даём переместиться на следующу клетку
-            try {
-                Thread.sleep(100l);
-            } catch (InterruptedException exc) {
-                LOG.error(exc.getMessage(), exc);
-            }
+            redrawMap();
             final GameOverDialog dlg = new GameOverDialog(ex);
             final Dimension dlgSize = dlg.getPreferredSize();
             final Dimension frmSize = frame.getSize();
@@ -62,6 +52,15 @@ public class TimerTaskAction extends TimerTask {
             dlg.setModal(true);
             dlg.pack();
             dlg.setVisible(true);
+        }
+    }
+
+    private void redrawMap() {
+        final MapPanel mapPanel = frame.getMapPanel();
+        final Graphics gr = mapPanel.getGraphics();
+        if (gr != null) {
+            mapPanel.setRedrawMap(true);
+            mapPanel.update(gr);
         }
     }
 }

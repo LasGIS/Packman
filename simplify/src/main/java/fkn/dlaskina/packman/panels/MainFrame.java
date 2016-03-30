@@ -57,7 +57,6 @@ public class MainFrame extends JFrame implements ComponentListener {
             mapPanel.addComponentListener(this);
             contentPane.add(splitPane, BorderLayout.CENTER);
             configPanel = new ConfigPanel();
-            configPanel.setMainFrame(this);
 
             splitPane.add(configPanel, JSplitPane.RIGHT);
             splitPane.add(mapPanel, JSplitPane.LEFT);

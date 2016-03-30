@@ -95,7 +95,7 @@ public class Cell {
      * @param animal element to be added to this list, if absent
      * @return <tt>true</tt> if the element was added
      */
-    public boolean addAnimal(final Elemental animal) {
+    public boolean addElement(final Elemental animal) {
         return elements.addIfAbsent(animal);
     }
 
@@ -104,8 +104,22 @@ public class Cell {
      * @param animal element to be removed from this list, if present
      * @return <tt>true</tt> if this list contained the specified element
      */
-    public boolean removeAnimal(final Elemental animal) {
+    public boolean removeElement(final Elemental animal) {
         return elements.remove(animal);
+    }
+
+
+    public boolean isStone() {
+        return contains(ElementalType.Stone);
+    }
+
+    public boolean contains(final ElementalType type) {
+        for (final Elemental elm : elements) {
+            if (elm.getType() == type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -141,18 +155,5 @@ public class Cell {
         for (Elemental elm : elements) {
             elm.paint(gr, rect);
         }
-    }
-
-    public boolean isStone() {
-        return contains(ElementalType.Stone);
-    }
-
-    public boolean contains(final ElementalType type) {
-        for (final Elemental elm : elements) {
-            if (elm.getType() == type) {
-                return true;
-            }
-        }
-        return false;
     }
 }
