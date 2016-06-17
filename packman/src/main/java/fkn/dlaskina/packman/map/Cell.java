@@ -1,8 +1,6 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,6 +24,7 @@ public class Cell {
     private int indY;
     /** список сущьностей, населяющих ячейку. */
     private CopyOnWriteArrayList<Elemental> elements = new CopyOnWriteArrayList<>();
+    private final Rectangle rectangle;
 
     /**
      * Создание ячейки по нижнему левому углу.
@@ -35,6 +34,7 @@ public class Cell {
     public Cell(final int indexX, final int indexY) {
         this.indX = indexX;
         this.indY = indexY;
+        rectangle = new Rectangle(indX * CELL_SIZE, indY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
     }
 
     /**
@@ -149,11 +149,13 @@ public class Cell {
     }
 
     public void paint(final Graphics gr, final int frame) {
-        final Rectangle rect = new Rectangle(indX * CELL_SIZE, indY * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        gr.setColor(Color.black);
-        gr.drawRect(rect.x, rect.y, rect.width, rect.height);
         for (Elemental elm : elements) {
-            elm.paint(gr, rect, frame);
+            elm.paint(gr, rectangle, frame);
         }
+    }
+
+    public void paintGrid(final Graphics gr) {
+        gr.setColor(Color.black);
+        gr.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
 }

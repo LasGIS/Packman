@@ -5,6 +5,9 @@ import java.awt.*;
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
 
+import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
+import static fkn.dlaskina.packman.map.Matrix.CELL_STEP;
+
 /**
  * Definition of the Enemy class
  * @author VLaskin
@@ -30,35 +33,37 @@ public class Enemy extends ActiveElemental {
     }
 
     private Polygon createPolygon(Rectangle rect, int frame) {
-        final int x0 = rect.x + rect.width / 2;
-        final int y0 = rect.y + rect.height / 2;
-        final int x1 = rect.x + BORDER;
-        final int y1 = rect.y + BORDER;
-        final int x2 = rect.x + rect.width - BORDER;
-        final int y2 = rect.y + rect.height - BORDER;
+        final int x = rect.x + cellX;
+        final int y = rect.y + cellY;
+        final int x0 = x + rect.width / 2;
+        final int y0 = y + rect.height / 2;
+        final int x1 = x + BORDER;
+        final int y1 = y + BORDER;
+        final int x2 = x + rect.width - BORDER;
+        final int y2 = y + rect.height - BORDER;
         final double factor = (frame < 20 ? frame : 40 - frame) / 20.0;
         final int dx = (int) ((rect.width / 2 - BORDER) * factor);
         final int dy = (int) ((rect.height / 2 - BORDER) * factor);
         switch (moveType) {
             case DOWN:
                 return new Polygon(
-                    new int[] {x1, x2, x2-dx, x0, x1+dx},
+                    new int[] {x1, x2, x2 - dx, x0, x1 + dx},
                     new int[] {y1, y1, y2, y0, y2}, 5
                 );
             case UP:
                 return new Polygon(
-                    new int[] {x1+dx, x0, x2-dx, x2, x1},
+                    new int[] {x1 + dx, x0, x2 - dx, x2, x1},
                     new int[] {y1, y0, y1, y2, y2}, 5
                 );
             case LEFT:
                 return new Polygon(
                     new int[] {x2, x2, x1, x0, x1},
-                    new int[] {y1, y2, y2-dy, y0, y1+dy}, 5
+                    new int[] {y1, y2, y2 - dy, y0, y1 + dy}, 5
                 );
             case RIGHT:
                 return new Polygon(
                     new int[] {x1, x2, x0, x2, x1},
-                    new int[] {y1, y1+dy, y0, y2-dy, y2}, 5
+                    new int[] {y1, y1 + dy, y0, y2 - dy, y2}, 5
                 );
             default:
                 return new Polygon(new int[] {x1, x2, x2, x1}, new  int[] {y1, y1, y2, y2}, 4);
@@ -67,6 +72,7 @@ public class Enemy extends ActiveElemental {
 
     @Override
     public void act() throws GameOverException {
+        if (cellMove(false)) return;
         // альтернативные перемещения
         Cell alterCell[] = new Cell[4];
         MoveType alterMoveType[] = new MoveType[4];
@@ -94,7 +100,38 @@ public class Enemy extends ActiveElemental {
             if (newCell.contains(ElementalType.PackMan)) {
                 throw new GameOverException(false, "Враг наехал на рокемона");
             }
+            cellMove(true);
         }
+    }
+
+    /**
+     * Перемещаемся внутри ячейки.
+     * @return if true then still moving
+     * @param alwaysMove перемещаемся не смотря ни на что
+     */
+    private boolean cellMove(final boolean alwaysMove) {
+        if (!alwaysMove && Math.abs(cellX) < CELL_STEP && Math.abs(cellY) < CELL_STEP) {
+            return false;
+        }
+        switch (moveType) {
+            case DOWN:
+                cellY += CELL_STEP; cellX = 0;
+                break;
+            case UP:
+                cellY -= CELL_STEP; cellX = 0;
+                break;
+            case RIGHT:
+                cellX += CELL_STEP; cellY = 0;
+                break;
+            case LEFT:
+                cellX -= CELL_STEP; cellY = 0;
+                break;
+        }
+        if (Math.abs(cellX) > CELL_SIZE / 2 || Math.abs(cellY) > CELL_SIZE / 2) {
+            cellX = cellX + (cellX == 0 ? 0 : (cellX > 0 ? -CELL_SIZE : CELL_SIZE));
+            cellY = cellY + (cellY == 0 ? 0 : (cellY > 0 ? -CELL_SIZE : CELL_SIZE));
+        }
+        return true;
     }
 
     private int findAlternativeCells(final Cell[] alterCell, final MoveType[] alterMoveType) {

@@ -30,6 +30,8 @@ public final class Matrix {
 
     /** размер элементарной ячейки в пикселях. */
     public static final int CELL_SIZE = 30;
+    /** шаг животного внутри ячейки. */
+    public static final int CELL_STEP = 3;
     /** singleton матрицы. */
     private static Matrix MATRIX;
 
@@ -156,6 +158,14 @@ public final class Matrix {
         for (final Cell[] yCells : cells) {
             for (final Cell cell : yCells) {
                 cell.paint(gr, frame);
+            }
+        }
+    }
+
+    public void paintGrid(final Graphics gr) {
+        for (final Cell[] yCells : cells) {
+            for (final Cell cell : yCells) {
+                cell.paintGrid(gr);
             }
         }
     }

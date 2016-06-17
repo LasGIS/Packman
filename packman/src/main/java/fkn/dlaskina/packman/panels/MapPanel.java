@@ -104,6 +104,7 @@ public class MapPanel extends JPanel {
                 final Graphics bckGr = grBackgroundImage.getGraphics();
                 bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
                 bckGr.fillRect(0, 0, mDim.width, mDim.height);
+                Matrix.getMatrix().paintGrid(bckGr);
                 Matrix.getMatrix().paint(bckGr, frame);
                 isRedrawMap = false;
                 requestFocusInWindow();

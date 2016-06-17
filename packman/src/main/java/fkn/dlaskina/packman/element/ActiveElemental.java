@@ -12,6 +12,9 @@ public abstract class ActiveElemental extends Elemental {
 
     /** ячейка, в которой находится существо */
     protected Cell cell;
+    /** координаты существа в ячейке */
+    protected int cellX = 0;
+    protected int cellY = 0;
     protected MoveType moveType = MoveType.NONE;
 
     protected ActiveElemental(ElementalType type, final Cell cell) {
