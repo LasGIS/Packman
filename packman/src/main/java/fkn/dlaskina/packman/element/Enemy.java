@@ -5,9 +5,6 @@ import java.awt.*;
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
 
-import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
-import static fkn.dlaskina.packman.map.Matrix.CELL_STEP;
-
 /**
  * Definition of the Enemy class
  * @author VLaskin
@@ -18,6 +15,9 @@ public class Enemy extends ActiveElemental {
     private static final Color FILL_COLOR = new Color(255, 0, 0);
     private static final Color BOUND_COLOR = new Color(125, 0, 0);
     private static final int BORDER = 2;
+
+    private Cell newCell = null;
+    //private MoveType newMoveType = MoveType.NONE;
 
     public Enemy(final Cell cell) {
         super(ElementalType.Enemy, cell);
@@ -44,7 +44,7 @@ public class Enemy extends ActiveElemental {
         final double factor = (frame < 20 ? frame : 40 - frame) / 20.0;
         final int dx = (int) ((rect.width / 2 - BORDER) * factor);
         final int dy = (int) ((rect.height / 2 - BORDER) * factor);
-        switch (moveType) {
+        switch (cellMoveType) {
             case DOWN:
                 return new Polygon(
                     new int[] {x1, x2, x2 - dx, x0, x1 + dx},
@@ -72,66 +72,40 @@ public class Enemy extends ActiveElemental {
 
     @Override
     public void act() throws GameOverException {
-        if (cellMove(false)) return;
-        // альтернативные перемещения
-        Cell alterCell[] = new Cell[4];
-        MoveType alterMoveType[] = new MoveType[4];
-        final int alterCount = findAlternativeCells(alterCell, alterMoveType);
-        Cell newCell;
-        if (alterCount > 2) {
-            // есть много путей
-            int ind = (int) Math.floor(Math.random() * alterCount);
-            newCell = alterCell[ind];
-            moveType = alterMoveType[ind];
-        } else if (alterCount > 0) {
-            // только один путь - вперёд!
-            newCell = alterCell[0];
-            moveType = alterMoveType[0];
-        } else {
-            // нет выхода
-            newCell = null;
-        }
-        if (newCell != null) {
-            cell.removeElement(this);
-            newCell.addElement(this);
-            cell = newCell;
-
-            // проверяем на packman`a
-            if (newCell.contains(ElementalType.PackMan)) {
-                throw new GameOverException(false, "Враг наехал на рокемона");
+        if (isCenterCell()) {
+            // альтернативные перемещения
+            Cell alterCell[] = new Cell[4];
+            MoveType alterMoveType[] = new MoveType[4];
+            final int alterCount = findAlternativeCells(alterCell, alterMoveType);
+            if (alterCount > 2) {
+                // есть много путей
+                int ind = (int) Math.floor(Math.random() * alterCount);
+                newCell = alterCell[ind];
+                cellMoveType = alterMoveType[ind];
+            } else if (alterCount > 0) {
+                // только один путь - вперёд!
+                newCell = alterCell[0];
+                cellMoveType = alterMoveType[0];
+            } else {
+                // нет выхода
+                newCell = null;
             }
-            cellMove(true);
         }
-    }
+        if (isBorderCell()) {
+            if (newCell != null) {
+                cell.removeElement(this);
+                newCell.addElement(this);
+                cell = newCell;
+                 moveType = cellMoveType;
+                startCellMove();
 
-    /**
-     * Перемещаемся внутри ячейки.
-     * @return if true then still moving
-     * @param alwaysMove перемещаемся не смотря ни на что
-     */
-    private boolean cellMove(final boolean alwaysMove) {
-        if (!alwaysMove && Math.abs(cellX) < CELL_STEP && Math.abs(cellY) < CELL_STEP) {
-            return false;
+                // проверяем на packman`a
+                if (newCell.contains(ElementalType.PackMan)) {
+                    throw new GameOverException(false, "Враг наехал на рокемона");
+                }
+            }
         }
-        switch (moveType) {
-            case DOWN:
-                cellY += CELL_STEP; cellX = 0;
-                break;
-            case UP:
-                cellY -= CELL_STEP; cellX = 0;
-                break;
-            case RIGHT:
-                cellX += CELL_STEP; cellY = 0;
-                break;
-            case LEFT:
-                cellX -= CELL_STEP; cellY = 0;
-                break;
-        }
-        if (Math.abs(cellX) > CELL_SIZE / 2 || Math.abs(cellY) > CELL_SIZE / 2) {
-            cellX = cellX + (cellX == 0 ? 0 : (cellX > 0 ? -CELL_SIZE : CELL_SIZE));
-            cellY = cellY + (cellY == 0 ? 0 : (cellY > 0 ? -CELL_SIZE : CELL_SIZE));
-        }
-        return true;
+        cellMove();
     }
 
     private int findAlternativeCells(final Cell[] alterCell, final MoveType[] alterMoveType) {
