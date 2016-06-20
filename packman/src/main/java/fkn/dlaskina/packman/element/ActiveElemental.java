@@ -5,7 +5,6 @@ import fkn.dlaskina.packman.map.GameOverException;
 
 import static fkn.dlaskina.packman.element.MoveType.NONE;
 import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
-import static fkn.dlaskina.packman.map.Matrix.CELL_STEP;
 
 /**
  * Definition of the ActiveElemental class
@@ -16,9 +15,13 @@ public abstract class ActiveElemental extends Elemental {
 
     /** ячейка, в которой находится существо */
     protected Cell cell;
+    /** ячейка, в которой будет находится существо на следующем шаге */
+    protected Cell newCell = null;
     /** координаты существа в ячейке */
-    protected int cellX = 0;
-    protected int cellY = 0;
+    protected double cellX = 0.0;
+    protected double cellY = 0.0;
+    /** шаг животного внутри ячейки. */
+    protected double cellStep;
     /** установленное перемещение. */
     protected MoveType moveType = NONE;
     /** перемещение внутри ячейки. */
@@ -41,22 +44,22 @@ public abstract class ActiveElemental extends Elemental {
 */
         switch (cellMoveType) {
             case DOWN:
-                cellY += CELL_STEP; cellX = 0;
+                cellY += cellStep; cellX = 0;
                 break;
             case UP:
-                cellY -= CELL_STEP; cellX = 0;
+                cellY -= cellStep; cellX = 0;
                 break;
             case RIGHT:
-                cellX += CELL_STEP; cellY = 0;
+                cellX += cellStep; cellY = 0;
                 break;
             case LEFT:
-                cellX -= CELL_STEP; cellY = 0;
+                cellX -= cellStep; cellY = 0;
                 break;
         }
     }
 
     protected boolean isCenterCell() {
-        return (Math.abs(cellX) < CELL_STEP && Math.abs(cellY) < CELL_STEP);
+        return (Math.abs(cellX) < cellStep && Math.abs(cellY) < cellStep);
     }
 
     protected boolean isBorderCell() {

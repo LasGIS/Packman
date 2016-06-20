@@ -16,11 +16,9 @@ public class Enemy extends ActiveElemental {
     private static final Color BOUND_COLOR = new Color(125, 0, 0);
     private static final int BORDER = 2;
 
-    private Cell newCell = null;
-    //private MoveType newMoveType = MoveType.NONE;
-
     public Enemy(final Cell cell) {
         super(ElementalType.Enemy, cell);
+        cellStep = 3.0;
     }
 
     @Override
@@ -33,8 +31,8 @@ public class Enemy extends ActiveElemental {
     }
 
     private Polygon createPolygon(Rectangle rect, int frame) {
-        final int x = rect.x + cellX;
-        final int y = rect.y + cellY;
+        final int x = (int) (rect.x + cellX);
+        final int y = (int) (rect.y + cellY);
         final int x0 = x + rect.width / 2;
         final int y0 = y + rect.height / 2;
         final int x1 = x + BORDER;
@@ -96,7 +94,7 @@ public class Enemy extends ActiveElemental {
                 cell.removeElement(this);
                 newCell.addElement(this);
                 cell = newCell;
-                 moveType = cellMoveType;
+                moveType = cellMoveType;
                 startCellMove();
 
                 // проверяем на packman`a

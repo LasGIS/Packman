@@ -1,7 +1,6 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +17,10 @@ import fkn.dlaskina.packman.panels.ConfigPanel;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
+import static fkn.dlaskina.packman.element.SurpriseType.simple;
+import static fkn.dlaskina.packman.element.SurpriseType.speed;
+
 /**
  * Матрица элементов карты.
  * @author Laskin
@@ -30,8 +33,6 @@ public final class Matrix {
 
     /** размер элементарной ячейки в пикселях. */
     public static final int CELL_SIZE = 30;
-    /** шаг животного внутри ячейки. */
-    public static final int CELL_STEP = 3;
     /** singleton матрицы. */
     private static Matrix MATRIX;
 
@@ -73,17 +74,27 @@ public final class Matrix {
                     case 'e': {
                         final Enemy enemy = new Enemy(cell);
                         cell.addElement(enemy);
-                        cell.addElement(new Surprise());
+                        cell.addElement(new Surprise(simple));
                         bonusCountMax++;
                         elements.add(enemy);
                         break;
                     }
-                    case 's':
-                        cell.addElement(new Stone());
-                        break;
                     case '1':
-                        cell.addElement(new Surprise());
+                        cell.addElement(new Surprise(simple));
                         bonusCountMax++;
+                        break;
+                    case '2':
+                        cell.addElement(new Surprise(speed));
+                        bonusCountMax++;
+                        break;
+                    case '3':
+                        cell.addElement(new Surprise(aggressive));
+                        bonusCountMax++;
+                        break;
+                    case ' ':
+                        break;
+                    default:
+                        cell.addElement(new Stone());
                         break;
                 }
                 cells[y][x] = cell;
