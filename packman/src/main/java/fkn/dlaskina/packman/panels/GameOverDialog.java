@@ -52,18 +52,23 @@ public class GameOverDialog extends JDialog {
             c.gridy = 0;
             JButton startButton = new JButton("Start This");
             startButton.addActionListener(e -> {
-                Matrix.createMatrix("matrix.txt");
+                Matrix.createMatrix(false);
                 TimersControl.startTimers();
                 dispose();
             });
             JButton newLevelButton = new JButton("New Level");
+            newLevelButton.setEnabled(goExc.isWin());
             newLevelButton.addActionListener(e -> {
-                Matrix.createMatrix("matrix1.txt");
+                Matrix.createMatrix(true);
                 TimersControl.startTimers();
                 dispose();
             });
+            JButton stopButton = new JButton("Stop");
+            stopButton.addActionListener(e -> System.exit(0));
             buttonPanel.add(startButton, c);
             c.gridx = 1;
+            buttonPanel.add(stopButton, c);
+            c.gridx = 2;
             buttonPanel.add(newLevelButton, c);
 
             Container contentPane = getContentPane();

@@ -35,6 +35,8 @@ public final class Matrix {
     public static final int CELL_SIZE = 30;
     /** singleton матрицы. */
     private static Matrix MATRIX;
+    /** уровень игры. */
+    private static int level = 0;
 
     /** размер матрицы по горизонтали. */
     public static int MATRIX_SIZE_X;
@@ -133,8 +135,9 @@ public final class Matrix {
     /**
      * @return выдаем singleton матрицы по первому требованию.
      */
-    public static Matrix createMatrix(final String matrixName) {
-        MATRIX = new Matrix(matrixName);
+    public static Matrix createMatrix(final boolean isNewLevel) {
+        if (isNewLevel) level++;
+        MATRIX = new Matrix("matrix" + level + ".txt");
         return MATRIX;
     }
 
