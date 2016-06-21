@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import fkn.dlaskina.packman.element.ActiveElemental;
 import fkn.dlaskina.packman.element.Enemy;
@@ -37,7 +38,7 @@ public final class Matrix {
     private static Matrix MATRIX;
     /** уровень игры. */
     private static int level = 0;
-
+    private static final int levelMax = 2;
     /** размер матрицы по горизонтали. */
     public static int MATRIX_SIZE_X;
     /** размер матрицы по вертикали. */
@@ -48,7 +49,7 @@ public final class Matrix {
     /** pokemon. */
     private PackMan packMan = null;
     /** pokemon. */
-    private List<ActiveElemental> elements = new ArrayList<>();
+    private List<ActiveElemental> elements = new CopyOnWriteArrayList<>();
 
     /**
      * Создаем и заполняем матрицу.
@@ -136,7 +137,7 @@ public final class Matrix {
      * @return выдаем singleton матрицы по первому требованию.
      */
     public static Matrix createMatrix(final boolean isNewLevel) {
-        if (isNewLevel) level++;
+        if (isNewLevel && level < levelMax) level++;
         MATRIX = new Matrix("matrix" + level + ".txt");
         return MATRIX;
     }

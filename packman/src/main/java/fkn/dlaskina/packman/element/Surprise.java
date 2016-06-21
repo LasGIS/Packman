@@ -2,8 +2,6 @@ package fkn.dlaskina.packman.element;
 
 import java.awt.*;
 
-import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
-
 /**
  * Definition of the Surprise class
  * @author VLaskin
@@ -13,14 +11,20 @@ public class Surprise extends Elemental {
 
     private static final Color FILL_COLOR = new Color(255, 255, 0);
     private static final Color BOUND_COLOR = new Color(125, 128, 0);
+    private static final Color SPEED_FILL_COLOR = new Color(128, 255, 0);
+    private static final Color SPEED_BOUND_COLOR = new Color(0, 128, 0);
     private static final Color AGGRESSIVE_FILL_COLOR = new Color(255, 128, 0);
-    private static final Color AGGRESSIVE_BOUND_COLOR = new Color(255, 0, 0);
+    private static final Color AGGRESSIVE_BOUND_COLOR = new Color(200, 0, 0);
     private static final int BORDER = 5;
-    private SurpriseType type;
+    private SurpriseType prizeType;
 
     public Surprise(final SurpriseType type) {
         super(ElementalType.Surprise);
-        this.type = type;
+        this.prizeType = type;
+    }
+
+    public SurpriseType getPrizeType() {
+        return prizeType;
     }
 
     @Override
@@ -30,13 +34,29 @@ public class Surprise extends Elemental {
         final int y = rect.y + BORDER;
         final int height = rect.height - BORDER * 2;
         if (width > 0) {
-            gr.setColor(type == aggressive ? AGGRESSIVE_FILL_COLOR : FILL_COLOR);
+            gr.setColor(getFillColor());
             gr.fillOval(x, y, width, height);
-            gr.setColor(type == aggressive ? AGGRESSIVE_BOUND_COLOR : BOUND_COLOR);
+            gr.setColor(getBoundColor());
             gr.drawOval(x, y, width, height);
         } else {
-            gr.setColor(type == aggressive ? AGGRESSIVE_FILL_COLOR : FILL_COLOR);
+            gr.setColor(getFillColor());
             gr.drawLine(x, y, x, y + height);
+        }
+    }
+
+    private Color getBoundColor() {
+        switch (prizeType) {
+            case aggressive: return AGGRESSIVE_BOUND_COLOR;
+            case speed: return SPEED_BOUND_COLOR;
+            default: return BOUND_COLOR;
+        }
+    }
+
+    private Color getFillColor() {
+        switch (prizeType) {
+            case aggressive: return AGGRESSIVE_FILL_COLOR;
+            case speed: return SPEED_FILL_COLOR;
+            default: return FILL_COLOR;
         }
     }
 }

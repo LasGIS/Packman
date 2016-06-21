@@ -4,6 +4,10 @@ import java.awt.*;
 
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
+import fkn.dlaskina.packman.map.Matrix;
+
+import static fkn.dlaskina.packman.element.ElementalType.PackMan;
+import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
 
 /**
  * Definition of the Enemy class
@@ -98,8 +102,15 @@ public class Enemy extends ActiveElemental {
                 startCellMove();
 
                 // проверяем на packman`a
-                if (newCell.contains(ElementalType.PackMan)) {
-                    throw new GameOverException(false, "Враг наехал на рокемона");
+                if (newCell.contains(PackMan)) {
+                    final Matrix matrix = Matrix.getMatrix();
+                    final PackMan packMan = Matrix.getMatrix().getPackMan();
+                    if (packMan.getPrizeType() == aggressive) {
+                        newCell.removeElement(this);
+                        matrix.getElements().remove(this);
+                    } else {
+                        throw new GameOverException(false, "Враг наехал на рокемона");
+                    }
                 }
             }
         }
