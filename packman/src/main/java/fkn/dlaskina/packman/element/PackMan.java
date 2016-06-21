@@ -133,7 +133,6 @@ public class PackMan extends ActiveElemental {
                                 }
                             }
                             if (isRemove || !(prizeType != simple && surpriseType != simple)) {
-                                cellStep = SIMPLE_CELL_STEP;
                                 newCell.removeElement(elm);
                                 if (ConfigPanel.addBonus()) {
                                     throw new GameOverException(true, "Победа!");
@@ -157,6 +156,7 @@ public class PackMan extends ActiveElemental {
             }
         }
         if (prizeType != simple && prizeTime < System.currentTimeMillis()) {
+            cellStep = SIMPLE_CELL_STEP;
             prizeType = simple;
         }
         cellMove();
