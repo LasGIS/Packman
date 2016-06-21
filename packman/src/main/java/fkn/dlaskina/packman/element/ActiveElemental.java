@@ -36,12 +36,7 @@ public abstract class ActiveElemental extends Elemental {
      * Перемещаемся внутри ячейки.
      * @ param alternativeMoveType альтернативное направление (если нет основного)
      */
-    protected void cellMove(/*final MoveType alternativeMoveType*/) {
-/*
-        if (cellMoveType == NONE) {
-            cellMoveType = alternativeMoveType;
-        }
-*/
+    protected void cellMove() {
         switch (cellMoveType) {
             case DOWN:
                 cellY += cellStep; cellX = 0;
