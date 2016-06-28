@@ -70,13 +70,7 @@ public class Cell {
      */
     public final double distance(final Cell to) {
         double dx = Math.abs(to.indX - indX);
-        if (dx > Matrix.MATRIX_SIZE_X / 2.) {
-            dx -= Matrix.MATRIX_SIZE_X;
-        }
         double dy = Math.abs(to.indY - indY);
-        if (dy > Matrix.MATRIX_SIZE_Y / 2.) {
-            dy -= Matrix.MATRIX_SIZE_Y;
-        }
         return Math.sqrt(dx * dx + dy * dy);
     }
 

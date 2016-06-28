@@ -81,4 +81,8 @@ public abstract class ActiveElemental extends Elemental {
     public void setMove(MoveType moveType) {
         this.moveType = moveType;
     }
+
+    public Cell getCell() {
+        return cell;
+    }
 }

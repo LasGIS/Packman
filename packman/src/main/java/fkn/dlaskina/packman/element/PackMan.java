@@ -141,8 +141,7 @@ public class PackMan extends ActiveElemental {
                             break;
                         case Enemy: {
                             if (prizeType == aggressive) {
-                                newCell.removeElement(elm);
-                                Matrix.getMatrix().getElements().remove(elm);
+                                Matrix.getMatrix().removeEnemy((Enemy) elm);
                             } else {
                                 throw new GameOverException(false, "Сам наехал на врага");
                             }

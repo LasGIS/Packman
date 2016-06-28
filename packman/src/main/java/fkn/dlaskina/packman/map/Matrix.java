@@ -196,4 +196,13 @@ public final class Matrix {
     public List<ActiveElemental> getElements() {
         return elements;
     }
+
+    /**
+     * удаляем врага
+     * @param enemy враг
+     */
+    public void removeEnemy(final Enemy enemy) {
+        enemy.getCell().removeElement(enemy);
+        getElements().remove(enemy);
+    }
 }
