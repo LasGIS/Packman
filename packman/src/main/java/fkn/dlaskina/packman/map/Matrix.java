@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fkn.dlaskina.packman.element.ActiveElemental;
+import fkn.dlaskina.packman.element.Bones;
+import fkn.dlaskina.packman.element.ElementalType;
 import fkn.dlaskina.packman.element.Enemy;
+import fkn.dlaskina.packman.element.MedicalBox;
 import fkn.dlaskina.packman.element.PackMan;
 import fkn.dlaskina.packman.element.Stone;
 import fkn.dlaskina.packman.element.Surprise;
@@ -202,7 +205,23 @@ public final class Matrix {
      * @param enemy враг
      */
     public void removeEnemy(final Enemy enemy) {
-        enemy.getCell().removeElement(enemy);
-        getElements().remove(enemy);
+        final Cell enemyCell = enemy.getCell();
+        enemyCell.removeElement(enemy);
+        elements.remove(enemy);
+
+        final Bones bones = new Bones(enemyCell);
+        enemyCell.addElement(bones);
+        elements.add(bones);
+        for (Cell[] row : cells) {
+            for (Cell cell : row) {
+                if (!cell.contains(ElementalType.Stone)) {
+                    final double dist = enemyCell.distance(cell);
+                    if (dist > 5) {
+                        cell.addElement(new MedicalBox());
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

@@ -11,5 +11,9 @@ public enum ElementalType {
      /** враг. */
     Enemy,
     /** стена. */
-    Stone
+    Stone,
+    /** Аптечка. */
+    MedBox,
+    /** Кости. */
+    Bones
 }

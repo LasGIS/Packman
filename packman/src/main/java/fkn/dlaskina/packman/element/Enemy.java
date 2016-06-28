@@ -12,7 +12,7 @@ import static fkn.dlaskina.packman.element.ElementalType.PackMan;
 import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
 
 /**
- * Definition of the Enemy class
+ * Враг.
  * @author VLaskin
  * @since 26.03.2016.
  */
