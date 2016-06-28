@@ -18,10 +18,14 @@ import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
  */
 public class Cell {
 
+    private static final Color BONE_COLOR = new Color(125, 0, 0);
+
     /** индекс широты ячейки 0 - это юг, 100 - это север. */
     private int indX;
     /** индекс долгота ячейки 0 - это запад, 100 - это восток. */
     private int indY;
+    /** рейтинг ячейки для костей*/
+    private int boneRate = 19;
     /** список сущьностей, населяющих ячейку. */
     private CopyOnWriteArrayList<Elemental> elements = new CopyOnWriteArrayList<>();
     private final Rectangle rectangle;
@@ -61,6 +65,14 @@ public class Cell {
         final int nx = indX + delX;
         final int ny = indY + delY;
         return Matrix.getMatrix().getCell(nx, ny);
+    }
+
+    public int getBoneRate() {
+        return boneRate;
+    }
+
+    public void setBoneRate(final int boneRate) {
+        this.boneRate = boneRate;
     }
 
     /**
@@ -151,5 +163,9 @@ public class Cell {
     public void paintGrid(final Graphics gr) {
         gr.setColor(Color.black);
         gr.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+        if (boneRate > 0) {
+            gr.setColor(BONE_COLOR);
+            gr.drawString(String.valueOf(boneRate), rectangle.x + 16, rectangle.y + 12);
+        }
     }
 }

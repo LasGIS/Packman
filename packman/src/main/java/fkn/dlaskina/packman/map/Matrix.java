@@ -223,5 +223,23 @@ public final class Matrix {
                 }
             }
         }
+        createBoneRate();
     }
+
+    private void createBoneRate() {
+        for (Cell[] row : cells) {
+            for (Cell cell : row) {
+                if (!cell.contains(ElementalType.Stone)) {
+/*
+                    final double dist = enemyCell.distance(cell);
+                    if (dist > 5) {
+                        cell.addElement(new MedicalBox());
+                        return;
+                    }
+*/
+                }
+            }
+        }
+    }
+
 }
