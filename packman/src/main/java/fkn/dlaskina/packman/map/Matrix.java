@@ -212,34 +212,57 @@ public final class Matrix {
         final Bones bones = new Bones(enemyCell);
         enemyCell.addElement(bones);
         elements.add(bones);
+        double maxDist = 5;
+        Cell cellMaxDist = null;
         for (Cell[] row : cells) {
             for (Cell cell : row) {
                 if (!cell.contains(ElementalType.Stone)) {
                     final double dist = enemyCell.distance(cell);
-                    if (dist > 5) {
-                        cell.addElement(new MedicalBox());
-                        return;
+                    if (dist > maxDist) {
+                        maxDist = dist;
+                        cellMaxDist = cell;
                     }
                 }
             }
         }
-        createBoneRate();
+        if (cellMaxDist != null) {
+            cellMaxDist.addElement(new MedicalBox());
+            createBoneRate();
+        }
     }
+
+    static final int[] DXS = {0, 1, -1, 0};
+    static final int[] DYS = {1, 0, 0, -1};
 
     private void createBoneRate() {
+        final ArrayList<Cell> temp = new ArrayList<>();
+        clearBoneRate(temp);
+        int nextRate = 1;
+        while (!temp.isEmpty()) {
+            final ArrayList<Cell> tempCell = new ArrayList<>();
+            for (final Cell tCell : temp) {
+                for (int i = 0; i < DXS.length; i++) {
+                    final Cell cell = tCell.getCell(DXS[i], DYS[i]);
+                    if (cell != null && !cell.contains(ElementalType.Stone) && cell.getBoneRate() == 0) {
+                        cell.setBoneRate(nextRate);
+                        tempCell.add(cell);
+                    }
+                }
+            }
+            temp.clear();
+            temp.addAll(tempCell);
+            nextRate++;
+        }
+    }
+
+    private void clearBoneRate(final ArrayList<Cell> temp) {
         for (Cell[] row : cells) {
             for (Cell cell : row) {
                 if (!cell.contains(ElementalType.Stone)) {
-/*
-                    final double dist = enemyCell.distance(cell);
-                    if (dist > 5) {
-                        cell.addElement(new MedicalBox());
-                        return;
-                    }
-*/
+                    if (cell.contains(ElementalType.MedBox)) temp.add(cell);
+                    cell.setBoneRate(0);
                 }
             }
         }
     }
-
 }
