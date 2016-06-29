@@ -11,8 +11,8 @@ public class Surprise extends Elemental {
 
     private static final Color FILL_COLOR = new Color(255, 255, 0);
     private static final Color BOUND_COLOR = new Color(125, 128, 0);
-    private static final Color SPEED_FILL_COLOR = new Color(128, 255, 0);
-    private static final Color SPEED_BOUND_COLOR = new Color(0, 128, 0);
+    private static final Color SPEED_FILL_COLOR = new Color(0, 128, 255);
+    private static final Color SPEED_BOUND_COLOR = new Color(0, 0, 128);
     private static final Color AGGRESSIVE_FILL_COLOR = new Color(255, 128, 0);
     private static final Color AGGRESSIVE_BOUND_COLOR = new Color(200, 0, 0);
     private static final int BORDER = 5;

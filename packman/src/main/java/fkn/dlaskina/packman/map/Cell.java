@@ -28,7 +28,7 @@ public class Cell {
     private static final int[] DYS = {1, 0, 0, -1};
     private static final MoveType[] D_MOVE_TYPES = {MoveType.DOWN, MoveType.RIGHT, MoveType.LEFT, MoveType.UP};
 
-    private static final Color BONE_COLOR = new Color(125, 0, 0);
+//    private static final Color BONE_COLOR = new Color(125, 0, 0);
 
     /** индекс широты ячейки 0 - это юг, 100 - это север. */
     private int indX;
@@ -188,9 +188,11 @@ public class Cell {
     public void paintGrid(final Graphics gr) {
         gr.setColor(Color.black);
         gr.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+/*
         if (boneRate > 0) {
             gr.setColor(BONE_COLOR);
             gr.drawString(String.valueOf(boneRate), rectangle.x + 16, rectangle.y + 12);
         }
+*/
     }
 }
