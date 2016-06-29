@@ -1,9 +1,14 @@
 package fkn.dlaskina.packman.element;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.Collection;
+import java.util.List;
 
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
+import fkn.dlaskina.packman.map.Matrix;
 
 /**
  * Это то, что осталось от врага, когда его съели :(.
@@ -17,6 +22,7 @@ public class Bones extends ActiveElemental {
 
     public Bones(final Cell cell) {
         super(ElementalType.Bones, cell);
+        cellStep = 1.0;
     }
 
     @Override
@@ -44,6 +50,52 @@ public class Bones extends ActiveElemental {
 
     @Override
     public void act() throws GameOverException {
+        if (isCenterCell()) {
+            AlterCellMove finalCellMove = null;
+            int finalBoneRate = Integer.MAX_VALUE;
+            for (final AlterCellMove cellMove : cell.getAroundCells()) {
+                final int boneRate = cellMove.getCell().getBoneRate();
+                if (boneRate < finalBoneRate) {
+                    finalBoneRate = boneRate;
+                    finalCellMove = cellMove;
+                }
+            }
+            if (finalCellMove != null) {
+                newCell = finalCellMove.getCell();
+                cellMoveType = finalCellMove.getMoveType();
+            } else {
+                // нет выхода
+                newCell = null;
+            }
+        }
+        if (isBorderCell()) {
+            if (newCell != null) {
+                cell.removeElement(this);
+                newCell.addElement(this);
+                cell = newCell;
+                moveType = cellMoveType;
+                startCellMove();
 
+                // проверяем на packman`a
+                if (newCell.contains(ElementalType.MedBox)) {
+                    Collection<Elemental> elements = newCell.getElements();
+                    for (final Elemental elm : elements) {
+                        if (elm.getType() == ElementalType.MedBox) {
+                            elements.remove(elm);
+                            break;
+                        }
+                    }
+                    final Enemy enm = new Enemy(newCell);
+                    final Matrix matrix = Matrix.getMatrix();
+                    newCell.addElement(enm);
+                    final List<ActiveElemental> matrixElements = matrix.getElements();
+                    matrixElements.add(enm);
+                    newCell.removeElement(this);
+                    matrixElements.remove(this);
+                    matrix.createBoneRate();
+                }
+            }
+        }
+        cellMove();
     }
 }

@@ -1,6 +1,7 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fkn.dlaskina.packman.element.ActiveElemental;
+import fkn.dlaskina.packman.element.AlterCellMove;
 import fkn.dlaskina.packman.element.Bones;
 import fkn.dlaskina.packman.element.ElementalType;
 import fkn.dlaskina.packman.element.Enemy;
@@ -231,19 +233,16 @@ public final class Matrix {
         }
     }
 
-    static final int[] DXS = {0, 1, -1, 0};
-    static final int[] DYS = {1, 0, 0, -1};
-
-    private void createBoneRate() {
+    public void createBoneRate() {
         final ArrayList<Cell> temp = new ArrayList<>();
         clearBoneRate(temp);
-        int nextRate = 1;
+        int nextRate = 2;
         while (!temp.isEmpty()) {
             final ArrayList<Cell> tempCell = new ArrayList<>();
             for (final Cell tCell : temp) {
-                for (int i = 0; i < DXS.length; i++) {
-                    final Cell cell = tCell.getCell(DXS[i], DYS[i]);
-                    if (cell != null && !cell.contains(ElementalType.Stone) && cell.getBoneRate() == 0) {
+                for (final AlterCellMove cellMove : tCell.getAroundCells()) {
+                    final Cell cell = cellMove.getCell();
+                    if (cell.getBoneRate() == 0) {
                         cell.setBoneRate(nextRate);
                         tempCell.add(cell);
                     }
@@ -259,8 +258,12 @@ public final class Matrix {
         for (Cell[] row : cells) {
             for (Cell cell : row) {
                 if (!cell.contains(ElementalType.Stone)) {
-                    if (cell.contains(ElementalType.MedBox)) temp.add(cell);
-                    cell.setBoneRate(0);
+                    if (cell.contains(ElementalType.MedBox)) {
+                        temp.add(cell);
+                        cell.setBoneRate(1);
+                    } else {
+                        cell.setBoneRate(0);
+                    }
                 }
             }
         }

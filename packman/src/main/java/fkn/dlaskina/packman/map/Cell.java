@@ -1,11 +1,17 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fkn.dlaskina.packman.element.AlterCellMove;
 import fkn.dlaskina.packman.element.Elemental;
 import fkn.dlaskina.packman.element.ElementalType;
+import fkn.dlaskina.packman.element.MoveType;
 
 import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
 
@@ -18,6 +24,10 @@ import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
  */
 public class Cell {
 
+    private static final int[] DXS = {0, 1, -1, 0};
+    private static final int[] DYS = {1, 0, 0, -1};
+    private static final MoveType[] D_MOVE_TYPES = {MoveType.DOWN, MoveType.RIGHT, MoveType.LEFT, MoveType.UP};
+
     private static final Color BONE_COLOR = new Color(125, 0, 0);
 
     /** индекс широты ячейки 0 - это юг, 100 - это север. */
@@ -25,7 +35,7 @@ public class Cell {
     /** индекс долгота ячейки 0 - это запад, 100 - это восток. */
     private int indY;
     /** рейтинг ячейки для костей*/
-    private int boneRate = 19;
+    private int boneRate = 0;
     /** список сущьностей, населяющих ячейку. */
     private CopyOnWriteArrayList<Elemental> elements = new CopyOnWriteArrayList<>();
     private final Rectangle rectangle;
@@ -65,6 +75,21 @@ public class Cell {
         final int nx = indX + delX;
         final int ny = indY + delY;
         return Matrix.getMatrix().getCell(nx, ny);
+    }
+
+    /**
+     * Вернуть массив из окружения данной ячейки.
+     * @return окружение данной ячейки
+     */
+    public final AlterCellMove[] getAroundCells() {
+        final List<AlterCellMove> tmp = new ArrayList<>();
+        for (int i = 0; i < DXS.length; i++) {
+            final Cell cell = this.getCell(DXS[i], DYS[i]);
+            if (cell != null && !cell.contains(ElementalType.Stone)) {
+                tmp.add(new AlterCellMove(cell, D_MOVE_TYPES[i]));
+            }
+        }
+        return tmp.toArray(new AlterCellMove[tmp.size()]);
     }
 
     public int getBoneRate() {
