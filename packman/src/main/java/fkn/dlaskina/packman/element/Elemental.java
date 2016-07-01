@@ -1,6 +1,7 @@
 package fkn.dlaskina.packman.element;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  * Элементарная сущьность, которая может находится в ячейке

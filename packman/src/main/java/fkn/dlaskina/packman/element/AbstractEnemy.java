@@ -1,6 +1,9 @@
 package fkn.dlaskina.packman.element;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.Matrix;
@@ -24,6 +27,10 @@ public abstract class AbstractEnemy extends ActiveElemental {
         cellStep = 2.8;
     }
 
+    public boolean isDummy() {
+        return isDummy;
+    }
+
     @Override
     public void paint(Graphics gr, Rectangle rect, final int frame) {
         final Polygon polygon = createPolygon(rect, frame);
@@ -31,7 +38,7 @@ public abstract class AbstractEnemy extends ActiveElemental {
         gr.fillPolygon(polygon);
         gr.setColor(BOUND_COLOR);
         gr.drawPolygon(polygon);
-        gr.drawString(isDummy ? "D" : "", xText, yText);
+        gr.drawString(isDummy ? "D" : "E", xText, yText);
     }
 
     private Polygon createPolygon(Rectangle rect, int frame) {

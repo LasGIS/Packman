@@ -20,8 +20,11 @@ public class Bones extends ActiveElemental {
     private static final Color BOUND_COLOR = new Color(125, 0, 0);
     private static final int BORDER = 2;
 
-    public Bones(final Cell cell) {
+    protected boolean isDummy;
+
+    public Bones(final Cell cell, final boolean dummy) {
         super(ElementalType.Bones, cell);
+        isDummy = dummy;
         cellStep = 1.0;
     }
 
@@ -85,7 +88,7 @@ public class Bones extends ActiveElemental {
                             break;
                         }
                     }
-                    final Enemy enm = new Enemy(newCell);
+                    final AbstractEnemy enm = isDummy ? new EnemyDummy(newCell) : new Enemy(newCell);
                     final Matrix matrix = Matrix.getMatrix();
                     newCell.addElement(enm);
                     final List<ActiveElemental> matrixElements = matrix.getElements();

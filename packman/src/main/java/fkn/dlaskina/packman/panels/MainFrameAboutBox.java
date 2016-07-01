@@ -15,8 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import fkn.dlaskina.util.Util;
-import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.

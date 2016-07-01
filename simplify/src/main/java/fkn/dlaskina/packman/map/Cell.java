@@ -1,10 +1,10 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import fkn.dlaskina.packman.element.Elemental;
 import fkn.dlaskina.packman.element.ElementalType;
@@ -25,7 +25,7 @@ public class Cell {
     /** индекс долгота ячейки 0 - это запад, 100 - это восток. */
     private int indY;
     /** список сущьностей, населяющих ячейку. */
-    private CopyOnWriteArrayList<Elemental> elements = new CopyOnWriteArrayList<>();
+    private List<Elemental> elements = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Создание ячейки по нижнему левому углу.
@@ -96,7 +96,7 @@ public class Cell {
      * @return <tt>true</tt> if the element was added
      */
     public boolean addElement(final Elemental animal) {
-        return elements.addIfAbsent(animal);
+        return elements.add(animal);
     }
 
     /**

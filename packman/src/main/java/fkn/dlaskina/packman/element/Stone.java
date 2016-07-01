@@ -1,6 +1,8 @@
 package fkn.dlaskina.packman.element;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  * Definition of the Surprise class

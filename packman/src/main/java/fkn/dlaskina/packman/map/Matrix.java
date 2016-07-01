@@ -1,13 +1,14 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import fkn.dlaskina.packman.element.AbstractEnemy;
 import fkn.dlaskina.packman.element.ActiveElemental;
@@ -55,7 +56,7 @@ public final class Matrix {
     /** pokemon. */
     private PackMan packMan = null;
     /** pokemon. */
-    private List<ActiveElemental> elements = new CopyOnWriteArrayList<>();
+    private List<ActiveElemental> elements = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Создаем и заполняем матрицу.
@@ -215,12 +216,13 @@ public final class Matrix {
      * удаляем врага
      * @param enemy враг
      */
-    public void removeEnemy(final AbstractEnemy enemy) {
+    public synchronized void removeEnemy(final AbstractEnemy enemy) {
+        LOG.info("удаляем врага", new Throwable());
         final Cell enemyCell = enemy.getCell();
         enemyCell.removeElement(enemy);
         elements.remove(enemy);
 
-        final Bones bones = new Bones(enemyCell);
+        final Bones bones = new Bones(enemyCell, enemy.isDummy());
         enemyCell.addElement(bones);
         elements.add(bones);
         double maxDist = 5;
