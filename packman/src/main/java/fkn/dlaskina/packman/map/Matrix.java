@@ -268,4 +268,40 @@ public final class Matrix {
             }
         }
     }
+
+    public void createPackManRate() {
+        final ArrayList<Cell> temp = new ArrayList<>();
+        clearPackManRate(temp);
+        int nextRate = 2;
+        while (!temp.isEmpty()) {
+            final ArrayList<Cell> tempCell = new ArrayList<>();
+            for (final Cell tCell : temp) {
+                for (final AlterCellMove cellMove : tCell.getAroundCells()) {
+                    final Cell cell = cellMove.getCell();
+                    if (cell.getPackManRate() == 0) {
+                        cell.setPackManRate(nextRate);
+                        tempCell.add(cell);
+                    }
+                }
+            }
+            temp.clear();
+            temp.addAll(tempCell);
+            nextRate++;
+        }
+    }
+
+    private void clearPackManRate(final ArrayList<Cell> temp) {
+        for (Cell[] row : cells) {
+            for (Cell cell : row) {
+                if (!cell.contains(ElementalType.Stone)) {
+                    if (cell.contains(ElementalType.PackMan)) {
+                        temp.add(cell);
+                        cell.setPackManRate(1);
+                    } else {
+                        cell.setPackManRate(0);
+                    }
+                }
+            }
+        }
+    }
 }

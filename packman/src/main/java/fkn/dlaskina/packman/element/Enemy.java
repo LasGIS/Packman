@@ -1,8 +1,6 @@
 package fkn.dlaskina.packman.element;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
@@ -24,7 +22,7 @@ public class Enemy extends ActiveElemental {
 
     public Enemy(final Cell cell) {
         super(ElementalType.Enemy, cell);
-        cellStep = 3.0;
+        cellStep = 2.8;
     }
 
     @Override
@@ -77,19 +75,20 @@ public class Enemy extends ActiveElemental {
     @Override
     public void act() throws GameOverException {
         if (isCenterCell()) {
-            // альтернативные перемещения
-            final List<AlterCellMove> alterCell = new ArrayList<>();
-            final int alterCount = findAlternativeCells(alterCell);
-            if (alterCount > 2) {
-                // есть много путей
-                AlterCellMove alterMoveType = findPackMan(alterCell);
-                newCell = alterMoveType.getCell();
-                cellMoveType = alterMoveType.getMoveType();
-            } else if (alterCount > 0) {
-                // только один путь - вперёд!
-                AlterCellMove alterMoveType = alterCell.get(0);
-                newCell = alterMoveType.getCell();
-                cellMoveType = alterMoveType.getMoveType();
+            final PackMan packMan = Matrix.getMatrix().getPackMan();
+            final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
+            AlterCellMove finalCellMove = null;
+            int finalPackManRate = isAggressive ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            for (final AlterCellMove cellMove : cell.getAroundCells()) {
+                final int packManRate = cellMove.getCell().getPackManRate();
+                if (isAggressive ? packManRate > finalPackManRate : packManRate < finalPackManRate) {
+                    finalPackManRate = packManRate;
+                    finalCellMove = cellMove;
+                }
+            }
+            if (finalCellMove != null) {
+                newCell = finalCellMove.getCell();
+                cellMoveType = finalCellMove.getMoveType();
             } else {
                 // нет выхода
                 newCell = null;
@@ -116,60 +115,5 @@ public class Enemy extends ActiveElemental {
             }
         }
         cellMove();
-    }
-
-    private AlterCellMove findPackMan(final List<AlterCellMove> alterCell) {
-        final PackMan packMan = Matrix.getMatrix().getPackMan();
-        final Cell cell = packMan.getCell();
-        final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
-        double distance = isAggressive ? Double.MIN_VALUE : Double.MAX_VALUE;
-        AlterCellMove ret = null;
-        for (final AlterCellMove acm : alterCell) {
-            final double distanceCell = acm.getCell().distance(cell);
-            if (isAggressive ? distanceCell > distance : distanceCell < distance) {
-                distance = distanceCell;
-                ret = acm;
-            }
-
-        }
-        return ret;
-    }
-
-    private int findAlternativeCells(final List<AlterCellMove> alterCell) {
-        final AlterCellMove[] tempCell = new AlterCellMove[4];
-        switch (moveType) {
-            case DOWN:
-                tempCell[0] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                tempCell[1] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                tempCell[2] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                tempCell[3] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                break;
-            case NONE:
-            case UP:
-                tempCell[0] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                tempCell[1] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                tempCell[2] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                tempCell[3] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                break;
-            case RIGHT:
-                tempCell[0] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                tempCell[1] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                tempCell[2] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                tempCell[3] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                break;
-            case LEFT:
-                tempCell[0] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                tempCell[1] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                tempCell[2] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                tempCell[3] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                break;
-        }
-        for (final AlterCellMove alter : tempCell) {
-            final Cell testCell = alter.getCell();
-            if (testCell != null && !testCell.isStone() && !testCell.contains(ElementalType.Enemy)) {
-                alterCell.add(alter);
-            }
-        }
-        return alterCell.size();
     }
 }

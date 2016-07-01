@@ -29,11 +29,14 @@ public class Cell {
     private static final MoveType[] D_MOVE_TYPES = {MoveType.DOWN, MoveType.RIGHT, MoveType.LEFT, MoveType.UP};
 
 //    private static final Color BONE_COLOR = new Color(125, 0, 0);
+//    private static final Color PACK_MAN_COLOR = new Color(0, 125, 0);
 
     /** индекс широты ячейки 0 - это юг, 100 - это север. */
     private int indX;
     /** индекс долгота ячейки 0 - это запад, 100 - это восток. */
     private int indY;
+    /** рейтинг ячейки для покемона*/
+    private int packManRate = 0;
     /** рейтинг ячейки для костей*/
     private int boneRate = 0;
     /** список сущьностей, населяющих ячейку. */
@@ -90,6 +93,14 @@ public class Cell {
             }
         }
         return tmp.toArray(new AlterCellMove[tmp.size()]);
+    }
+
+    public int getPackManRate() {
+        return packManRate;
+    }
+
+    public void setPackManRate(final int packManRate) {
+        this.packManRate = packManRate;
     }
 
     public int getBoneRate() {
@@ -192,6 +203,10 @@ public class Cell {
         if (boneRate > 0) {
             gr.setColor(BONE_COLOR);
             gr.drawString(String.valueOf(boneRate), rectangle.x + 16, rectangle.y + 12);
+        }
+        if (packManRate > 0) {
+            gr.setColor(PACK_MAN_COLOR);
+            gr.drawString(String.valueOf(packManRate), rectangle.x + 1, rectangle.y + 12);
         }
 */
     }

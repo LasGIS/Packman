@@ -105,6 +105,7 @@ public class PackMan extends ActiveElemental {
             } else {
                 cellMoveType = moveType;
             }
+            Matrix.getMatrix().createPackManRate();
         }
         if (isBorderCell()) {
             if (newCell != null) {
@@ -148,6 +149,7 @@ public class PackMan extends ActiveElemental {
                         }
                     }
                 }
+                Matrix.getMatrix().createPackManRate();
             } else {
                 cellX = 0;
                 cellY = 0;
