@@ -216,31 +216,34 @@ public final class Matrix {
      * удаляем врага
      * @param enemy враг
      */
-    public synchronized void removeEnemy(final AbstractEnemy enemy) {
-        LOG.info("удаляем врага", new Throwable());
-        final Cell enemyCell = enemy.getCell();
-        enemyCell.removeElement(enemy);
-        elements.remove(enemy);
+    public void removeEnemy(final AbstractEnemy enemy) {
+        if (!enemy.isDeleted()) {
+            enemy.setDeleted(true);
+            LOG.info("удаляем врага {" + enemy + "}", new Throwable());
+            final Cell enemyCell = enemy.getCell();
+            enemyCell.removeElement(enemy);
+            elements.remove(enemy);
 
-        final Bones bones = new Bones(enemyCell, enemy.isDummy());
-        enemyCell.addElement(bones);
-        elements.add(bones);
-        double maxDist = 5;
-        Cell cellMaxDist = null;
-        for (Cell[] row : cells) {
-            for (Cell cell : row) {
-                if (!cell.contains(ElementalType.Stone)) {
-                    final double dist = enemyCell.distance(cell);
-                    if (dist > maxDist) {
-                        maxDist = dist;
-                        cellMaxDist = cell;
+            final Bones bones = new Bones(enemyCell, enemy.isDummy());
+            enemyCell.addElement(bones);
+            elements.add(bones);
+            double maxDist = 5;
+            Cell cellMaxDist = null;
+            for (Cell[] row : cells) {
+                for (Cell cell : row) {
+                    if (!cell.contains(ElementalType.Stone)) {
+                        final double dist = enemyCell.distance(cell);
+                        if (dist > maxDist) {
+                            maxDist = dist;
+                            cellMaxDist = cell;
+                        }
                     }
                 }
             }
-        }
-        if (cellMaxDist != null) {
-            cellMaxDist.addElement(new MedicalBox());
-            createBoneRate();
+            if (cellMaxDist != null) {
+                cellMaxDist.addElement(new MedicalBox());
+                createBoneRate();
+            }
         }
     }
 

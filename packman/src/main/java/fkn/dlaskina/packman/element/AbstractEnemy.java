@@ -21,6 +21,7 @@ public abstract class AbstractEnemy extends ActiveElemental {
     protected boolean isDummy;
     private int xText;
     private int yText;
+    private boolean deleted = false;
 
     protected AbstractEnemy(final Cell cell) {
         super(ElementalType.Enemy, cell);
@@ -137,5 +138,13 @@ public abstract class AbstractEnemy extends ActiveElemental {
             }
         }
         return alterCell.size();
+    }
+
+    public void setDeleted(final boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 }
