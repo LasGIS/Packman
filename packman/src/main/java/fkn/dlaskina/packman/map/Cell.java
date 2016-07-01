@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import fkn.dlaskina.packman.element.AlterCellMove;
 import fkn.dlaskina.packman.element.Elemental;
@@ -40,7 +40,7 @@ public class Cell {
     /** рейтинг ячейки для костей*/
     private int boneRate = 0;
     /** список сущьностей, населяющих ячейку. */
-    private List<Elemental> elements = Collections.synchronizedList(new ArrayList<>());
+    private CopyOnWriteArrayList<Elemental> elements = new CopyOnWriteArrayList<>();
     private final Rectangle rectangle;
 
     /**
@@ -138,7 +138,7 @@ public class Cell {
      * @return <tt>true</tt> if the element was added
      */
     public boolean addElement(final Elemental animal) {
-        return elements.add(animal);
+        return elements.addIfAbsent(animal);
     }
 
     /**
