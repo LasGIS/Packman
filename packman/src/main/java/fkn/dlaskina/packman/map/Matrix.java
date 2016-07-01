@@ -1,7 +1,6 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fkn.dlaskina.packman.element.AbstractEnemy;
 import fkn.dlaskina.packman.element.ActiveElemental;
 import fkn.dlaskina.packman.element.AlterCellMove;
 import fkn.dlaskina.packman.element.Bones;
 import fkn.dlaskina.packman.element.ElementalType;
 import fkn.dlaskina.packman.element.Enemy;
+import fkn.dlaskina.packman.element.EnemyDummy;
 import fkn.dlaskina.packman.element.MedicalBox;
 import fkn.dlaskina.packman.element.PackMan;
 import fkn.dlaskina.packman.element.Stone;
@@ -80,7 +81,15 @@ public final class Matrix {
                         break;
                     }
                     case 'e': {
-                        final Enemy enemy = new Enemy(cell);
+                        final AbstractEnemy enemy = new Enemy(cell);
+                        cell.addElement(enemy);
+                        cell.addElement(new Surprise(simple));
+                        bonusCountMax++;
+                        elements.add(enemy);
+                        break;
+                    }
+                    case 'd': {
+                        final AbstractEnemy enemy = new EnemyDummy(cell);
                         cell.addElement(enemy);
                         cell.addElement(new Surprise(simple));
                         bonusCountMax++;
@@ -206,7 +215,7 @@ public final class Matrix {
      * удаляем врага
      * @param enemy враг
      */
-    public void removeEnemy(final Enemy enemy) {
+    public void removeEnemy(final AbstractEnemy enemy) {
         final Cell enemyCell = enemy.getCell();
         enemyCell.removeElement(enemy);
         elements.remove(enemy);
