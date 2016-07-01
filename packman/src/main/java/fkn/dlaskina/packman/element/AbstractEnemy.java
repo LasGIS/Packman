@@ -3,6 +3,7 @@ package fkn.dlaskina.packman.element;
 import java.awt.*;
 
 import fkn.dlaskina.packman.map.Cell;
+import fkn.dlaskina.packman.map.Matrix;
 
 /**
  * The Class AbstractEnemy.
@@ -30,7 +31,7 @@ public abstract class AbstractEnemy extends ActiveElemental {
         gr.fillPolygon(polygon);
         gr.setColor(BOUND_COLOR);
         gr.drawPolygon(polygon);
-        gr.drawString(isDummy ? "D" : "E", xText, yText);
+        gr.drawString(isDummy ? "D" : "", xText, yText);
     }
 
     private Polygon createPolygon(Rectangle rect, int frame) {
@@ -76,4 +77,58 @@ public abstract class AbstractEnemy extends ActiveElemental {
         }
     }
 
+    protected AlterCellMove findPackMan(final java.util.List<AlterCellMove> alterCell) {
+        final PackMan packMan = Matrix.getMatrix().getPackMan();
+        final Cell cell = packMan.getCell();
+        final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
+        double distance = isAggressive ? Double.MIN_VALUE : Double.MAX_VALUE;
+        AlterCellMove ret = null;
+        for (final AlterCellMove acm : alterCell) {
+            final double distanceCell = acm.getCell().distance(cell);
+            if (isAggressive ? distanceCell > distance : distanceCell < distance) {
+                distance = distanceCell;
+                ret = acm;
+            }
+
+        }
+        return ret;
+    }
+
+    protected int findAlternativeCells(final java.util.List<AlterCellMove> alterCell) {
+        final AlterCellMove[] tempCell = new AlterCellMove[4];
+        switch (moveType) {
+            case DOWN:
+                tempCell[0] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
+                tempCell[1] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
+                tempCell[2] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
+                tempCell[3] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
+                break;
+            case NONE:
+            case UP:
+                tempCell[0] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
+                tempCell[1] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
+                tempCell[2] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
+                tempCell[3] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
+                break;
+            case RIGHT:
+                tempCell[0] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
+                tempCell[1] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
+                tempCell[2] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
+                tempCell[3] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
+                break;
+            case LEFT:
+                tempCell[0] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
+                tempCell[1] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
+                tempCell[2] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
+                tempCell[3] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
+                break;
+        }
+        for (final AlterCellMove alter : tempCell) {
+            final Cell testCell = alter.getCell();
+            if (testCell != null && !testCell.isStone() && !testCell.contains(ElementalType.Enemy)) {
+                alterCell.add(alter);
+            }
+        }
+        return alterCell.size();
+    }
 }
