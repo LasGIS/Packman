@@ -26,7 +26,7 @@ public class ShowFonts {
                 System.out.println(fontName);
             }
             // регистрация шрифта для java
-            Font font = Font.createFont(1, new File("MyFont.fnt"));
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Candara.TTF"));
             ge.registerFont(font);
 
         } catch (FontFormatException | IOException ex) {
