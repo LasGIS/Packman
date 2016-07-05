@@ -217,7 +217,14 @@ public final class Matrix {
      * @param enemy враг
      */
     public void removeEnemy(final AbstractEnemy enemy) {
-        if (!enemy.isDeleted()) {
+        if (enemy.isDeleted()) {
+            LOG.info("Вторичное удаление врага {" + enemy + "}", new Throwable());
+            final Cell enemyCell = enemy.getCell();
+            if (enemyCell != null) {
+                enemyCell.removeElement(enemy);
+            }
+            elements.remove(enemy);
+        } else {
             enemy.setDeleted(true);
             LOG.info("удаляем врага {" + enemy + "}", new Throwable());
             final Cell enemyCell = enemy.getCell();
