@@ -29,9 +29,10 @@ public class CreateImage {
 
         // записываем
         final String fileName = args.length > 0 ? args[0] : "saved.png";
+        final String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
         final File outputFile = new File(fileName);
         try {
-            ImageIO.write(bim, "png", outputFile);
+            ImageIO.write(bim, extension, outputFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
