@@ -43,12 +43,13 @@ public class Bones extends ActiveElemental {
     private void paintBone(
         final Graphics gr, final int arm, final int x, final int y, final int frame
     ) {
-        final int x1 = x + (int) (Math.sin(frame * Math.PI / 20) * arm);
-        final int y1 = y + (int) (Math.cos(frame * Math.PI / 20) * arm);
-        final int x2 = x - (int) (Math.sin(frame * Math.PI / 20) * arm);
-        final int y2 = y - (int) (Math.cos(frame * Math.PI / 20) * arm);
+        final int sinFrame = (int) Math.sin(frame * Math.PI / 20) * arm;
+        final int cosFrame = (int) Math.cos(frame * Math.PI / 20) * arm;
+        final int x1 = x + sinFrame;
+        final int y1 = y + cosFrame;
+        final int x2 = x - sinFrame;
+        final int y2 = y - cosFrame;
         gr.drawLine(x1, y1, x2, y2);
-
     }
 
     @Override

@@ -2,13 +2,14 @@ package fkn.dlaskina.packman
 
 import fkn.dlaskina.packman.panels.MainFrame
 import org.apache.log4j.LogManager
+import org.apache.log4j.Logger
 import java.awt.Dimension
 import java.awt.Toolkit
 import javax.swing.JFrame
 import javax.swing.UIManager
 import javax.swing.WindowConstants
 
-val log = LogManager.getLogger(Lunch::class.java)
+private val log: Logger = LogManager.getLogger(Lunch::class.java)
 
 /**
  * <description>

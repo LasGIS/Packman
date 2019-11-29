@@ -8,47 +8,57 @@ import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
 
 /**
  * Definition of the ActiveElemental class
+ *
  * @author VLaskin
  * @since 27.03.2016.
  */
 public abstract class ActiveElemental extends Elemental {
 
     /** ячейка, в которой находится существо */
-    protected Cell cell;
+    Cell cell;
     /** ячейка, в которой будет находится существо на следующем шаге */
-    protected Cell newCell = null;
+    Cell newCell = null;
     /** координаты существа в ячейке */
-    protected double cellX = 0.0;
-    protected double cellY = 0.0;
+    double cellX = 0.0;
+    double cellY = 0.0;
     /** шаг животного внутри ячейки. */
-    protected double cellStep;
-    /** установленное перемещение. */
-    protected MoveType moveType = NONE;
-    /** перемещение внутри ячейки. */
-    protected MoveType cellMoveType = NONE;
+    double cellStep;
+    /**
+     * установленное перемещение.
+     */
+    MoveType moveType = NONE;
+    /**
+     * перемещение внутри ячейки.
+     */
+    MoveType cellMoveType = NONE;
 
-    protected ActiveElemental(ElementalType type, final Cell cell) {
+    ActiveElemental(ElementalType type, final Cell cell) {
         super(type);
         this.cell = cell;
     }
 
     /**
      * Перемещаемся внутри ячейки.
+     *
      * @ param alternativeMoveType альтернативное направление (если нет основного)
      */
     protected void cellMove() {
         switch (cellMoveType) {
             case DOWN:
-                cellY += cellStep; cellX = 0;
+                cellY += cellStep;
+                cellX = 0;
                 break;
             case UP:
-                cellY -= cellStep; cellX = 0;
+                cellY -= cellStep;
+                cellX = 0;
                 break;
             case RIGHT:
-                cellX += cellStep; cellY = 0;
+                cellX += cellStep;
+                cellY = 0;
                 break;
             case LEFT:
-                cellX -= cellStep; cellY = 0;
+                cellX -= cellStep;
+                cellY = 0;
                 break;
         }
     }
@@ -60,16 +70,32 @@ public abstract class ActiveElemental extends Elemental {
     protected boolean isBorderCell() {
         return (Math.abs(cellX) >= CELL_SIZE / 2 || Math.abs(cellY) >= CELL_SIZE / 2);
     }
+
     /**
      * вступаем на новую ячейку, устанавливаем новые координаты
      */
     protected void startCellMove() {
         switch (cellMoveType) {
-            case DOWN:  cellY = -CELL_SIZE / 2; cellX = 0; break;
-            case UP:    cellY = +CELL_SIZE / 2; cellX = 0; break;
-            case RIGHT: cellX = -CELL_SIZE / 2; cellY = 0; break;
-            case LEFT:  cellX = +CELL_SIZE / 2; cellY = 0; break;
-            default:    cellX = 0; cellY = 0; break;
+            case DOWN:
+                cellY = -CELL_SIZE / 2;
+                cellX = 0;
+                break;
+            case UP:
+                cellY = +CELL_SIZE / 2;
+                cellX = 0;
+                break;
+            case RIGHT:
+                cellX = -CELL_SIZE / 2;
+                cellY = 0;
+                break;
+            case LEFT:
+                cellX = +CELL_SIZE / 2;
+                cellY = 0;
+                break;
+            default:
+                cellX = 0;
+                cellY = 0;
+                break;
         }
     }
 
