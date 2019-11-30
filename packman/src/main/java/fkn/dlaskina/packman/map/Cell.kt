@@ -55,7 +55,7 @@ class Cell(
      * @param delY смещение по оси Y
      * @return ячейка, смещенная от этой
      */
-    fun getCell(delX: Int, delY: Int): Cell {
+    fun getCell(delX: Int, delY: Int): Cell? {
         val nx = indX + delX
         val ny = indY + delY
         return Matrix.getMatrix().getCell(nx, ny)
