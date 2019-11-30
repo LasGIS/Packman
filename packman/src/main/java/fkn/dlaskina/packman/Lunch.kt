@@ -17,7 +17,7 @@ private val log: Logger = LogManager.getLogger(Lunch::class.java)
  * @author VLaskin
  * @since <pre>27.11.2019</pre>
  */
-class Lunch {
+class Lunch() {
 
     init {
         val frame = MainFrame()
@@ -43,7 +43,6 @@ class Lunch {
         )
         frame.isVisible = true
     }
-
 }
 
 /**

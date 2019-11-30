@@ -1,33 +1,15 @@
-package fkn.dlaskina.packman.map;
+package fkn.dlaskina.packman.map
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import fkn.dlaskina.packman.element.AbstractEnemy;
-import fkn.dlaskina.packman.element.ActiveElemental;
-import fkn.dlaskina.packman.element.AlterCellMove;
-import fkn.dlaskina.packman.element.Bones;
-import fkn.dlaskina.packman.element.ElementalType;
-import fkn.dlaskina.packman.element.Enemy;
-import fkn.dlaskina.packman.element.EnemyDummy;
-import fkn.dlaskina.packman.element.MedicalBox;
-import fkn.dlaskina.packman.element.PackMan;
-import fkn.dlaskina.packman.element.Stone;
-import fkn.dlaskina.packman.element.Surprise;
-import fkn.dlaskina.packman.panels.ConfigPanel;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
-import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
-import static fkn.dlaskina.packman.element.SurpriseType.simple;
-import static fkn.dlaskina.packman.element.SurpriseType.speed;
+import fkn.dlaskina.packman.element.*
+import fkn.dlaskina.packman.panels.ConfigPanel
+import org.apache.log4j.LogManager
+import java.awt.Dimension
+import java.awt.Graphics
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Матрица элементов карты.
@@ -35,133 +17,70 @@ import static fkn.dlaskina.packman.element.SurpriseType.speed;
  * @version 1.0
  * @since 06.06.2010 22:24:26
  */
-public final class Matrix {
+class Matrix private constructor(name: String) {
+    /** сама матрица.  */
+    private val cells: Array<Array<Cell?>>
+    /** pokemon.  */
+    private var packMan: PackMan? = null
+    /** pokemon.  */
+    private val elements: MutableList<ActiveElemental> = CopyOnWriteArrayList()
 
-    private static final Logger LOG = LogManager.getLogger(Matrix.class);
+    companion object {
+        private val log = LogManager.getLogger(Matrix::class.java)
+        /** размер элементарной ячейки в пикселях.  */
+        const val CELL_SIZE = 30
+        /**
+         * @return выдаем singleton матрицы по первому требованию.
+         */
+        /** singleton матрицы.  */
+        var matrix: Matrix? = null
+        /** уровень игры.  */
+        private var level = 0
+        private const val levelMax = 2
+        /** размер матрицы по горизонтали.  */
+        var MATRIX_SIZE_X: Int = 10
+        /** размер матрицы по вертикали.  */
+        var MATRIX_SIZE_Y: Int = 20
 
-    /** размер элементарной ячейки в пикселях. */
-    public static final int CELL_SIZE = 30;
-    /** singleton матрицы. */
-    private static Matrix MATRIX;
-    /** уровень игры. */
-    private static int level = 0;
-    private static final int levelMax = 2;
-    /** размер матрицы по горизонтали. */
-    public static int MATRIX_SIZE_X;
-    /** размер матрицы по вертикали. */
-    public static int MATRIX_SIZE_Y;
-
-    /** сама матрица. */
-    private final Cell[][] cells;
-    /** pokemon. */
-    private PackMan packMan = null;
-    /** pokemon. */
-    private List<ActiveElemental> elements = new CopyOnWriteArrayList<>();
-
-    /**
-     * Создаем и заполняем матрицу.
-     * @param name имя ресурса с матрицей
-     */
-    private Matrix(String name) {
-        int[] sizeX = {0};
-        final ArrayList<String> list = load(name, sizeX);
-        MATRIX_SIZE_X = sizeX[0];
-        MATRIX_SIZE_Y = list.size();
-        cells = new Cell[MATRIX_SIZE_Y][MATRIX_SIZE_X];
-        int bonusCountMax = 0;
-        for (int y = 0; y < MATRIX_SIZE_Y; y++) {
-            for (int x = 0; x < MATRIX_SIZE_X; x++) {
-                final Cell cell = new Cell(x, y);
-                final char ch = list.get(y).charAt(x);
-                switch (ch) {
-                    case 'p': {
-                        final PackMan packMan = new PackMan(cell);
-                        cell.addElement(packMan);
-                        this.packMan = packMan;
-                        elements.add(packMan);
-                        break;
-                    }
-                    case 'e': {
-                        final AbstractEnemy enemy = new Enemy(cell);
-                        cell.addElement(enemy);
-                        cell.addElement(new Surprise(simple));
-                        bonusCountMax++;
-                        elements.add(enemy);
-                        break;
-                    }
-                    case 'd': {
-                        final AbstractEnemy enemy = new EnemyDummy(cell);
-                        cell.addElement(enemy);
-                        cell.addElement(new Surprise(simple));
-                        bonusCountMax++;
-                        elements.add(enemy);
-                        break;
-                    }
-                    case '1':
-                        cell.addElement(new Surprise(simple));
-                        bonusCountMax++;
-                        break;
-                    case '2':
-                        cell.addElement(new Surprise(speed));
-                        bonusCountMax++;
-                        break;
-                    case '3':
-                        cell.addElement(new Surprise(aggressive));
-                        bonusCountMax++;
-                        break;
-                    case ' ':
-                        break;
-                    default:
-                        cell.addElement(new Stone());
-                        break;
-                }
-                cells[y][x] = cell;
-            }
+        /**
+         * @return выдаем singleton матрицы по первому требованию.
+         */
+        @JvmStatic
+        fun createMatrix(isNewLevel: Boolean): Matrix? {
+            if (isNewLevel && level < levelMax) level++
+            matrix = Matrix("matrix$level.txt")
+            return matrix
         }
-        ConfigPanel.setBonusCountMax(bonusCountMax);
     }
 
     /**
      * Читаем матрицу из файла
      * @param fileName имя файла
+     * @param retMaxX возвращаемый размер по горизонтали
      */
-    private  ArrayList<String> load(final String fileName, final int[] retMaxX) {
-        final ArrayList<String> list = new ArrayList<>();
-        int maxX = 0;
-        final ClassLoader ldr = Matrix.class.getClassLoader();
-        try (
-            final InputStream in = ldr.getResourceAsStream(fileName);
-            final InputStreamReader rd = new InputStreamReader(in, "UTF-8");
-            final BufferedReader br = new BufferedReader(rd);
-        ) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                list.add(line);
-                if (maxX < line.length()) {
-                    maxX = line.length();
+    private fun load(fileName: String, retMaxX: IntArray): ArrayList<String> {
+        val list = ArrayList<String>()
+        var maxX = 0
+        val ldr = Matrix::class.java.classLoader
+        try {
+            ldr.getResourceAsStream(fileName).use { `in` ->
+                InputStreamReader(`in`, "UTF-8").use { rd ->
+                    BufferedReader(rd).use { br ->
+                        var line: String
+                        while (br.readLine().also { line = it } != null) {
+                            list.add(line)
+                            if (maxX < line.length) {
+                                maxX = line.length
+                            }
+                        }
+                    }
                 }
             }
-        } catch (IOException ex) {
-            LOG.error(ex.getMessage(), ex);
+        } catch (ex: IOException) {
+            log.error(ex.message, ex)
         }
-        retMaxX[0] = maxX;
-        return list;
-    }
-
-    /**
-     * @return выдаем singleton матрицы по первому требованию.
-     */
-    public static Matrix createMatrix(final boolean isNewLevel) {
-        if (isNewLevel && level < levelMax) level++;
-        MATRIX = new Matrix("matrix" + level + ".txt");
-        return MATRIX;
-    }
-
-    /**
-     * @return выдаем singleton матрицы по первому требованию.
-     */
-    public static Matrix getMatrix() {
-        return MATRIX;
+        retMaxX[0] = maxX
+        return list
     }
 
     /**
@@ -170,8 +89,8 @@ public final class Matrix {
      * @param y индекс долготы ячейки
      * @return ячейка или NULL если вышли из диапазона
      */
-    public Cell getCell(final int x, final int y) {
-        return isValidIndex(x, y) ? cells[y][x] : null;
+    fun getCell(x: Int, y: Int): Cell? {
+        return if (isValidIndex(x, y)) cells[y][x] else null
     }
 
     /**
@@ -180,149 +99,199 @@ public final class Matrix {
      * @param y индекс долготы ячейки
      * @return ячейка или NULL если вышли из диапазона
      */
-    public boolean isValidIndex(final int x, final int y) {
-        return x >= 0 && x < MATRIX_SIZE_X && y >= 0 && y < MATRIX_SIZE_Y;
+    private fun isValidIndex(x: Int, y: Int): Boolean {
+        return x in 0 until MATRIX_SIZE_X && y in 0 until MATRIX_SIZE_Y
     }
 
-    public void paint(final Graphics gr, final int frame) {
-        for (final Cell[] yCells : cells) {
-            for (final Cell cell : yCells) {
-                cell.paint(gr, frame);
+    fun paint(gr: Graphics?, frame: Int) {
+        for (yCells in cells) {
+            for (cell in yCells) {
+                cell!!.paint(gr, frame)
             }
         }
     }
 
-    public void paintGrid(final Graphics gr) {
-        for (final Cell[] yCells : cells) {
-            for (final Cell cell : yCells) {
-                cell.paintGrid(gr);
+    fun paintGrid(gr: Graphics?) {
+        for (yCells in cells) {
+            for (cell in yCells) {
+                cell!!.paintGrid(gr!!)
             }
         }
     }
 
-    public Dimension getSize() {
-        return new Dimension(MATRIX_SIZE_X * CELL_SIZE + 1, MATRIX_SIZE_Y * CELL_SIZE + 1);
-    }
+    val size: Dimension
+        get() = Dimension(MATRIX_SIZE_X * CELL_SIZE + 1, MATRIX_SIZE_Y * CELL_SIZE + 1)
 
-    public PackMan getPackMan() {
-        return packMan;
-    }
-
-    public List<ActiveElemental> getElements() {
-        return elements;
+    fun getElements(): List<ActiveElemental> {
+        return elements
     }
 
     /**
      * удаляем врага
      * @param enemy враг
      */
-    public void removeEnemy(final AbstractEnemy enemy) {
-        if (enemy.isDeleted()) {
-            LOG.info("Вторичное удаление врага {" + enemy + "}", new Throwable());
-            final Cell enemyCell = enemy.getCell();
-            if (enemyCell != null) {
-                enemyCell.removeElement(enemy);
-            }
-            elements.remove(enemy);
+    fun removeEnemy(enemy: AbstractEnemy) {
+        if (enemy.isDeleted) {
+            log.info("Вторичное удаление врага {$enemy}", Throwable())
+            val enemyCell = enemy.cell
+            enemyCell?.removeElement(enemy)
+            elements.remove(enemy)
         } else {
-            enemy.setDeleted(true);
-            LOG.info("удаляем врага {" + enemy + "}", new Throwable());
-            final Cell enemyCell = enemy.getCell();
-            enemyCell.removeElement(enemy);
-            elements.remove(enemy);
-
-            final Bones bones = new Bones(enemyCell, enemy.isDummy());
-            enemyCell.addElement(bones);
-            elements.add(bones);
-            double maxDist = 5;
-            Cell cellMaxDist = null;
-            for (Cell[] row : cells) {
-                for (Cell cell : row) {
-                    if (!cell.contains(ElementalType.Stone)) {
-                        final double dist = enemyCell.distance(cell);
+            enemy.isDeleted = true
+            log.info("удаляем врага {$enemy}", Throwable())
+            val enemyCell = enemy.cell
+            enemyCell.removeElement(enemy)
+            elements.remove(enemy)
+            val bones = Bones(enemyCell, enemy.isDummy)
+            enemyCell.addElement(bones)
+            elements.add(bones)
+            var maxDist = 5.0
+            var cellMaxDist: Cell? = null
+            for (row in cells) {
+                for (cell in row) {
+                    if (!cell!!.contains(ElementalType.Stone)) {
+                        val dist = enemyCell.distance(cell)
                         if (dist > maxDist) {
-                            maxDist = dist;
-                            cellMaxDist = cell;
+                            maxDist = dist
+                            cellMaxDist = cell
                         }
                     }
                 }
             }
             if (cellMaxDist != null) {
-                cellMaxDist.addElement(new MedicalBox());
-                createBoneRate();
+                cellMaxDist.addElement(MedicalBox())
+                createBoneRate()
             }
         }
     }
 
-    public void createBoneRate() {
-        final ArrayList<Cell> temp = new ArrayList<>();
-        clearBoneRate(temp);
-        int nextRate = 2;
+    fun createBoneRate() {
+        val temp = ArrayList<Cell?>()
+        clearBoneRate(temp)
+        var nextRate = 2
         while (!temp.isEmpty()) {
-            final ArrayList<Cell> tempCell = new ArrayList<>();
-            for (final Cell tCell : temp) {
-                for (final AlterCellMove cellMove : tCell.getAroundCells()) {
-                    final Cell cell = cellMove.getCell();
-                    if (cell.getBoneRate() == 0) {
-                        cell.setBoneRate(nextRate);
-                        tempCell.add(cell);
+            val tempCell = ArrayList<Cell>()
+            for (tCell in temp) {
+                for (cellMove in tCell!!.aroundCells) {
+                    val cell = cellMove.cell
+                    if (cell.boneRate == 0) {
+                        cell.boneRate = nextRate
+                        tempCell.add(cell)
                     }
                 }
             }
-            temp.clear();
-            temp.addAll(tempCell);
-            nextRate++;
+            temp.clear()
+            temp.addAll(tempCell)
+            nextRate++
         }
     }
 
-    private void clearBoneRate(final ArrayList<Cell> temp) {
-        for (Cell[] row : cells) {
-            for (Cell cell : row) {
-                if (!cell.contains(ElementalType.Stone)) {
+    private fun clearBoneRate(temp: ArrayList<Cell?>) {
+        for (row in cells) {
+            for (cell in row) {
+                if (!cell!!.contains(ElementalType.Stone)) {
                     if (cell.contains(ElementalType.MedBox)) {
-                        temp.add(cell);
-                        cell.setBoneRate(1);
+                        temp.add(cell)
+                        cell.boneRate = 1
                     } else {
-                        cell.setBoneRate(0);
+                        cell.boneRate = 0
                     }
                 }
             }
         }
     }
 
-    public void createPackManRate() {
-        final ArrayList<Cell> temp = new ArrayList<>();
-        clearPackManRate(temp);
-        int nextRate = 2;
+    fun createPackManRate() {
+        val temp = ArrayList<Cell?>()
+        clearPackManRate(temp)
+        var nextRate = 2
         while (!temp.isEmpty()) {
-            final ArrayList<Cell> tempCell = new ArrayList<>();
-            for (final Cell tCell : temp) {
-                for (final AlterCellMove cellMove : tCell.getAroundCells()) {
-                    final Cell cell = cellMove.getCell();
-                    if (cell.getPackManRate() == 0) {
-                        cell.setPackManRate(nextRate);
-                        tempCell.add(cell);
+            val tempCell = ArrayList<Cell>()
+            for (tCell in temp) {
+                for (cellMove in tCell!!.aroundCells) {
+                    val cell = cellMove.cell
+                    if (cell.packManRate == 0) {
+                        cell.packManRate = nextRate
+                        tempCell.add(cell)
                     }
                 }
             }
-            temp.clear();
-            temp.addAll(tempCell);
-            nextRate++;
+            temp.clear()
+            temp.addAll(tempCell)
+            nextRate++
         }
     }
 
-    private void clearPackManRate(final ArrayList<Cell> temp) {
-        for (Cell[] row : cells) {
-            for (Cell cell : row) {
-                if (!cell.contains(ElementalType.Stone)) {
+    private fun clearPackManRate(temp: ArrayList<Cell?>) {
+        for (row in cells) {
+            for (cell in row) {
+                if (!cell!!.contains(ElementalType.Stone)) {
                     if (cell.contains(ElementalType.PackMan)) {
-                        temp.add(cell);
-                        cell.setPackManRate(1);
+                        temp.add(cell)
+                        cell.packManRate = 1
                     } else {
-                        cell.setPackManRate(0);
+                        cell.packManRate = 0
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Создаем и заполняем матрицу.
+     * @param name имя ресурса с матрицей
+     */
+    init {
+        val sizeX = intArrayOf(0)
+        val list = load(name, sizeX)
+        MATRIX_SIZE_X = sizeX[0]
+        MATRIX_SIZE_Y = list.size
+        cells = Array(MATRIX_SIZE_Y) { arrayOfNulls<Cell>(MATRIX_SIZE_X) }
+        var bonusCountMax = 0
+        for (y in 0 until MATRIX_SIZE_Y) {
+            for (x in 0 until MATRIX_SIZE_X) {
+                val cell = Cell(x, y)
+                val ch = list[y][x]
+                when (ch) {
+                    'p' -> {
+                        val pokemon = PackMan(cell)
+                        packMan = pokemon
+                        cell.addElement(pokemon)
+                        elements.add(pokemon)
+                    }
+                    'e' -> {
+                        val enemy: AbstractEnemy = Enemy(cell)
+                        cell.addElement(enemy)
+                        cell.addElement(Surprise(SurpriseType.simple))
+                        bonusCountMax++
+                        elements.add(enemy)
+                    }
+                    'd' -> {
+                        val enemy: AbstractEnemy = EnemyDummy(cell)
+                        cell.addElement(enemy)
+                        cell.addElement(Surprise(SurpriseType.simple))
+                        bonusCountMax++
+                        elements.add(enemy)
+                    }
+                    '1' -> {
+                        cell.addElement(Surprise(SurpriseType.simple))
+                        bonusCountMax++
+                    }
+                    '2' -> {
+                        cell.addElement(Surprise(SurpriseType.speed))
+                        bonusCountMax++
+                    }
+                    '3' -> {
+                        cell.addElement(Surprise(SurpriseType.aggressive))
+                        bonusCountMax++
+                    }
+                    ' ' -> {
+                    }
+                    else -> cell.addElement(Stone())
+                }
+                cells[y][x] = cell
+            }
+        }
+        ConfigPanel.setBonusCountMax(bonusCountMax)
     }
 }

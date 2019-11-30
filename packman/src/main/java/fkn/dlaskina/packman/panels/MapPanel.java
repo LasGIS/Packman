@@ -43,7 +43,7 @@ public class MapPanel extends JPanel {
     private final KeyAdapter keyAdapter = new KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent e) {
-            final PackMan packMan = Matrix.getMatrix().getPackMan();
+            final PackMan packMan = Matrix.getMatrix().packMan;
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_NUMPAD4 :
                 case KeyEvent.VK_LEFT :

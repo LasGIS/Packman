@@ -62,9 +62,8 @@ public final class Matrix {
                 final char ch = list.get(y).charAt(x);
                 switch (ch) {
                     case 'p': {
-                        final PackMan packMan = new PackMan(cell);
+                        packMan = new PackMan(cell);
                         cell.addElement(packMan);
-                        this.packMan = packMan;
                         elements.add(packMan);
                         break;
                     }
