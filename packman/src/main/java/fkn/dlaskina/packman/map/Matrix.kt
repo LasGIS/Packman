@@ -17,40 +17,34 @@ import java.util.concurrent.CopyOnWriteArrayList
  * @version 1.0
  * @since 06.06.2010 22:24:26
  */
-class Matrix private constructor(name: String) {
+object Matrix {
+
+    private val log = LogManager.getLogger(Matrix::class.java)
+
     /** сама матрица.  */
-    private val cells: Array<Array<Cell?>>
+    private lateinit var cells: Array<Array<Cell>>
     /** pokemon.  */
-    private var packMan: PackMan? = null
-    /** pokemon.  */
-    private val elements: MutableList<ActiveElemental> = CopyOnWriteArrayList()
+    lateinit var packMan: PackMan
+    /** Активные элементы.  */
+    val elements: MutableList<ActiveElemental> = CopyOnWriteArrayList()
 
-    companion object {
-        private val log = LogManager.getLogger(Matrix::class.java)
-        /** размер элементарной ячейки в пикселях.  */
-        const val CELL_SIZE = 30
-        /**
-         * @return выдаем singleton матрицы по первому требованию.
-         */
-        /** singleton матрицы.  */
-        var matrix: Matrix? = null
-        /** уровень игры.  */
-        private var level = 0
-        private const val levelMax = 2
-        /** размер матрицы по горизонтали.  */
-        var MATRIX_SIZE_X: Int = 10
-        /** размер матрицы по вертикали.  */
-        var MATRIX_SIZE_Y: Int = 20
+    /** размер элементарной ячейки в пикселях.  */
+    const val CELL_SIZE: Int = 30
+    /** уровень игры.  */
+    private var level = 0
+    private const val levelMax = 2
+    /** размер матрицы по горизонтали.  */
+    var MATRIX_SIZE_X: Int = 10
+    /** размер матрицы по вертикали.  */
+    var MATRIX_SIZE_Y: Int = 20
 
-        /**
-         * @return выдаем singleton матрицы по первому требованию.
-         */
-        @JvmStatic
-        fun createMatrix(isNewLevel: Boolean): Matrix? {
-            if (isNewLevel && level < levelMax) level++
-            matrix = Matrix("matrix$level.txt")
-            return matrix
-        }
+    /**
+     * @return выдаем singleton матрицы по первому требованию.
+     */
+    fun createMatrix(isNewLevel: Boolean): Matrix {
+        if (isNewLevel && level < levelMax) level++
+        loadFile("/matrix$level.txt")
+        return Matrix
     }
 
     /**
@@ -58,26 +52,14 @@ class Matrix private constructor(name: String) {
      * @param fileName имя файла
      * @param retMaxX возвращаемый размер по горизонтали
      */
-    private fun load(fileName: String, retMaxX: IntArray): ArrayList<String> {
-        val list = ArrayList<String>()
+    private fun load(fileName: String, retMaxX: IntArray): List<String> {
+        log.error("Читаем матрицу из файла \"$fileName\"")
         var maxX = 0
-        val ldr = Matrix::class.java.classLoader
-        try {
-            ldr.getResourceAsStream(fileName).use { `in` ->
-                InputStreamReader(`in`, "UTF-8").use { rd ->
-                    BufferedReader(rd).use { br ->
-                        var line: String
-                        while (br.readLine().also { line = it } != null) {
-                            list.add(line)
-                            if (maxX < line.length) {
-                                maxX = line.length
-                            }
-                        }
-                    }
-                }
+        val list: List<String> = Matrix::class.java.getResourceAsStream(fileName).bufferedReader().readLines()
+        for (line in list) {
+            if (maxX < line.length) {
+                maxX = line.length
             }
-        } catch (ex: IOException) {
-            log.error(ex.message, ex)
         }
         retMaxX[0] = maxX
         return list
@@ -106,7 +88,7 @@ class Matrix private constructor(name: String) {
     fun paint(gr: Graphics?, frame: Int) {
         for (yCells in cells) {
             for (cell in yCells) {
-                cell!!.paint(gr, frame)
+                cell.paint(gr, frame)
             }
         }
     }
@@ -114,7 +96,7 @@ class Matrix private constructor(name: String) {
     fun paintGrid(gr: Graphics?) {
         for (yCells in cells) {
             for (cell in yCells) {
-                cell!!.paintGrid(gr!!)
+                cell.paintGrid(gr!!)
             }
         }
     }
@@ -122,9 +104,9 @@ class Matrix private constructor(name: String) {
     val size: Dimension
         get() = Dimension(MATRIX_SIZE_X * CELL_SIZE + 1, MATRIX_SIZE_Y * CELL_SIZE + 1)
 
-    fun getElements(): List<ActiveElemental> {
-        return elements
-    }
+//    fun getElements(): List<ActiveElemental> {
+//        return elements
+//    }
 
     /**
      * удаляем врага
@@ -149,7 +131,7 @@ class Matrix private constructor(name: String) {
             var cellMaxDist: Cell? = null
             for (row in cells) {
                 for (cell in row) {
-                    if (!cell!!.contains(ElementalType.Stone)) {
+                    if (!cell.contains(ElementalType.Stone)) {
                         val dist = enemyCell.distance(cell)
                         if (dist > maxDist) {
                             maxDist = dist
@@ -165,6 +147,7 @@ class Matrix private constructor(name: String) {
         }
     }
 
+    @JvmStatic
     fun createBoneRate() {
         val temp = ArrayList<Cell?>()
         clearBoneRate(temp)
@@ -189,7 +172,7 @@ class Matrix private constructor(name: String) {
     private fun clearBoneRate(temp: ArrayList<Cell?>) {
         for (row in cells) {
             for (cell in row) {
-                if (!cell!!.contains(ElementalType.Stone)) {
+                if (!cell.contains(ElementalType.Stone)) {
                     if (cell.contains(ElementalType.MedBox)) {
                         temp.add(cell)
                         cell.boneRate = 1
@@ -225,7 +208,7 @@ class Matrix private constructor(name: String) {
     private fun clearPackManRate(temp: ArrayList<Cell?>) {
         for (row in cells) {
             for (cell in row) {
-                if (!cell!!.contains(ElementalType.Stone)) {
+                if (!cell.contains(ElementalType.Stone)) {
                     if (cell.contains(ElementalType.PackMan)) {
                         temp.add(cell)
                         cell.packManRate = 1
@@ -241,16 +224,20 @@ class Matrix private constructor(name: String) {
      * Создаем и заполняем матрицу.
      * @param name имя ресурса с матрицей
      */
-    init {
+    private fun loadFile(name: String) {
         val sizeX = intArrayOf(0)
-        val list = load(name, sizeX)
+        val list: List<String> = load(name, sizeX)
         MATRIX_SIZE_X = sizeX[0]
         MATRIX_SIZE_Y = list.size
-        cells = Array(MATRIX_SIZE_Y) { arrayOfNulls<Cell>(MATRIX_SIZE_X) }
+        cells = Array(MATRIX_SIZE_Y) { y ->
+            Array(MATRIX_SIZE_Y) { x ->
+                Cell(x, y)
+            }
+        }
         var bonusCountMax = 0
         for (y in 0 until MATRIX_SIZE_Y) {
             for (x in 0 until MATRIX_SIZE_X) {
-                val cell = Cell(x, y)
+                val cell = cells[y][x]
                 val ch = list[y][x]
                 when (ch) {
                     'p' -> {
@@ -289,7 +276,6 @@ class Matrix private constructor(name: String) {
                     }
                     else -> cell.addElement(Stone())
                 }
-                cells[y][x] = cell
             }
         }
         ConfigPanel.setBonusCountMax(bonusCountMax)

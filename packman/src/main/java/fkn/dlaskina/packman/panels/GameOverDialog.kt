@@ -10,8 +10,7 @@ import javax.swing.JButton
 import javax.swing.JDialog
 import javax.swing.JLabel
 import javax.swing.JPanel
-
-private val log = LogManager.getLogger(GameOverDialog::class.java)
+import kotlin.system.exitProcess
 
 /**
  * Create and show dialog.
@@ -20,6 +19,10 @@ private val log = LogManager.getLogger(GameOverDialog::class.java)
  * @version 1.0
  */
 class GameOverDialog(goExc: GameOverException) : JDialog() {
+
+    companion object {
+        private val log = LogManager.getLogger(GameOverDialog::class.java)
+    }
 
     init {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK)
@@ -40,20 +43,20 @@ class GameOverDialog(goExc: GameOverException) : JDialog() {
             c.gridx = 0
             c.gridy = 0
             val startButton = JButton("Start This")
-            startButton.addActionListener { e ->
+            startButton.addActionListener {
                 Matrix.createMatrix(false)
                 TimersControl.startTimers()
                 dispose()
             }
             val newLevelButton = JButton("New Level")
             newLevelButton.isEnabled = goExc.isWin
-            newLevelButton.addActionListener { e ->
+            newLevelButton.addActionListener {
                 Matrix.createMatrix(true)
                 TimersControl.startTimers()
                 dispose()
             }
             val stopButton = JButton("Stop")
-            stopButton.addActionListener { e -> System.exit(0) }
+            stopButton.addActionListener { exitProcess(0) }
             buttonPanel.add(startButton, c)
             c.gridx = 1
             buttonPanel.add(stopButton, c)

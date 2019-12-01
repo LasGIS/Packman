@@ -22,7 +22,7 @@ public class Enemy extends AbstractEnemy {
     @Override
     public void act() throws GameOverException {
         if (isCenterCell()) {
-            final PackMan packMan = Matrix.getMatrix().packMan;
+            final PackMan packMan = Matrix.INSTANCE.getPackMan();
             final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
             AlterCellMove finalCellMove = null;
             int finalPackManRate = isAggressive ? Integer.MIN_VALUE : Integer.MAX_VALUE;
@@ -51,10 +51,9 @@ public class Enemy extends AbstractEnemy {
 
                 // проверяем на packman`a
                 if (newCell.contains(PackMan)) {
-                    final Matrix matrix = Matrix.getMatrix();
-                    final PackMan packMan = Matrix.getMatrix().packMan;
+                    final PackMan packMan = Matrix.INSTANCE.getPackMan();
                     if (packMan.getPrizeType() == aggressive) {
-                        matrix.removeEnemy(this);
+                        Matrix.INSTANCE.removeEnemy(this);
                     } else {
                         throw new GameOverException(false, "Враг наехал на рокемона");
                     }

@@ -107,7 +107,7 @@ public class PackMan extends ActiveElemental {
             } else {
                 cellMoveType = moveType;
             }
-            Matrix.getMatrix().createPackManRate();
+            Matrix.INSTANCE.createPackManRate();
         }
         if (isBorderCell()) {
             if (newCell != null) {
@@ -144,14 +144,14 @@ public class PackMan extends ActiveElemental {
                             break;
                         case Enemy: {
                             if (prizeType == aggressive) {
-                                Matrix.getMatrix().removeEnemy((AbstractEnemy) elm);
+                                Matrix.INSTANCE.removeEnemy((AbstractEnemy) elm);
                             } else {
                                 throw new GameOverException(false, "Сам наехал на врага");
                             }
                         }
                     }
                 }
-                Matrix.getMatrix().createPackManRate();
+                Matrix.INSTANCE.createPackManRate();
             } else {
                 cellX = 0;
                 cellY = 0;

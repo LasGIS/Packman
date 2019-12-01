@@ -126,7 +126,7 @@ public class MainFrame extends JFrame implements ComponentListener {
             splitPane.setResizeWeight(1);
 
             // создаём матрицу и запускаем
-            Matrix.createMatrix(false);
+            Matrix.INSTANCE.createMatrix(false);
             TimersControl.setMainFrame(this);
             TimersControl.startTimers();
 

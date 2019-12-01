@@ -90,13 +90,12 @@ public class Bones extends ActiveElemental {
                         }
                     }
                     final AbstractEnemy enm = isDummy ? new EnemyDummy(newCell) : new Enemy(newCell);
-                    final Matrix matrix = Matrix.getMatrix();
                     newCell.addElement(enm);
-                    final List<ActiveElemental> matrixElements = matrix.getElements();
+                    final List<ActiveElemental> matrixElements = Matrix.INSTANCE.getElements();
                     matrixElements.add(enm);
                     newCell.removeElement(this);
                     matrixElements.remove(this);
-                    matrix.createBoneRate();
+                    Matrix.createBoneRate();
                 }
             }
         }

@@ -86,7 +86,7 @@ public abstract class AbstractEnemy extends ActiveElemental {
     }
 
     protected AlterCellMove findPackMan(final java.util.List<AlterCellMove> alterCell) {
-        final PackMan packMan = Matrix.getMatrix().packMan;
+        final PackMan packMan = Matrix.INSTANCE.getPackMan();
         final Cell cell = packMan.getCell();
         final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
         double distance = isAggressive ? Double.MIN_VALUE : Double.MAX_VALUE;
@@ -97,7 +97,6 @@ public abstract class AbstractEnemy extends ActiveElemental {
                 distance = distanceCell;
                 ret = acm;
             }
-
         }
         return ret;
     }

@@ -53,10 +53,9 @@ public class EnemyDummy extends AbstractEnemy {
 
                 // проверяем на packman`a
                 if (newCell.contains(PackMan)) {
-                    final Matrix matrix = Matrix.getMatrix();
-                    final PackMan packMan = Matrix.getMatrix().packMan;
+                    final PackMan packMan = Matrix.INSTANCE.getPackMan();
                     if (packMan.getPrizeType() == aggressive) {
-                        matrix.removeEnemy(this);
+                        Matrix.INSTANCE.removeEnemy(this);
                     } else {
                         throw new GameOverException(false, "Враг наехал на рокемона");
                     }

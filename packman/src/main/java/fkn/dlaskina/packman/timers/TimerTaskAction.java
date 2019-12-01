@@ -30,7 +30,7 @@ public class TimerTaskAction extends TimerTask {
     @Override
     public void run() {
         try {
-            final Matrix matrix = Matrix.getMatrix();
+            final Matrix matrix = Matrix.INSTANCE;
             if (matrix != null) {
                 for (final ActiveElemental elm : matrix.getElements()) {
                     elm.act();

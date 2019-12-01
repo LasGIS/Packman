@@ -2,6 +2,7 @@ package fkn.dlaskina.packman.element;
 
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
+import fkn.dlaskina.packman.map.Matrix;
 
 import static fkn.dlaskina.packman.element.MoveType.NONE;
 import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
@@ -76,6 +77,8 @@ public abstract class ActiveElemental extends Elemental {
      */
     protected void startCellMove() {
         switch (cellMoveType) {
+            case NONE:
+                break;
             case DOWN:
                 cellY = -CELL_SIZE / 2;
                 cellX = 0;

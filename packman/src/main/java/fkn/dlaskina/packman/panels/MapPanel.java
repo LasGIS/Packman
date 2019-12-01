@@ -43,7 +43,7 @@ public class MapPanel extends JPanel {
     private final KeyAdapter keyAdapter = new KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent e) {
-            final PackMan packMan = Matrix.getMatrix().packMan;
+            final PackMan packMan = Matrix.INSTANCE.getPackMan();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_NUMPAD4 :
                 case KeyEvent.VK_LEFT :
@@ -91,7 +91,7 @@ public class MapPanel extends JPanel {
      */
     public void paint(final Graphics gr) {
         final Dimension dim = getSize();
-        final Dimension mDim = Matrix.getMatrix().getSize();
+        final Dimension mDim = Matrix.INSTANCE.getSize();
         if (isClear) {
             gr.setColor(this.getBackground());
             gr.fillRect(0, 0, dim.width, dim.height);
@@ -104,8 +104,8 @@ public class MapPanel extends JPanel {
                 final Graphics bckGr = grBackgroundImage.getGraphics();
                 bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
                 bckGr.fillRect(0, 0, mDim.width, mDim.height);
-                Matrix.getMatrix().paintGrid(bckGr);
-                Matrix.getMatrix().paint(bckGr, frame);
+                Matrix.INSTANCE.paintGrid(bckGr);
+                Matrix.INSTANCE.paint(bckGr, frame);
                 isRedrawMap = false;
                 requestFocusInWindow();
             }
