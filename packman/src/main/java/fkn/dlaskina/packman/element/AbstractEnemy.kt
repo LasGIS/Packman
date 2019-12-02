@@ -1,149 +1,137 @@
-package fkn.dlaskina.packman.element;
+package fkn.dlaskina.packman.element
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-
-import fkn.dlaskina.packman.map.Cell;
-import fkn.dlaskina.packman.map.Matrix;
+import fkn.dlaskina.packman.map.Cell
+import fkn.dlaskina.packman.map.Matrix.packMan
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Polygon
+import java.awt.Rectangle
 
 /**
  * The Class AbstractEnemy.
  * @author Vladimir Laskin
  * @version 1.0
  */
-public abstract class AbstractEnemy extends ActiveElemental {
+abstract class AbstractEnemy internal constructor(cell: Cell) : ActiveElemental(ElementalType.Enemy, cell) {
+    var dummy = false
+    private var xText = 0
+    private var yText = 0
+    var deleted = false
 
-    private static final Color FILL_COLOR = new Color(255, 0, 0);
-    private static final Color BOUND_COLOR = new Color(125, 0, 0);
-    private static final int BORDER = 2;
-    boolean isDummy;
-    private int xText;
-    private int yText;
-    private boolean deleted = false;
-
-    AbstractEnemy(final Cell cell) {
-        super(ElementalType.Enemy, cell);
-        cellStep = 2.8;
+    override fun paint(gr: Graphics, rect: Rectangle, frame: Int) {
+        val polygon = createPolygon(rect, frame)
+        gr.color = FILL_COLOR
+        gr.fillPolygon(polygon)
+        gr.color = BOUND_COLOR
+        gr.drawPolygon(polygon)
+        gr.drawString(if (dummy) "D" else "E", xText, yText)
     }
 
-    public boolean isDummy() {
-        return isDummy;
-    }
-
-    @Override
-    public void paint(Graphics gr, Rectangle rect, final int frame) {
-        final Polygon polygon = createPolygon(rect, frame);
-        gr.setColor(FILL_COLOR);
-        gr.fillPolygon(polygon);
-        gr.setColor(BOUND_COLOR);
-        gr.drawPolygon(polygon);
-        gr.drawString(isDummy ? "D" : "E", xText, yText);
-    }
-
-    private Polygon createPolygon(Rectangle rect, int frame) {
-        final int x = (int) (rect.x + cellX);
-        final int y = (int) (rect.y + cellY);
-        final int x0 = x + rect.width / 2;
-        final int y0 = y + rect.height / 2;
-        final int x1 = x + BORDER;
-        final int y1 = y + BORDER;
-        final int x2 = x + rect.width - BORDER;
-        final int y2 = y + rect.height - BORDER;
-        final double factor = (frame < 20 ? frame : 40 - frame) / 20.0;
-        final int dx = (int) ((rect.width / 2 - BORDER) * factor);
-        final int dy = (int) ((rect.height / 2 - BORDER) * factor);
-        switch (cellMoveType) {
-            case DOWN:
-                xText = x + 12; yText = y + 14;
-                return new Polygon(
-                    new int[] {x1, x2, x2 - dx, x0, x1 + dx},
-                    new int[] {y1, y1, y2, y0, y2}, 5
-                );
-            case UP:
-                xText = x + 12; yText = y + 26;
-                return new Polygon(
-                    new int[] {x1 + dx, x0, x2 - dx, x2, x1},
-                    new int[] {y1, y0, y1, y2, y2}, 5
-                );
-            case LEFT:
-                xText = x + 18; yText = y + 20;
-                return new Polygon(
-                    new int[] {x2, x2, x1, x0, x1},
-                    new int[] {y1, y2, y2 - dy, y0, y1 + dy}, 5
-                );
-            case RIGHT:
-                xText = x + 6; yText = y + 20;
-                return new Polygon(
-                    new int[] {x1, x2, x0, x2, x1},
-                    new int[] {y1, y1 + dy, y0, y2 - dy, y2}, 5
-                );
-            default:
-                xText = x + 12; yText = y + 16;
-                return new Polygon(new int[] {x1, x2, x2, x1}, new  int[] {y1, y1, y2, y2}, 4);
-        }
-    }
-
-    AlterCellMove findPackMan(final java.util.List<AlterCellMove> alterCell) {
-        final PackMan packMan = Matrix.INSTANCE.getPackMan();
-        final Cell cell = packMan.getCell();
-        final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
-        double distance = isAggressive ? Double.MIN_VALUE : Double.MAX_VALUE;
-        AlterCellMove ret = null;
-        for (final AlterCellMove acm : alterCell) {
-            final double distanceCell = acm.getCell().distance(cell);
-            if (isAggressive ? distanceCell > distance : distanceCell < distance) {
-                distance = distanceCell;
-                ret = acm;
+    private fun createPolygon(rect: Rectangle, frame: Int): Polygon {
+        val x = (rect.x + cellX).toInt()
+        val y = (rect.y + cellY).toInt()
+        val x0 = x + rect.width / 2
+        val y0 = y + rect.height / 2
+        val x1 = x + BORDER
+        val y1 = y + BORDER
+        val x2 = x + rect.width - BORDER
+        val y2 = y + rect.height - BORDER
+        val factor = (if (frame < 20) frame else 40 - frame) / 20.0
+        val dx = ((rect.width / 2 - BORDER) * factor).toInt()
+        val dy = ((rect.height / 2 - BORDER) * factor).toInt()
+        return when (cellMoveType) {
+            MoveType.DOWN -> {
+                xText = x + 12
+                yText = y + 14
+                Polygon(intArrayOf(x1, x2, x2 - dx, x0, x1 + dx), intArrayOf(y1, y1, y2, y0, y2), 5
+                )
+            }
+            MoveType.UP -> {
+                xText = x + 12
+                yText = y + 26
+                Polygon(intArrayOf(x1 + dx, x0, x2 - dx, x2, x1), intArrayOf(y1, y0, y1, y2, y2), 5
+                )
+            }
+            MoveType.LEFT -> {
+                xText = x + 18
+                yText = y + 20
+                Polygon(intArrayOf(x2, x2, x1, x0, x1), intArrayOf(y1, y2, y2 - dy, y0, y1 + dy), 5
+                )
+            }
+            MoveType.RIGHT -> {
+                xText = x + 6
+                yText = y + 20
+                Polygon(intArrayOf(x1, x2, x0, x2, x1), intArrayOf(y1, y1 + dy, y0, y2 - dy, y2), 5
+                )
+            }
+            else -> {
+                xText = x + 12
+                yText = y + 16
+                Polygon(intArrayOf(x1, x2, x2, x1), intArrayOf(y1, y1, y2, y2), 4)
             }
         }
-        return ret;
     }
 
-    int findAlternativeCells(final java.util.List<AlterCellMove> alterCell) {
-        final AlterCellMove[] tempCell = new AlterCellMove[4];
-        switch (moveType) {
-            case DOWN:
-                tempCell[0] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                tempCell[1] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                tempCell[2] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                tempCell[3] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                break;
-            case NONE:
-            case UP:
-                tempCell[0] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                tempCell[1] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                tempCell[2] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                tempCell[3] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                break;
-            case RIGHT:
-                tempCell[0] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                tempCell[1] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                tempCell[2] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                tempCell[3] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                break;
-            case LEFT:
-                tempCell[0] = new AlterCellMove(cell.getCell(-1,  0), MoveType.LEFT);
-                tempCell[1] = new AlterCellMove(cell.getCell( 0, -1), MoveType.UP);
-                tempCell[2] = new AlterCellMove(cell.getCell( 0,  1), MoveType.DOWN);
-                tempCell[3] = new AlterCellMove(cell.getCell( 1,  0), MoveType.RIGHT);
-                break;
-        }
-        for (final AlterCellMove alter : tempCell) {
-            final Cell testCell = alter.getCell();
-            if (testCell != null && !testCell.isStone() && !testCell.contains(ElementalType.Enemy)) {
-                alterCell.add(alter);
+    fun findPackMan(alterCell: List<AlterCellMove>): AlterCellMove? {
+        val packMan = packMan
+        val cell = packMan.cell
+        val isAggressive = packMan.prizeType == SurpriseType.aggressive
+        var distance = if (isAggressive) Double.MIN_VALUE else Double.MAX_VALUE
+        var ret: AlterCellMove? = null
+        for (acm in alterCell) {
+            val distanceCell = acm.cell?.distance(cell)
+            if (if (isAggressive) distanceCell > distance else distanceCell < distance) {
+                distance = distanceCell
+                ret = acm
             }
         }
-        return alterCell.size();
+        return ret
     }
 
-    public void setDeleted(final boolean deleted) {
-        this.deleted = deleted;
+    fun findAlternativeCells(alterCell: MutableList<AlterCellMove>): Int {
+        val tempCell = arrayOfNulls<AlterCellMove>(4)
+        when (moveType) {
+            MoveType.DOWN -> {
+                tempCell[0] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
+                tempCell[1] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
+                tempCell[2] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
+                tempCell[3] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
+            }
+            MoveType.NONE, MoveType.UP -> {
+                tempCell[0] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
+                tempCell[1] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
+                tempCell[2] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
+                tempCell[3] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
+            }
+            MoveType.RIGHT -> {
+                tempCell[0] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
+                tempCell[1] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
+                tempCell[2] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
+                tempCell[3] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
+            }
+            MoveType.LEFT -> {
+                tempCell[0] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
+                tempCell[1] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
+                tempCell[2] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
+                tempCell[3] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
+            }
+        }
+        for (alter in tempCell) {
+            val testCell = alter!!.cell
+            if (testCell != null && !testCell.isStone && !testCell.contains(ElementalType.Enemy)) {
+                alterCell.add(alter)
+            }
+        }
+        return alterCell.size
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    companion object {
+        private val FILL_COLOR = Color(255, 0, 0)
+        private val BOUND_COLOR = Color(125, 0, 0)
+        private const val BORDER = 2
+    }
+
+    init {
+        cellStep = 2.8
     }
 }

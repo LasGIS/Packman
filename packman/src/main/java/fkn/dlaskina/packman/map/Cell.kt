@@ -149,7 +149,7 @@ class Cell(
         return "Cell{X=$indX, Y=$indY}"
     }
 
-    fun paint(gr: Graphics?, frame: Int) {
+    fun paint(gr: Graphics, frame: Int) {
         for (elm in elements) {
             elm.paint(gr, rectangle, frame)
         }

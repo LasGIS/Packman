@@ -5,9 +5,6 @@ import fkn.dlaskina.packman.panels.ConfigPanel
 import org.apache.log4j.LogManager
 import java.awt.Dimension
 import java.awt.Graphics
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -86,7 +83,7 @@ object Matrix {
         return x in 0 until MATRIX_SIZE_X && y in 0 until MATRIX_SIZE_Y
     }
 
-    fun paint(gr: Graphics?, frame: Int) {
+    fun paint(gr: Graphics, frame: Int) {
         for (yCells in cells) {
             for (cell in yCells) {
                 cell.paint(gr, frame)
@@ -110,18 +107,18 @@ object Matrix {
      * @param enemy враг
      */
     fun removeEnemy(enemy: AbstractEnemy) {
-        if (enemy.isDeleted) {
+        if (enemy.deleted) {
             log.info("Вторичное удаление врага {$enemy}")
             val enemyCell = enemy.cell
             enemyCell?.removeElement(enemy)
             elements.remove(enemy)
         } else {
-            enemy.isDeleted = true
+            enemy.deleted = true
             log.info("удаляем врага {$enemy}")
             val enemyCell = enemy.cell
             enemyCell.removeElement(enemy)
             elements.remove(enemy)
-            val bones = Bones(enemyCell, enemy.isDummy)
+            val bones = Bones(enemyCell, enemy.dummy)
             enemyCell.addElement(bones)
             elements.add(bones)
             var maxDist = 5.0

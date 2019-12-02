@@ -1,67 +1,56 @@
-package fkn.dlaskina.packman.element;
+package fkn.dlaskina.packman.element
 
-import java.util.ArrayList;
-import java.util.List;
-
-import fkn.dlaskina.packman.map.Cell;
-import fkn.dlaskina.packman.map.GameOverException;
-import fkn.dlaskina.packman.map.Matrix;
-
-import static fkn.dlaskina.packman.element.ElementalType.PackMan;
-import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
+import fkn.dlaskina.packman.map.Cell
+import fkn.dlaskina.packman.map.GameOverException
+import fkn.dlaskina.packman.map.Matrix.packMan
+import fkn.dlaskina.packman.map.Matrix.removeEnemy
+import java.util.*
 
 /**
  * Враг.
  * @author VLaskin
  * @since 26.03.2016.
  */
-public class EnemyDummy extends AbstractEnemy {
-
-    public EnemyDummy(final Cell cell) {
-        super(cell);
-        isDummy = true;
-    }
-
-    @Override
-    public void act() throws GameOverException {
-        if (isCenterCell()) {
-            // альтернативные перемещения
-            final List<AlterCellMove> alterCell = new ArrayList<>();
-            final int alterCount = findAlternativeCells(alterCell);
-            if (alterCount > 2) {
-                // есть много путей
-                AlterCellMove alterMoveType = findPackMan(alterCell);
-                newCell = alterMoveType.getCell();
-                cellMoveType = alterMoveType.getMoveType();
-            } else if (alterCount > 0) {
-                // только один путь - вперёд!
-                AlterCellMove alterMoveType = alterCell.get(0);
-                newCell = alterMoveType.getCell();
-                cellMoveType = alterMoveType.getMoveType();
-            } else {
-                // нет выхода
-                newCell = null;
+class EnemyDummy(cell: Cell?) : AbstractEnemy(cell!!) {
+    @Throws(GameOverException::class)
+    override fun act() {
+        if (isCenterCell) { // альтернативные перемещения
+            val alterCell: List<AlterCellMove> = ArrayList()
+            val alterCount = findAlternativeCells(alterCell)
+            if (alterCount > 2) { // есть много путей
+                val alterMoveType = findPackMan(alterCell)
+                newCell = alterMoveType!!.cell
+                cellMoveType = alterMoveType.moveType
+            } else if (alterCount > 0) { // только один путь - вперёд!
+                val alterMoveType = alterCell[0]
+                newCell = alterMoveType!!.cell
+                cellMoveType = alterMoveType.moveType
+            } else { // нет выхода
+                newCell = null
             }
         }
-        if (isBorderCell()) {
+        if (isBorderCell) {
             if (newCell != null) {
-                cell.removeElement(this);
-                newCell.addElement(this);
-                cell = newCell;
-                moveType = cellMoveType;
-                startCellMove();
-
+                cell.removeElement(this)
+                newCell!!.addElement(this)
+                cell = newCell
+                moveType = cellMoveType
+                startCellMove()
                 // проверяем на packman`a
-                if (newCell.contains(PackMan)) {
-                    final PackMan packMan = Matrix.INSTANCE.getPackMan();
-                    if (packMan.getPrizeType() == aggressive) {
-                        Matrix.INSTANCE.removeEnemy(this);
+                if (newCell!!.contains(ElementalType.PackMan)) {
+                    val packMan = packMan
+                    if (packMan.prizeType == SurpriseType.aggressive) {
+                        removeEnemy(this)
                     } else {
-                        throw new GameOverException(false, "Враг наехал на рокемона");
+                        throw GameOverException(false, "Враг наехал на рокемона")
                     }
                 }
             }
         }
-        cellMove();
+        cellMove()
+    }
+
+    init {
+        dummy = true
     }
 }

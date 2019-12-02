@@ -1,19 +1,19 @@
-package fkn.dlaskina.packman.element;
+package fkn.dlaskina.packman.element
 
 /**
  * Тип элементала
  */
-public enum ElementalType {
-    /** главное действующее лицо. */
+enum class ElementalType {
+    /** главное действующее лицо.  */
     PackMan,
-    /** приз. */
+    /** приз.  */
     Surprise,
-     /** враг. */
+    /** враг.  */
     Enemy,
-    /** стена. */
+    /** стена.  */
     Stone,
-    /** Аптечка. */
+    /** Аптечка.  */
     MedBox,
-    /** Кости. */
+    /** Кости.  */
     Bones
 }

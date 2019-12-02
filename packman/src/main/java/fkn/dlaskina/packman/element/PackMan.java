@@ -88,16 +88,16 @@ public class PackMan extends ActiveElemental {
         if (isCenterCell()) {
             switch (moveType) {
                 case DOWN:
-                    newCell = cell.getCell(0, 1);
+                    newCell = getCell().getCell(0, 1);
                     break;
                 case UP:
-                    newCell = cell.getCell(0, -1);
+                    newCell = getCell().getCell(0, -1);
                     break;
                 case RIGHT:
-                    newCell = cell.getCell(1, 0);
+                    newCell = getCell().getCell(1, 0);
                     break;
                 case LEFT:
-                    newCell = cell.getCell(-1, 0);
+                    newCell = getCell().getCell(-1, 0);
                     break;
             }
             if (newCell == null || newCell.isStone()) {
@@ -111,9 +111,9 @@ public class PackMan extends ActiveElemental {
         }
         if (isBorderCell()) {
             if (newCell != null) {
-                cell.removeElement(this);
+                getCell().removeElement(this);
                 newCell.addElement(this);
-                cell = newCell;
+                setCell(newCell);
                 startCellMove();
                 // забираем призы и проверяем на злодея
                 for (Elemental elm : newCell.getElements()) {

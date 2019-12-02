@@ -1,65 +1,59 @@
-package fkn.dlaskina.packman.element;
+package fkn.dlaskina.packman.element
 
-import fkn.dlaskina.packman.map.Cell;
-import fkn.dlaskina.packman.map.GameOverException;
-import fkn.dlaskina.packman.map.Matrix;
-
-import static fkn.dlaskina.packman.element.ElementalType.PackMan;
-import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
+import fkn.dlaskina.packman.map.Cell
+import fkn.dlaskina.packman.map.GameOverException
+import fkn.dlaskina.packman.map.Matrix.packMan
+import fkn.dlaskina.packman.map.Matrix.removeEnemy
 
 /**
  * Враг.
  * @author VLaskin
  * @since 26.03.2016.
  */
-public class Enemy extends AbstractEnemy {
-
-    public Enemy(final Cell cell) {
-        super(cell);
-        isDummy = false;
-    }
-
-    @Override
-    public void act() throws GameOverException {
-        if (isCenterCell()) {
-            final PackMan packMan = Matrix.INSTANCE.getPackMan();
-            final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
-            AlterCellMove finalCellMove = null;
-            int finalPackManRate = isAggressive ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-            for (final AlterCellMove cellMove : cell.getAroundCells()) {
-                final int packManRate = cellMove.getCell().getPackManRate();
-                if (isAggressive ? packManRate > finalPackManRate : packManRate < finalPackManRate) {
-                    finalPackManRate = packManRate;
-                    finalCellMove = cellMove;
+class Enemy(cell: Cell?) : AbstractEnemy(cell!!) {
+    @Throws(GameOverException::class)
+    override fun act() {
+        if (isCenterCell) {
+            val packMan = packMan
+            val isAggressive = packMan.prizeType == SurpriseType.aggressive
+            var finalCellMove: AlterCellMove? = null
+            var finalPackManRate = if (isAggressive) Int.MIN_VALUE else Int.MAX_VALUE
+            for (cellMove in cell.aroundCells) {
+                val packManRate = cellMove.cell.packManRate
+                if (if (isAggressive) packManRate > finalPackManRate else packManRate < finalPackManRate) {
+                    finalPackManRate = packManRate
+                    finalCellMove = cellMove
                 }
             }
             if (finalCellMove != null) {
-                newCell = finalCellMove.getCell();
-                cellMoveType = finalCellMove.getMoveType();
-            } else {
-                // нет выхода
-                newCell = null;
+                newCell = finalCellMove.cell
+                cellMoveType = finalCellMove.moveType
+            } else { // нет выхода
+                newCell = null
             }
         }
-        if (isBorderCell()) {
+        if (isBorderCell) {
             if (newCell != null) {
-                cell.removeElement(this);
-                newCell.addElement(this);
-                cell = newCell;
-                moveType = cellMoveType;
-                startCellMove();
-
+                cell.removeElement(this)
+                newCell!!.addElement(this)
+                cell = newCell as Cell
+                moveType = cellMoveType
+                startCellMove()
                 // проверяем на packman`a
-                if (newCell.contains(PackMan)) {
-                    final PackMan packMan = Matrix.INSTANCE.getPackMan();
-                    if (packMan.getPrizeType() == aggressive) {
-                        Matrix.INSTANCE.removeEnemy(this);
+                if (newCell!!.contains(ElementalType.PackMan)) {
+                    val packMan = packMan
+                    if (packMan.prizeType == SurpriseType.aggressive) {
+                        removeEnemy(this)
                     } else {
-                        throw new GameOverException(false, "Враг наехал на рокемона");
+                        throw GameOverException(false, "Враг наехал на рокемона")
                     }
                 }
             }
         }
-        cellMove();
+        cellMove()
+    }
+
+    init {
+        dummy = false
     }
 }
