@@ -1,33 +1,27 @@
-import java.awt.GraphicsEnvironment;
+import java.awt.Font
+import java.awt.FontFormatException
+import java.awt.GraphicsEnvironment
+import java.io.File
+import java.io.IOException
 
 /**
- * The Class ShowFonts.
- * @author Vladimir Laskin
- * @version 1.0
+ * Главный запуск программы.
+ * @param args аргументы командной строки
  */
-public class ShowFonts {
-    /**
-     * Главный запуск программы.
-     * @param args аргументы командной строки
-     */
-    public static void main(final String[] args) {
-//        try {
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-
-            // поиск доступных шрифтов
-            String[] fontFamilies = ge.getAvailableFontFamilyNames();
-            for (String fontName : fontFamilies) {
-                System.out.println(fontName);
-            }
-            // регистрация шрифта для java
-//            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Candara.TTF"));
-//            ge.registerFont(font);
-
-/*
-        } catch (FontFormatException | IOException ex) {
-            ex.printStackTrace();
+fun main(args: Array<String>) {
+    try {
+        val ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
+        // поиск доступных шрифтов
+        val fontFamilies = ge.availableFontFamilyNames
+        for (fontName in fontFamilies) {
+            println(fontName)
         }
-*/
-
+        // регистрация шрифта для java
+        val font = Font.createFont(Font.TRUETYPE_FONT, File("fonts/Candara.TTF"))
+        ge.registerFont(font)
+    } catch (ex: FontFormatException) {
+        ex.printStackTrace()
+    } catch (ex: IOException) {
+        ex.printStackTrace()
     }
 }

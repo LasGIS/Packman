@@ -43,6 +43,7 @@ object Matrix {
      */
     fun createMatrix(isNewLevel: Boolean): Matrix {
         if (isNewLevel && level < levelMax) level++
+        elements.removeAll { true }
         loadFile("/matrix$level.txt")
         return Matrix
     }
@@ -53,7 +54,7 @@ object Matrix {
      * @param retMaxX возвращаемый размер по горизонтали
      */
     private fun load(fileName: String, retMaxX: IntArray): List<String> {
-        log.error("Читаем матрицу из файла \"$fileName\"")
+        log.info("Читаем матрицу из файла \"$fileName\"")
         var maxX = 0
         val list: List<String> = Matrix::class.java.getResourceAsStream(fileName).bufferedReader().readLines()
         for (line in list) {
@@ -104,23 +105,19 @@ object Matrix {
     val size: Dimension
         get() = Dimension(MATRIX_SIZE_X * CELL_SIZE + 1, MATRIX_SIZE_Y * CELL_SIZE + 1)
 
-//    fun getElements(): List<ActiveElemental> {
-//        return elements
-//    }
-
     /**
      * удаляем врага
      * @param enemy враг
      */
     fun removeEnemy(enemy: AbstractEnemy) {
         if (enemy.isDeleted) {
-            log.info("Вторичное удаление врага {$enemy}", Throwable())
+            log.info("Вторичное удаление врага {$enemy}")
             val enemyCell = enemy.cell
             enemyCell?.removeElement(enemy)
             elements.remove(enemy)
         } else {
             enemy.isDeleted = true
-            log.info("удаляем врага {$enemy}", Throwable())
+            log.info("удаляем врага {$enemy}")
             val enemyCell = enemy.cell
             enemyCell.removeElement(enemy)
             elements.remove(enemy)
@@ -230,7 +227,7 @@ object Matrix {
         MATRIX_SIZE_X = sizeX[0]
         MATRIX_SIZE_Y = list.size
         cells = Array(MATRIX_SIZE_Y) { y ->
-            Array(MATRIX_SIZE_Y) { x ->
+            Array(MATRIX_SIZE_X) { x ->
                 Cell(x, y)
             }
         }

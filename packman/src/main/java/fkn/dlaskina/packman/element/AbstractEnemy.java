@@ -18,12 +18,12 @@ public abstract class AbstractEnemy extends ActiveElemental {
     private static final Color FILL_COLOR = new Color(255, 0, 0);
     private static final Color BOUND_COLOR = new Color(125, 0, 0);
     private static final int BORDER = 2;
-    protected boolean isDummy;
+    boolean isDummy;
     private int xText;
     private int yText;
     private boolean deleted = false;
 
-    protected AbstractEnemy(final Cell cell) {
+    AbstractEnemy(final Cell cell) {
         super(ElementalType.Enemy, cell);
         cellStep = 2.8;
     }
@@ -85,7 +85,7 @@ public abstract class AbstractEnemy extends ActiveElemental {
         }
     }
 
-    protected AlterCellMove findPackMan(final java.util.List<AlterCellMove> alterCell) {
+    AlterCellMove findPackMan(final java.util.List<AlterCellMove> alterCell) {
         final PackMan packMan = Matrix.INSTANCE.getPackMan();
         final Cell cell = packMan.getCell();
         final boolean isAggressive = packMan.getPrizeType() == SurpriseType.aggressive;
@@ -101,7 +101,7 @@ public abstract class AbstractEnemy extends ActiveElemental {
         return ret;
     }
 
-    protected int findAlternativeCells(final java.util.List<AlterCellMove> alterCell) {
+    int findAlternativeCells(final java.util.List<AlterCellMove> alterCell) {
         final AlterCellMove[] tempCell = new AlterCellMove[4];
         switch (moveType) {
             case DOWN:
