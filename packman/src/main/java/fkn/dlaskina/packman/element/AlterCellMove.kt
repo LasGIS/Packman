@@ -7,4 +7,4 @@ import fkn.dlaskina.packman.map.Cell
  * @author Vladimir Laskin
  * @version 1.0
  */
-class AlterCellMove(var cell: Cell?, var moveType: MoveType)
+class AlterCellMove(var cell: Cell, var moveType: MoveType)

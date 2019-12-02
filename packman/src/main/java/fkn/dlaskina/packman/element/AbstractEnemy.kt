@@ -73,16 +73,17 @@ abstract class AbstractEnemy internal constructor(cell: Cell) : ActiveElemental(
     }
 
     fun findPackMan(alterCell: List<AlterCellMove>): AlterCellMove? {
-        val packMan = packMan
         val cell = packMan.cell
         val isAggressive = packMan.prizeType == SurpriseType.aggressive
         var distance = if (isAggressive) Double.MIN_VALUE else Double.MAX_VALUE
         var ret: AlterCellMove? = null
         for (acm in alterCell) {
             val distanceCell = acm.cell?.distance(cell)
-            if (if (isAggressive) distanceCell > distance else distanceCell < distance) {
-                distance = distanceCell
-                ret = acm
+            distanceCell?.let {
+                if (if (isAggressive) distanceCell > distance else distanceCell < distance) {
+                    distance = distanceCell
+                    ret = acm
+                }
             }
         }
         return ret
@@ -92,34 +93,36 @@ abstract class AbstractEnemy internal constructor(cell: Cell) : ActiveElemental(
         val tempCell = arrayOfNulls<AlterCellMove>(4)
         when (moveType) {
             MoveType.DOWN -> {
-                tempCell[0] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
-                tempCell[1] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
-                tempCell[2] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
-                tempCell[3] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
+                tempCell[0] = cell.getCell(0, 1)?.let { AlterCellMove(it, MoveType.DOWN) }
+                tempCell[1] = cell.getCell(1, 0)?.let { AlterCellMove(it, MoveType.RIGHT) }
+                tempCell[2] = cell.getCell(-1, 0)?.let { AlterCellMove(it, MoveType.LEFT) }
+                tempCell[3] = cell.getCell(0, -1)?.let { AlterCellMove(it, MoveType.UP) }
             }
             MoveType.NONE, MoveType.UP -> {
-                tempCell[0] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
-                tempCell[1] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
-                tempCell[2] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
-                tempCell[3] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
+                tempCell[0] = cell.getCell(0, -1)?.let { AlterCellMove(it, MoveType.UP) }
+                tempCell[1] = cell.getCell(-1, 0)?.let { AlterCellMove(it, MoveType.LEFT) }
+                tempCell[2] = cell.getCell(1, 0)?.let { AlterCellMove(it, MoveType.RIGHT) }
+                tempCell[3] = cell.getCell(0, 1)?.let { AlterCellMove(it, MoveType.DOWN) }
             }
             MoveType.RIGHT -> {
-                tempCell[0] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
-                tempCell[1] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
-                tempCell[2] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
-                tempCell[3] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
+                tempCell[0] = cell.getCell(1, 0)?.let { AlterCellMove(it, MoveType.RIGHT) }
+                tempCell[1] = cell.getCell(0, 1)?.let { AlterCellMove(it, MoveType.DOWN) }
+                tempCell[2] = cell.getCell(0, -1)?.let { AlterCellMove(it, MoveType.UP) }
+                tempCell[3] = cell.getCell(-1, 0)?.let { AlterCellMove(it, MoveType.LEFT) }
             }
             MoveType.LEFT -> {
-                tempCell[0] = AlterCellMove(cell.getCell(-1, 0), MoveType.LEFT)
-                tempCell[1] = AlterCellMove(cell.getCell(0, -1), MoveType.UP)
-                tempCell[2] = AlterCellMove(cell.getCell(0, 1), MoveType.DOWN)
-                tempCell[3] = AlterCellMove(cell.getCell(1, 0), MoveType.RIGHT)
+                tempCell[0] = cell.getCell(-1, 0)?.let { AlterCellMove(it, MoveType.LEFT) }
+                tempCell[1] = cell.getCell(0, -1)?.let { AlterCellMove(it, MoveType.UP) }
+                tempCell[2] = cell.getCell(0, 1)?.let { AlterCellMove(it, MoveType.DOWN) }
+                tempCell[3] = cell.getCell(1, 0)?.let { AlterCellMove(it, MoveType.RIGHT) }
             }
         }
         for (alter in tempCell) {
-            val testCell = alter!!.cell
-            if (testCell != null && !testCell.isStone && !testCell.contains(ElementalType.Enemy)) {
-                alterCell.add(alter)
+            alter?.let {
+                val testCell = it.cell
+                if (!testCell.isStone && !testCell.contains(ElementalType.Enemy)) {
+                    alterCell.add(alter)
+                }
             }
         }
         return alterCell.size

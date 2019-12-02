@@ -15,7 +15,7 @@ class EnemyDummy(cell: Cell?) : AbstractEnemy(cell!!) {
     @Throws(GameOverException::class)
     override fun act() {
         if (isCenterCell) { // альтернативные перемещения
-            val alterCell: List<AlterCellMove> = ArrayList()
+            val alterCell: MutableList<AlterCellMove> = ArrayList()
             val alterCount = findAlternativeCells(alterCell)
             if (alterCount > 2) { // есть много путей
                 val alterMoveType = findPackMan(alterCell)
@@ -30,14 +30,14 @@ class EnemyDummy(cell: Cell?) : AbstractEnemy(cell!!) {
             }
         }
         if (isBorderCell) {
-            if (newCell != null) {
+            newCell?.let {
                 cell.removeElement(this)
-                newCell!!.addElement(this)
-                cell = newCell
+                it.addElement(this)
+                cell = it
                 moveType = cellMoveType
                 startCellMove()
                 // проверяем на packman`a
-                if (newCell!!.contains(ElementalType.PackMan)) {
+                if (it.contains(ElementalType.PackMan)) {
                     val packMan = packMan
                     if (packMan.prizeType == SurpriseType.aggressive) {
                         removeEnemy(this)
