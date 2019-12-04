@@ -1,167 +1,157 @@
-package fkn.dlaskina.packman.element;
+package fkn.dlaskina.packman.element
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-
-import fkn.dlaskina.packman.map.Cell;
-import fkn.dlaskina.packman.map.GameOverException;
-import fkn.dlaskina.packman.map.Matrix;
-import fkn.dlaskina.packman.panels.ConfigPanel;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
-import static fkn.dlaskina.packman.element.SurpriseType.aggressive;
-import static fkn.dlaskina.packman.element.SurpriseType.simple;
+import fkn.dlaskina.packman.map.Cell
+import fkn.dlaskina.packman.map.GameOverException
+import fkn.dlaskina.packman.map.Matrix.createPackManRate
+import fkn.dlaskina.packman.map.Matrix.removeEnemy
+import fkn.dlaskina.packman.panels.ConfigPanel
+import org.apache.log4j.LogManager
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Rectangle
 
 /**
  * Definition of the PackMan class
  * @author VLaskin
  * @since 26.03.2016.
  */
-public class PackMan extends ActiveElemental {
+class PackMan(cell: Cell?) : ActiveElemental(ElementalType.PackMan, cell!!) {
 
-    private static final Logger LOG = LogManager.getLogger(PackMan.class);
-
-    private static final Color FILL_COLOR = new Color(0, 255, 0);
-    private static final Color BOUND_COLOR = new Color(0, 125, 0);
-    private static final Color SPEED_FILL_COLOR = new Color(0, 128, 255);
-    private static final Color SPEED_BOUND_COLOR = new Color(0, 0, 200);
-    private static final Color AGGRESSIVE_FILL_COLOR = new Color(255, 128, 0);
-    private static final Color AGGRESSIVE_BOUND_COLOR = new Color(200, 0, 0);
-    private static final double SPEED_CELL_STEP = 5.0;
-    private static final double SIMPLE_CELL_STEP = 3.0;
-    private static final int BORDER = 2;
-
-    private SurpriseType prizeType = simple;
-    private long prizeTime = 0;
-
-    public PackMan(final Cell cell) {
-        super(ElementalType.PackMan, cell);
-        cellStep = SIMPLE_CELL_STEP;
+    companion object {
+        private val LOG = LogManager.getLogger(PackMan::class.java)
+        private val FILL_COLOR = Color(0, 255, 0)
+        private val BOUND_COLOR = Color(0, 125, 0)
+        private val SPEED_FILL_COLOR = Color(0, 128, 255)
+        private val SPEED_BOUND_COLOR = Color(0, 0, 200)
+        private val AGGRESSIVE_FILL_COLOR = Color(255, 128, 0)
+        private val AGGRESSIVE_BOUND_COLOR = Color(200, 0, 0)
+        private const val SPEED_CELL_STEP = 5.0
+        private const val SIMPLE_CELL_STEP = 3.0
+        private const val BORDER = 2
     }
 
-    public SurpriseType getPrizeType() {
-        return prizeType;
+    var prizeType = SurpriseType.simple
+        private set
+    private var prizeTime: Long = 0
+
+    init {
+        cellStep = SIMPLE_CELL_STEP
     }
 
-    @Override
-    public void paint(Graphics gr, Rectangle rect, final int frame) {
-        final int x = (int) (rect.x + cellX + BORDER);
-        final int y = (int) (rect.y + cellY + BORDER);
-        final int width =  rect.width - BORDER * 2;
-        final int height = rect.height - BORDER * 2;
-        final int angView;
-        final int angMouth = (frame < 20 ? frame : (40 - frame)) * 3;
-        switch (cellMoveType) {
-            case DOWN: angView = 270; break;
-            case UP: angView = 90; break;
-            case LEFT: angView = 180; break;
-            default:
-            case RIGHT: angView = 0; break;
+    override fun paint(gr: Graphics, rect: Rectangle, frame: Int) {
+        val x = (rect.x + cellX + BORDER).toInt()
+        val y = (rect.y + cellY + BORDER).toInt()
+        val width = rect.width - BORDER * 2
+        val height = rect.height - BORDER * 2
+        val angView: Int
+        val angMouth = (if (frame < 20) frame else 40 - frame) * 3
+        angView = when (cellMoveType) {
+            MoveType.DOWN -> 270
+            MoveType.UP -> 90
+            MoveType.LEFT -> 180
+            MoveType.RIGHT -> 0
+            else -> 0
+        }
+        gr.color = fillColor
+        gr.fillArc(x, y, width, height, angView + angMouth, 360 - angMouth * 2)
+        gr.color = boundColor
+        gr.drawArc(x, y, width, height, angView + angMouth, 360 - angMouth * 2)
+    }
+
+    private val boundColor: Color
+        get() = when (prizeType) {
+            SurpriseType.aggressive -> AGGRESSIVE_BOUND_COLOR
+            SurpriseType.speed -> SPEED_BOUND_COLOR
+            else -> BOUND_COLOR
         }
 
-        gr.setColor(getFillColor());
-        gr.fillArc(x, y, width, height, angView + angMouth, 360 - (angMouth * 2));
-        gr.setColor(getBoundColor());
-        gr.drawArc(x, y, width, height, angView + angMouth, 360 - (angMouth * 2));
-    }
-
-    private Color getBoundColor() {
-        switch (prizeType) {
-            case aggressive: return AGGRESSIVE_BOUND_COLOR;
-            case speed: return SPEED_BOUND_COLOR;
-            default: return BOUND_COLOR;
+    private val fillColor: Color
+        get() = when (prizeType) {
+            SurpriseType.aggressive -> AGGRESSIVE_FILL_COLOR
+            SurpriseType.speed -> SPEED_FILL_COLOR
+            else -> FILL_COLOR
         }
-    }
 
-    private Color getFillColor() {
-        switch (prizeType) {
-            case aggressive: return AGGRESSIVE_FILL_COLOR;
-            case speed: return SPEED_FILL_COLOR;
-            default: return FILL_COLOR;
-        }
-    }
-
-    @Override
-    public void act() throws GameOverException {
-        if (isCenterCell()) {
-            switch (moveType) {
-                case DOWN:
-                    newCell = getCell().getCell(0, 1);
-                    break;
-                case UP:
-                    newCell = getCell().getCell(0, -1);
-                    break;
-                case RIGHT:
-                    newCell = getCell().getCell(1, 0);
-                    break;
-                case LEFT:
-                    newCell = getCell().getCell(-1, 0);
-                    break;
+    @Throws(GameOverException::class)
+    override fun act() {
+        if (isCenterCell) {
+            newCell = when (moveType) {
+                MoveType.DOWN -> cell.getCell(0, 1)
+                MoveType.UP -> cell.getCell(0, -1)
+                MoveType.RIGHT -> cell.getCell(1, 0)
+                MoveType.LEFT -> cell.getCell(-1, 0)
+                else -> cell
             }
-            if (newCell == null || newCell.isStone()) {
-                cellX = 0;
-                cellY = 0;
-                cellMoveType = moveType = MoveType.NONE;
+            if (newCell == null || newCell!!.isStone) {
+                cellX = 0.0
+                cellY = 0.0
+                moveType = MoveType.NONE
+                cellMoveType = moveType
             } else {
-                cellMoveType = moveType;
+                cellMoveType = moveType
             }
-            Matrix.INSTANCE.createPackManRate();
+            createPackManRate()
         }
-        if (isBorderCell()) {
-            if (newCell != null) {
-                getCell().removeElement(this);
-                newCell.addElement(this);
-                setCell(newCell);
-                startCellMove();
+        if (isBorderCell) {
+            val nCell = newCell
+            if (nCell != null) {
+                cell.removeElement(this)
+                nCell.addElement(this)
+                cell = nCell
+                startCellMove()
                 // забираем призы и проверяем на злодея
-                for (Elemental elm : newCell.getElements()) {
-                    switch (elm.getType()) {
-                        case Surprise:
-                            final SurpriseType surpriseType = ((Surprise) elm).getPrizeType();
-                            boolean isRemove = false;
-                            if (prizeType == simple && surpriseType != simple) {
-                                prizeType = surpriseType;
-                                switch (prizeType) {
-                                    case aggressive:
-                                        prizeTime = System.currentTimeMillis() + 10000;
-                                        isRemove = true;
-                                        break;
-                                    case speed:
-                                        prizeTime = System.currentTimeMillis() + 20000;
-                                        cellStep = SPEED_CELL_STEP;
-                                        isRemove = true;
-                                        break;
+                for (elm in nCell.elements) {
+                    when (elm.type) {
+                        ElementalType.Surprise -> {
+                            val surpriseType = (elm as Surprise).prizeType
+                            var isRemove = false
+                            if (prizeType === SurpriseType.simple && surpriseType !== SurpriseType.simple) {
+                                prizeType = surpriseType
+                                when (prizeType) {
+                                    SurpriseType.aggressive -> {
+                                        prizeTime = System.currentTimeMillis() + 10000
+                                        isRemove = true
+                                    }
+                                    SurpriseType.speed -> {
+                                        prizeTime = System.currentTimeMillis() + 20000
+                                        cellStep = SPEED_CELL_STEP
+                                        isRemove = true
+                                    }
                                 }
                             }
-                            if (isRemove || !(prizeType != simple && surpriseType != simple)) {
-                                newCell.removeElement(elm);
+                            if (isRemove || !(prizeType !== SurpriseType.simple && surpriseType !== SurpriseType.simple)) {
+                                nCell.removeElement(elm)
                                 if (ConfigPanel.addBonus()) {
-                                    throw new GameOverException(true, "Победа!");
+                                    throw GameOverException(true, "Победа!")
                                 }
-                            }
-                            break;
-                        case Enemy: {
-                            if (prizeType == aggressive) {
-                                Matrix.INSTANCE.removeEnemy((AbstractEnemy) elm);
-                            } else {
-                                throw new GameOverException(false, "Сам наехал на врага");
                             }
                         }
+                        ElementalType.Enemy -> {
+                            if (prizeType === SurpriseType.aggressive) {
+                                removeEnemy((elm as AbstractEnemy))
+                            } else {
+                                throw GameOverException(false, "Сам наехал на врага")
+                            }
+                        }
+                        ElementalType.PackMan -> TODO()
+                        ElementalType.Stone -> TODO()
+                        ElementalType.MedBox -> TODO()
+                        ElementalType.Bones -> TODO()
                     }
                 }
-                Matrix.INSTANCE.createPackManRate();
+                createPackManRate()
             } else {
-                cellX = 0;
-                cellY = 0;
-                cellMoveType = moveType = MoveType.NONE;
+                cellX = 0.0
+                cellY = 0.0
+                moveType = MoveType.NONE
+                cellMoveType = moveType
             }
         }
-        if (prizeType != simple && prizeTime < System.currentTimeMillis()) {
-            cellStep = SIMPLE_CELL_STEP;
-            prizeType = simple;
+        if (prizeType !== SurpriseType.simple && prizeTime < System.currentTimeMillis()) {
+            cellStep = SIMPLE_CELL_STEP
+            prizeType = SurpriseType.simple
         }
-        cellMove();
+        cellMove()
     }
+
 }

@@ -81,7 +81,7 @@ abstract class ActiveElemental(
             MoveType.NONE -> {
             }
             MoveType.DOWN -> {
-                cellY = -CELL_SIZE / 2.toDouble()
+                cellY = -CELL_SIZE.toDouble() / 2
                 cellX = 0.0
             }
             MoveType.UP -> {

@@ -1,25 +1,22 @@
-package fkn.dlaskina.packman.element;
+package fkn.dlaskina.packman.element
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Rectangle
 
 /**
  * Definition of the Surprise class
  * @author VLaskin
  * @since 26.03.2016.
  */
-public class Stone extends Elemental {
+class Stone : Elemental(ElementalType.Stone) {
 
-    private static final Color FILL_COLOR = new Color(125, 128, 128);
-
-    public Stone() {
-        super(ElementalType.Stone);
+    companion object {
+        private val FILL_COLOR = Color(125, 128, 128)
     }
 
-    @Override
-    public void paint(Graphics gr, Rectangle rect, final int frame) {
-        gr.setColor(FILL_COLOR);
-        gr.fillRect(rect.x, rect.y, rect.width, rect.height);
+    override fun paint(gr: Graphics, rect: Rectangle, frame: Int) {
+        gr.color = FILL_COLOR
+        gr.fillRect(rect.x, rect.y, rect.width, rect.height)
     }
 }

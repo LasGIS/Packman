@@ -1,64 +1,57 @@
-package fkn.dlaskina.packman.element;
+package fkn.dlaskina.packman.element
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Rectangle
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.cos
 
 /**
  * Definition of the Surprise class
  * @author VLaskin
  * @since 26.03.2016.
  */
-public class Surprise extends Elemental {
+class Surprise(val prizeType: SurpriseType) : Elemental(ElementalType.Surprise) {
 
-    private static final Color FILL_COLOR = new Color(255, 255, 0);
-    private static final Color BOUND_COLOR = new Color(125, 128, 0);
-    private static final Color SPEED_FILL_COLOR = new Color(0, 128, 255);
-    private static final Color SPEED_BOUND_COLOR = new Color(0, 0, 128);
-    private static final Color AGGRESSIVE_FILL_COLOR = new Color(255, 128, 0);
-    private static final Color AGGRESSIVE_BOUND_COLOR = new Color(200, 0, 0);
-    private static final int BORDER = 5;
-    private SurpriseType prizeType;
-
-    public Surprise(final SurpriseType type) {
-        super(ElementalType.Surprise);
-        this.prizeType = type;
-    }
-
-    public SurpriseType getPrizeType() {
-        return prizeType;
-    }
-
-    @Override
-    public void paint(final Graphics gr, final Rectangle rect, final int frame) {
-        final int width = (int) ((rect.width - BORDER * 2) * Math.abs(Math.cos((frame * Math.PI) / 20)));
-        final int x = rect.x + (rect.width - width) / 2;
-        final int y = rect.y + BORDER;
-        final int height = rect.height - BORDER * 2;
+    override fun paint(gr: Graphics, rect: Rectangle, frame: Int) {
+        val width = ((rect.width - BORDER * 2) * abs(cos(frame * PI / 20))).toInt()
+        val x = rect.x + (rect.width - width) / 2
+        val y = rect.y + BORDER
+        val height = rect.height - BORDER * 2
         if (width > 0) {
-            gr.setColor(getFillColor());
-            gr.fillOval(x, y, width, height);
-            gr.setColor(getBoundColor());
-            gr.drawOval(x, y, width, height);
+            gr.color = fillColor
+            gr.fillOval(x, y, width, height)
+            gr.color = boundColor
+            gr.drawOval(x, y, width, height)
         } else {
-            gr.setColor(getFillColor());
-            gr.drawLine(x, y, x, y + height);
+            gr.color = fillColor
+            gr.drawLine(x, y, x, y + height)
         }
     }
 
-    private Color getBoundColor() {
-        switch (prizeType) {
-            case aggressive: return AGGRESSIVE_BOUND_COLOR;
-            case speed: return SPEED_BOUND_COLOR;
-            default: return BOUND_COLOR;
+    private val boundColor: Color
+        get() = when (prizeType) {
+            SurpriseType.aggressive -> AGGRESSIVE_BOUND_COLOR
+            SurpriseType.speed -> SPEED_BOUND_COLOR
+            else -> BOUND_COLOR
         }
+
+    private val fillColor: Color
+        get() = when (prizeType) {
+            SurpriseType.aggressive -> AGGRESSIVE_FILL_COLOR
+            SurpriseType.speed -> SPEED_FILL_COLOR
+            else -> FILL_COLOR
+        }
+
+    companion object {
+        private val FILL_COLOR = Color(255, 255, 0)
+        private val BOUND_COLOR = Color(125, 128, 0)
+        private val SPEED_FILL_COLOR = Color(0, 128, 255)
+        private val SPEED_BOUND_COLOR = Color(0, 0, 128)
+        private val AGGRESSIVE_FILL_COLOR = Color(255, 128, 0)
+        private val AGGRESSIVE_BOUND_COLOR = Color(200, 0, 0)
+        private const val BORDER = 5
     }
 
-    private Color getFillColor() {
-        switch (prizeType) {
-            case aggressive: return AGGRESSIVE_FILL_COLOR;
-            case speed: return SPEED_FILL_COLOR;
-            default: return FILL_COLOR;
-        }
-    }
 }
