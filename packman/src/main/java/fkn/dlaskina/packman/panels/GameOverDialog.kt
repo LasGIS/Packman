@@ -3,6 +3,7 @@ package fkn.dlaskina.packman.panels
 import fkn.dlaskina.packman.map.GameOverException
 import fkn.dlaskina.packman.map.Matrix
 import fkn.dlaskina.packman.timers.TimersControl
+import fkn.dlaskina.packman.util.Alog
 import org.apache.log4j.LogManager
 import java.awt.*
 import java.awt.event.WindowEvent
@@ -21,10 +22,11 @@ import kotlin.system.exitProcess
 class GameOverDialog(goExc: GameOverException) : JDialog() {
 
     companion object {
-        private val log = LogManager.getLogger(GameOverDialog::class.java)
+        private val log = LogManager.getLogger(this::class.java)
     }
 
     init {
+        log.info("проверка log.info()")
         enableEvents(AWTEvent.WINDOW_EVENT_MASK)
         TimersControl.stopTimers()
         try {

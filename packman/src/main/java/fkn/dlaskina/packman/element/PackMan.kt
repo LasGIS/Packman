@@ -5,6 +5,7 @@ import fkn.dlaskina.packman.map.GameOverException
 import fkn.dlaskina.packman.map.Matrix.createPackManRate
 import fkn.dlaskina.packman.map.Matrix.removeEnemy
 import fkn.dlaskina.packman.panels.ConfigPanel
+import fkn.dlaskina.packman.util.Alog
 import org.apache.log4j.LogManager
 import java.awt.Color
 import java.awt.Graphics
@@ -18,7 +19,7 @@ import java.awt.Rectangle
 class PackMan(cell: Cell?) : ActiveElemental(ElementalType.PackMan, cell!!) {
 
     companion object {
-        private val LOG = LogManager.getLogger(PackMan::class.java)
+        private val log = LogManager.getLogger(this::class.java)
         private val FILL_COLOR = Color(0, 255, 0)
         private val BOUND_COLOR = Color(0, 125, 0)
         private val SPEED_FILL_COLOR = Color(0, 128, 255)
@@ -117,6 +118,7 @@ class PackMan(cell: Cell?) : ActiveElemental(ElementalType.PackMan, cell!!) {
                                         cellStep = SPEED_CELL_STEP
                                         isRemove = true
                                     }
+                                    else -> {/*nothing*/}
                                 }
                             }
                             if (isRemove || !(prizeType !== SurpriseType.simple && surpriseType !== SurpriseType.simple)) {
@@ -133,10 +135,9 @@ class PackMan(cell: Cell?) : ActiveElemental(ElementalType.PackMan, cell!!) {
                                 throw GameOverException(false, "Сам наехал на врага")
                             }
                         }
-                        ElementalType.PackMan -> TODO()
-                        ElementalType.Stone -> TODO()
-                        ElementalType.MedBox -> TODO()
-                        ElementalType.Bones -> TODO()
+                        else -> {
+                            log.info("проверка")
+                        }
                     }
                 }
                 createPackManRate()

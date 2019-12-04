@@ -33,8 +33,8 @@ class Cell(
         private val DXS = intArrayOf(0, 1, -1, 0)
         private val DYS = intArrayOf(1, 0, 0, -1)
         private val D_MOVE_TYPES = arrayOf(MoveType.DOWN, MoveType.RIGHT, MoveType.LEFT, MoveType.UP)
-        private val BONE_COLOR = Color(125, 0, 0)
-        private val PACK_MAN_COLOR = Color(0, 125, 0)
+//        private val BONE_COLOR = Color(125, 0, 0)
+//        private val PACK_MAN_COLOR = Color(0, 125, 0)
     }
 
     /** рейтинг ячейки для покемона */
@@ -43,11 +43,7 @@ class Cell(
     var boneRate: Int = 0
     /** список сущьностей, населяющих ячейку.  */
     val elements = CopyOnWriteArrayList<Elemental>()
-    val rectangle: Rectangle
-
-    init {
-        rectangle = Rectangle(indX * Matrix.CELL_SIZE, indY * Matrix.CELL_SIZE, Matrix.CELL_SIZE, Matrix.CELL_SIZE)
-    }
+    val rectangle: Rectangle = Rectangle(indX * Matrix.CELL_SIZE, indY * Matrix.CELL_SIZE, Matrix.CELL_SIZE, Matrix.CELL_SIZE)
 
     /**
      * Вернуть ячейку, по смещениям относительно данной ячейки.
@@ -87,15 +83,6 @@ class Cell(
         val dy = Math.abs(to.indY - indY).toDouble()
         return Math.sqrt(dx * dx + dy * dy)
     }
-
-    /**
-     * Получить доступ к животным в данной ячейке.
-     * Добавлять или удалять животных можно только через Cell.
-     * @return список животных в этой ячейке
-    fun getElements(): Collection<Elemental> {
-    return elements
-    }
-     */
 
     /**
      * Append the element if not present.
@@ -158,6 +145,7 @@ class Cell(
     fun paintGrid(gr: Graphics) {
         gr.color = Color.black
         gr.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height)
+/*
         if (boneRate > 0) {
             gr.color = BONE_COLOR;
             gr.drawString(boneRate.toString(), rectangle.x + 16, rectangle.y + 12);
@@ -166,5 +154,6 @@ class Cell(
             gr.color = PACK_MAN_COLOR;
             gr.drawString(packManRate.toString(), rectangle.x + 1, rectangle.y + 12);
         }
+*/
     }
 }
