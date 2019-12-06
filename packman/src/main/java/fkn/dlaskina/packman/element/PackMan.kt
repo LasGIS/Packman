@@ -5,7 +5,6 @@ import fkn.dlaskina.packman.map.GameOverException
 import fkn.dlaskina.packman.map.Matrix.createPackManRate
 import fkn.dlaskina.packman.map.Matrix.removeEnemy
 import fkn.dlaskina.packman.panels.ConfigPanel
-import fkn.dlaskina.packman.util.Alog
 import org.apache.log4j.LogManager
 import java.awt.Color
 import java.awt.Graphics
@@ -135,9 +134,7 @@ class PackMan(cell: Cell?) : ActiveElemental(ElementalType.PackMan, cell!!) {
                                 throw GameOverException(false, "Сам наехал на врага")
                             }
                         }
-                        else -> {
-                            log.info("проверка")
-                        }
+                        else -> {/*nothing*/}
                     }
                 }
                 createPackManRate()

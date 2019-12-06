@@ -42,16 +42,15 @@ class MapPanel : JPanel() {
         override fun keyPressed(e: KeyEvent) {
             val packMan = packMan
             when (e.keyCode) {
-                KeyEvent.VK_NUMPAD4, KeyEvent.VK_LEFT ->  // влево
+                KeyEvent.VK_NUMPAD4, KeyEvent.VK_LEFT ->   // влево
                     packMan.setMove(MoveType.LEFT)
                 KeyEvent.VK_NUMPAD6, KeyEvent.VK_RIGHT ->  // вправо
                     packMan.setMove(MoveType.RIGHT)
-                KeyEvent.VK_NUMPAD8, KeyEvent.VK_UP ->  // вверх
+                KeyEvent.VK_NUMPAD8, KeyEvent.VK_UP ->     // вверх
                     packMan.setMove(MoveType.UP)
-                KeyEvent.VK_NUMPAD2, KeyEvent.VK_DOWN ->  // вниз
+                KeyEvent.VK_NUMPAD2, KeyEvent.VK_DOWN ->   // вниз
                     packMan.setMove(MoveType.DOWN)
-                else -> {
-                }
+                else -> {/*nothing*/}
             }
             //log.info("keyPressed = " + e.getKeyCode());
         }

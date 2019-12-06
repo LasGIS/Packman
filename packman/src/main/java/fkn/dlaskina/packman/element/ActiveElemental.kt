@@ -96,10 +96,6 @@ abstract class ActiveElemental(
                 cellX = +CELL_SIZE / 2.toDouble()
                 cellY = 0.0
             }
-            else -> {
-                cellX = 0.0
-                cellY = 0.0
-            }
         }
     }
 
