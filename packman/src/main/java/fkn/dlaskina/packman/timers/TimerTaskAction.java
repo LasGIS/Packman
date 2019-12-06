@@ -19,11 +19,11 @@ import org.apache.log4j.Logger;
  */
 public class TimerTaskAction extends TimerTask {
 
-    private static final Logger LOG = LogManager.getLogger(TimerTaskAction.class);
+    private static final Logger log = LogManager.getLogger(TimerTaskAction.class);
 
-    final JFrame frame;
+    private final JFrame frame;
 
-    public TimerTaskAction(final JFrame frame) {
+    TimerTaskAction(final JFrame frame) {
         this.frame = frame;
     }
 

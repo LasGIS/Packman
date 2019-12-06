@@ -17,14 +17,14 @@ public class TimersControl {
 
     private static Timer redrawTimer;
     private static Timer actionTimer;
-    private static MainFrame mainFrame;
+//    private static MainFrame mainFrame;
 
     public static void startTimers() {
         redrawTimer = new Timer();
-        redrawTimer.schedule(new TimerTaskRedraw(mainFrame.getMapPanel()), 33, 33);
+        redrawTimer.schedule(new TimerTaskRedraw(MainFrame.INSTANCE.getMapPanel()), 33, 33);
         actionTimer = new Timer();
-        actionTimer.schedule(new TimerTaskAction(mainFrame), 50, 50);
-        mainFrame.getMapPanel().clearBackground();
+        actionTimer.schedule(new TimerTaskAction(MainFrame.INSTANCE), 50, 50);
+        MainFrame.INSTANCE.getMapPanel().clearBackground();
     }
 
     public static void stopTimers() {
@@ -36,9 +36,5 @@ public class TimersControl {
             actionTimer.cancel();
             actionTimer.purge();
         }
-    }
-
-    public static void setMainFrame(final MainFrame mainFrame) {
-        TimersControl.mainFrame = mainFrame;
     }
 }

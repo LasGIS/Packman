@@ -1,135 +1,103 @@
-package fkn.dlaskina.packman.panels;
+package fkn.dlaskina.packman.panels
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
-import static java.awt.GridBagConstraints.BOTH;
-import static java.awt.GridBagConstraints.CENTER;
+import org.apache.log4j.LogManager
+import java.awt.*
+import javax.swing.JButton
+import javax.swing.JLabel
+import javax.swing.JPanel
 
 /**
  * Панель конфигурации.
  * @author VLaskin
  * @version 1.0 Date: 13.01.2005 16:38:05
  */
-public class ConfigPanel extends JPanel {
+class ConfigPanel : JPanel() {
+    /** всего бонусов  */
+    private val lblBonus = JLabel("0", JLabel.LEFT)
+    /** собранных бонусов  */
+    private val lblBonusMax = JLabel("0", JLabel.LEFT)
 
-    private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
-    private static ConfigPanel singleton;
+    companion object {
+        private val log = LogManager.getLogger(this::class.java)
+        var configPanel: ConfigPanel? = null
+        /** число полученых подарков.  */
+        private var bonusCount = 0
+        /** общее число подарков.  */
+        private var bonusCountMax = 0
 
-    /** число полученых подарков. */
-    private static int bonusCount = 0;
-    /** общее число подарков. */
-    private static int bonusCountMax;
-    /** всего бонусов */
-    private JLabel lblBonus = new JLabel("0", JLabel.LEFT);
-    /** собранных бонусов */
-    private JLabel lblBonusMax = new JLabel("0", JLabel.LEFT);
+        /**
+         * Добавить подарок и проверить - не последний ли?
+         * @return true если это последний бонус
+         */
+        fun addBonus(): Boolean {
+            bonusCount++
+            configPanel?.let {
+                it.lblBonus.text = bonusCount.toString()
+            }
+            return bonusCountMax <= bonusCount
+        }
+
+        fun setBonusCountMax(maxCount: Int) {
+            bonusCount = 0
+            bonusCountMax = maxCount
+            configPanel?.let {
+                it.lblBonusMax.text = bonusCountMax.toString()
+            }
+        }
+    }
 
     /**
      * Конструктор.
-    final String[] fontNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-    LOG.info(fontNames);
+     * final String[] fontNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+     * log.info(fontNames);
      */
-    public ConfigPanel() {
-        super();
-
-        final JPanel controlPanel = new JPanel(new GridBagLayout());
-        final GridBagConstraints c = new GridBagConstraints(0, 0, 1, 1, 0, 0,
-            CENTER, BOTH, new Insets(2, 10, 2, 10), 0, 0);
-
-        final Insets mainInsets = new Insets(2, 10, 2, 10);
-        final Insets deskInsets = new Insets(2, 10, 2, 2);
-        final Insets digitInsets = new Insets(2, 5, 2, 10);
-        final Font mainFont = new Font("Arial", Font.BOLD, 14);
-        final Font deskFont = new Font("Arial", Font.PLAIN, 12);
-        final Font digitFont = new Font("Courier New", Font.BOLD, 12);
-
-        c.gridwidth = 2;
-        c.insets = mainInsets;
-        JLabel label = new JLabel("Призы:", JLabel.CENTER);
-        label.setFont(mainFont);
-        label.setForeground(Color.BLUE);
-        controlPanel.add(label, c);
-
-        c.gridy = 1;
-        c.gridx = 0;
-        c.gridwidth = 1;
-        c.insets = deskInsets;
-        label = new JLabel("всего:", JLabel.RIGHT);
-        label.setFont(deskFont);
-        controlPanel.add(label, c);
-
-        c.gridx = 1;
-        c.insets = digitInsets;
-        lblBonusMax.setFont(digitFont);
-        lblBonusMax.setForeground(Color.RED);
-        controlPanel.add(lblBonusMax, c);
-
-        c.gridx = 0;
-        c.gridy = 2;
-        c.insets = deskInsets;
-        label = new JLabel("получено:", JLabel.RIGHT);
-        label.setFont(deskFont);
-        controlPanel.add(label, c);
-
-        c.gridx = 1;
-        c.insets = digitInsets;
-        lblBonus.setFont(digitFont);
-        lblBonus.setForeground(Color.RED);
-        controlPanel.add(lblBonus, c);
-
-        c.gridx = 0;
-        c.gridy = 3;
-        c.gridwidth = 2;
-        final JButton button = new JButton("Выход");
-        controlPanel.add(button, c);
-        button.addActionListener(
-            new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    System.exit(0);
-                }
-            }
-        );
-
-        setLayout(new BorderLayout());
-        add(controlPanel, BorderLayout.NORTH);
-        singleton = this;
-    }
-
-    public static ConfigPanel getConfigPanel() {
-        return singleton;
-    }
-
-    /**
-     * Добавить подарок и проверить - не последний ли?
-     * @return true если это последний бонус
-     */
-    public static boolean addBonus() {
-        bonusCount++;
-        if (singleton != null) {
-            singleton.lblBonus.setText(String.valueOf(bonusCount));
-        }
-        return bonusCountMax <= bonusCount;
-    }
-
-    public static void setBonusCountMax(final int maxCount) {
-        bonusCount = 0;
-        bonusCountMax = maxCount;
-        if (singleton != null) {
-            singleton.lblBonusMax.setText(String.valueOf(bonusCountMax));
-        }
+    init {
+        val controlPanel = JPanel(GridBagLayout())
+        val c = GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.BOTH, Insets(2, 10, 2, 10), 0, 0)
+        val mainInsets = Insets(2, 10, 2, 10)
+        val deskInsets = Insets(2, 10, 2, 2)
+        val digitInsets = Insets(2, 5, 2, 10)
+        val mainFont = Font("Arial", Font.BOLD, 14)
+        val deskFont = Font("Arial", Font.PLAIN, 12)
+        val digitFont = Font("Courier New", Font.BOLD, 12)
+        c.gridwidth = 2
+        c.insets = mainInsets
+        var label = JLabel("Призы:", JLabel.CENTER)
+        label.font = mainFont
+        label.foreground = Color.BLUE
+        controlPanel.add(label, c)
+        c.gridy = 1
+        c.gridx = 0
+        c.gridwidth = 1
+        c.insets = deskInsets
+        label = JLabel("всего:", JLabel.RIGHT)
+        label.font = deskFont
+        controlPanel.add(label, c)
+        c.gridx = 1
+        c.insets = digitInsets
+        lblBonusMax.font = digitFont
+        lblBonusMax.foreground = Color.RED
+        controlPanel.add(lblBonusMax, c)
+        c.gridx = 0
+        c.gridy = 2
+        c.insets = deskInsets
+        label = JLabel("получено:", JLabel.RIGHT)
+        label.font = deskFont
+        controlPanel.add(label, c)
+        c.gridx = 1
+        c.insets = digitInsets
+        lblBonus.font = digitFont
+        lblBonus.foreground = Color.RED
+        controlPanel.add(lblBonus, c)
+        c.gridx = 0
+        c.gridy = 3
+        c.gridwidth = 2
+        val button = JButton("Выход")
+        controlPanel.add(button, c)
+        button.addActionListener { System.exit(0) }
+        layout = BorderLayout()
+        add(controlPanel, BorderLayout.NORTH)
+        configPanel = this
     }
 }

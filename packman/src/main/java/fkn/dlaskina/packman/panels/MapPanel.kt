@@ -1,87 +1,72 @@
-package fkn.dlaskina.packman.panels;
+package fkn.dlaskina.packman.panels
 
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-
-import fkn.dlaskina.packman.element.MoveType;
-import fkn.dlaskina.packman.element.PackMan;
-import fkn.dlaskina.packman.map.Matrix;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
+import fkn.dlaskina.packman.element.MoveType
+import fkn.dlaskina.packman.map.Matrix
+import fkn.dlaskina.packman.map.Matrix.packMan
+import fkn.dlaskina.packman.map.Matrix.paint
+import fkn.dlaskina.packman.map.Matrix.paintGrid
+import org.apache.log4j.LogManager
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
+import java.awt.image.BufferedImage
+import javax.swing.JPanel
 
 /**
  * Окно вывода карты.
  * @author VLaskin
  * @version 1.0
  */
-public class MapPanel extends JPanel {
+class MapPanel : JPanel() {
 
-    private static final Logger LOG = LogManager.getLogger(MapPanel.class);
+    companion object {
+        private val log = LogManager.getLogger(MapPanel::class.java)
+        /** серый цвет фона.  */
+        val PANEL_GRAY_COLOR = Color(220, 220, 220)
+    }
 
-    /** серый цвет фона. */
-    public static final Color PANEL_GRAY_COLOR = new Color(220, 220, 220);
-    /** ссылка на MainFrame. */
-    private MainFrame mainFrame = null;
-
-    /** Если true, то будем перегружать. */
-    private boolean isRedrawMap = true;
-    /** сохраненное изображение. */
-    private BufferedImage grBackgroundImage = null;
-    /** номер кадра. */
-    private int frame = 0;
-    /** Стереть фон. */
-    private boolean isClear = true;
-
-    /** Ловим нажатие кнопочек. */
-    private final KeyAdapter keyAdapter = new KeyAdapter() {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            final PackMan packMan = Matrix.INSTANCE.getPackMan();
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_NUMPAD4 :
-                case KeyEvent.VK_LEFT :
-                    // влево
-                    packMan.setMove(MoveType.LEFT);
-                    break;
-                case KeyEvent.VK_NUMPAD6:
-                case KeyEvent.VK_RIGHT:
-                    // вправо
-                    packMan.setMove(MoveType.RIGHT);
-                    break;
-                case KeyEvent.VK_NUMPAD8:
-                case KeyEvent.VK_UP:
-                    // вверх
-                    packMan.setMove(MoveType.UP);
-                    break;
-                case KeyEvent.VK_NUMPAD2:
-                case KeyEvent.VK_DOWN:
-                    // вниз
-                    packMan.setMove(MoveType.DOWN);
-                    break;
-                default:
-                    break;
+    /** ссылка на MainFrame.  */
+    private var mainFrame: MainFrame? = null
+    /** Если true, то будем перегружать.  */
+    private var isRedrawMap = true
+    /** сохраненное изображение.  */
+    private var grBackgroundImage: BufferedImage? = null
+    /** номер кадра.  */
+    private var frame = 0
+    /** Стереть фон.  */
+    private var isClear = true
+    /** Ловим нажатие кнопочек.  */
+    private val keyAdapter: KeyAdapter = object : KeyAdapter() {
+        override fun keyPressed(e: KeyEvent) {
+            val packMan = packMan
+            when (e.keyCode) {
+                KeyEvent.VK_NUMPAD4, KeyEvent.VK_LEFT ->  // влево
+                    packMan.setMove(MoveType.LEFT)
+                KeyEvent.VK_NUMPAD6, KeyEvent.VK_RIGHT ->  // вправо
+                    packMan.setMove(MoveType.RIGHT)
+                KeyEvent.VK_NUMPAD8, KeyEvent.VK_UP ->  // вверх
+                    packMan.setMove(MoveType.UP)
+                KeyEvent.VK_NUMPAD2, KeyEvent.VK_DOWN ->  // вниз
+                    packMan.setMove(MoveType.DOWN)
+                else -> {
+                }
             }
-            //LOG.info("keyPressed = " + e.getKeyCode());
+            //log.info("keyPressed = " + e.getKeyCode());
         }
-    };
+    }
 
     /**
      * Конструктор.
      */
-    public MapPanel() {
+    init {
         try {
-            setLayout(new BorderLayout());
-            addKeyListener(keyAdapter);
-            setFocusable(true);
-        } catch (final Exception ex) {
-            LOG.error(ex.getMessage(), ex);
+            layout = BorderLayout()
+            addKeyListener(keyAdapter)
+            isFocusable = true
+        } catch (ex: Exception) {
+            log.error(ex.message, ex)
         }
     }
 
@@ -89,32 +74,32 @@ public class MapPanel extends JPanel {
      * стандартный вход для рисования.
      * @param gr контекст вывода
      */
-    public void paint(final Graphics gr) {
-        final Dimension dim = getSize();
-        final Dimension mDim = Matrix.INSTANCE.getSize();
+    override fun paint(gr: Graphics) {
+        val dim = size
+        val mDim = Matrix.size
         if (isClear) {
-            gr.setColor(this.getBackground());
-            gr.fillRect(0, 0, dim.width, dim.height);
-            isClear = false;
+            gr.color = background
+            gr.fillRect(0, 0, dim.width, dim.height)
+            isClear = false
         } else {
             if (isRedrawMap || grBackgroundImage == null) {
-                grBackgroundImage = new BufferedImage(
-                    mDim.width, mDim.height, BufferedImage.TYPE_INT_RGB
-                );
-                final Graphics bckGr = grBackgroundImage.getGraphics();
-                bckGr.setColor(MapPanel.PANEL_GRAY_COLOR);
-                bckGr.fillRect(0, 0, mDim.width, mDim.height);
-                Matrix.INSTANCE.paintGrid(bckGr);
-                Matrix.INSTANCE.paint(bckGr, frame);
-                isRedrawMap = false;
-                requestFocusInWindow();
+                grBackgroundImage = BufferedImage(
+                        mDim.width, mDim.height, BufferedImage.TYPE_INT_RGB
+                )
+                val bckGr = grBackgroundImage!!.graphics
+                bckGr.color = PANEL_GRAY_COLOR
+                bckGr.fillRect(0, 0, mDim.width, mDim.height)
+                paintGrid(bckGr)
+                paint(bckGr, frame)
+                isRedrawMap = false
+                requestFocusInWindow()
             }
             gr.drawImage(
-                grBackgroundImage,
-                (dim.width - mDim.width) / 2,
-                (dim.height - mDim.height) / 2,
-                mDim.width, mDim.height, null
-            );
+                    grBackgroundImage,
+                    (dim.width - mDim.width) / 2,
+                    (dim.height - mDim.height) / 2,
+                    mDim.width, mDim.height, null
+            )
         }
     }
 
@@ -123,9 +108,9 @@ public class MapPanel extends JPanel {
      * @param out string for message
      * @param numItem номер элемента статусной строки
      */
-    private void outStatus(final String out, final int numItem) {
+    private fun outStatus(out: String, numItem: Int) {
         if (mainFrame != null) {
-            mainFrame.outStatus(out, numItem);
+            mainFrame!!.outStatus(out, numItem)
         }
     }
 
@@ -133,23 +118,23 @@ public class MapPanel extends JPanel {
      * Установить добавить ссылку на главное окно.
      * @param mainFrame главное окно
      */
-    public void setMainFrame(final MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
+    fun setMainFrame(mainFrame: MainFrame?) {
+        this.mainFrame = mainFrame
     }
 
     /**
      * Устанавливаем признак перерисовки.
      * @param redrawMap if true, then redraw component
      */
-    public void setRedrawMap(final boolean redrawMap) {
-        this.isRedrawMap = redrawMap;
+    fun setRedrawMap(redrawMap: Boolean) {
+        isRedrawMap = redrawMap
     }
 
-    public void setFrame(final int frame) {
-        this.frame = frame;
+    fun setFrame(frame: Int) {
+        this.frame = frame
     }
 
-    public void clearBackground() {
-        isClear = true;
+    fun clearBackground() {
+        isClear = true
     }
 }

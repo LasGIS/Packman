@@ -20,7 +20,7 @@ private val log: Logger = LogManager.getLogger(Lunch::class.java)
 class Lunch() {
 
     init {
-        val frame = MainFrame()
+        val frame = MainFrame
         frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
 
         // Validate panels that have preset sizes
