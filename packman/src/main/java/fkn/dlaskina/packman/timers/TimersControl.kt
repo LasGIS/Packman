@@ -1,40 +1,36 @@
-package fkn.dlaskina.packman.timers;
+package fkn.dlaskina.packman.timers
 
-import java.util.Timer;
-
-import fkn.dlaskina.packman.panels.MainFrame;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import fkn.dlaskina.packman.panels.MainFrame
+import fkn.dlaskina.packman.panels.MainFrame.mapPanel
+import org.apache.log4j.LogManager
+import java.util.*
 
 /**
  * The Class TimersControl.
  * @author Vladimir Laskin
  * @version 1.0
  */
-public class TimersControl {
-
-    private static final Logger LOG = LogManager.getLogger(TimersControl.class);
-
-    private static Timer redrawTimer;
-    private static Timer actionTimer;
-//    private static MainFrame mainFrame;
-
-    public static void startTimers() {
-        redrawTimer = new Timer();
-        redrawTimer.schedule(new TimerTaskRedraw(MainFrame.INSTANCE.getMapPanel()), 33, 33);
-        actionTimer = new Timer();
-        actionTimer.schedule(new TimerTaskAction(MainFrame.INSTANCE), 50, 50);
-        MainFrame.INSTANCE.getMapPanel().clearBackground();
+object TimersControl {
+    private val LOG = LogManager.getLogger(TimersControl::class.java)
+    private var redrawTimer: Timer? = null
+    private var actionTimer: Timer? = null
+    //    private static MainFrame mainFrame;
+    fun startTimers() {
+        redrawTimer = Timer()
+        redrawTimer!!.schedule(TimerTaskRedraw(mapPanel), 33, 33)
+        actionTimer = Timer()
+        actionTimer!!.schedule(TimerTaskAction(MainFrame), 50, 50)
+        mapPanel.clearBackground()
     }
 
-    public static void stopTimers() {
+    fun stopTimers() {
         if (redrawTimer != null) {
-            redrawTimer.cancel();
-            redrawTimer.purge();
+            redrawTimer!!.cancel()
+            redrawTimer!!.purge()
         }
         if (actionTimer != null) {
-            actionTimer.cancel();
-            actionTimer.purge();
+            actionTimer!!.cancel()
+            actionTimer!!.purge()
         }
     }
 }

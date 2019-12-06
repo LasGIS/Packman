@@ -14,7 +14,13 @@ import javax.swing.*
  * @version 1.0
  */
 class MainFrameAboutBox(parent: Frame?) : JDialog(parent), ActionListener {
+
     private val button1 = JButton()
+
+    companion object {
+        private val log = LogManager.getLogger(MainFrameAboutBox::class.java)
+    }
+
     /**
      * Component initialization.
      * @throws Exception some Exception
@@ -49,10 +55,6 @@ class MainFrameAboutBox(parent: Frame?) : JDialog(parent), ActionListener {
         if (e.source === button1) {
             cancel()
         }
-    }
-
-    companion object {
-        private val LOG = LogManager.getLogger(MainFrameAboutBox::class.java)
     }
 
     /**
@@ -108,7 +110,7 @@ class MainFrameAboutBox(parent: Frame?) : JDialog(parent), ActionListener {
             panel1.add(panel2, BorderLayout.NORTH)
             isResizable = true
         } catch (ex: Exception) {
-            LOG.error(ex.message, ex)
+            log.error(ex.message, ex)
         }
     }
 }

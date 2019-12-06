@@ -12,7 +12,10 @@ import java.awt.AWTEvent
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.event.*
-import javax.swing.*
+import javax.swing.JFrame
+import javax.swing.JMenuBar
+import javax.swing.JSplitPane
+import javax.swing.JToolBar
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,18 +35,10 @@ object MainFrame : JFrame(), ComponentListener {
 
     /** Строка состояния.  */
     private val jStatusBar = StatusBar(STATUS_BAR_SIZES)
-    /**
-     * Вернуть панель с картой.
-     * @return панель с картой
-     */
     /** Панель с картой.  */
     val mapPanel = MapPanel()
-    /**
-     * Вернуть панель конфигурации.
-     * @return панель конфигурации
-     */
     /** панель конфигурации.  */
-    var configPanel: ConfigPanel? = null
+    val configPanel = ConfigPanel()
     /** Настройка главного меню.  */
     private val menuSetting = arrayOf(
             SettingMenuItem(
@@ -120,14 +115,6 @@ object MainFrame : JFrame(), ComponentListener {
     }
 
     /**
-     * Overridden so we can exit when window is closed.
-     * @param e оконное событие
-     */
-    override fun processWindowEvent(e: WindowEvent) {
-        super.processWindowEvent(e)
-    }
-
-    /**
      * Вывод сообщений на statusBar.
      * @param out строка сообщения
      * @param numItem номер элемента статусной строки
@@ -153,34 +140,35 @@ object MainFrame : JFrame(), ComponentListener {
         enableEvents(AWTEvent.WINDOW_EVENT_MASK)
         try {
             size = Dimension(800, 600)
-            val contentPane = this.contentPane as JPanel
             contentPane.layout = BorderLayout()
             title = "Run First Blood"
+
             /* настраиваем главное меню */
-            val menuBar = JMenuBar()
+            jMenuBar = JMenuBar()
             for (aSetMenu in menuSetting) {
-                menuBar.add(Util.createImageMenuItem(aSetMenu))
+                jMenuBar.add(Util.createImageMenuItem(aSetMenu))
             }
+
             /* настраиваем главный ToolBar */
             val toolBar = JToolBar()
             for (aSetToolBar in toolBarSetting) {
                 toolBar.add(Util.createImageButton(aSetToolBar))
             }
+
             /* разделительная панелька */
             val splitPane = JSplitPane()
             splitPane.isContinuousLayout = true
             mapPanel.setMainFrame(this)
             mapPanel.addComponentListener(this)
-            this.jMenuBar = menuBar
             contentPane.add(toolBar, BorderLayout.NORTH)
             contentPane.add(jStatusBar, BorderLayout.SOUTH)
             contentPane.add(splitPane, BorderLayout.CENTER)
-            configPanel = ConfigPanel()
             splitPane.add(configPanel, JSplitPane.RIGHT)
             splitPane.add(mapPanel, JSplitPane.LEFT)
-//splitPane.setLastDividerLocation(size.width - 300);
-//splitPane.setDividerLocation(size.width - 300);
+//            splitPane.lastDividerLocation = size.width - 300;
+//            splitPane.dividerLocation = size.width - 300;
             splitPane.resizeWeight = 1.0
+
             // создаём матрицу и запускаем
             createMatrix(false)
             TimersControl.startTimers()

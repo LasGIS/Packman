@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  */
 object Matrix {
 
-    private val log = LogManager.getLogger(Matrix::class.java)
+    private val log = LogManager.getLogger(this::class.java)
 
     /** сама матрица.  */
     private lateinit var cells: Array<Array<Cell>>

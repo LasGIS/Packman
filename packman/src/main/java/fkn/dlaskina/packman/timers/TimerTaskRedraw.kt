@@ -1,36 +1,29 @@
-package fkn.dlaskina.packman.timers;
+package fkn.dlaskina.packman.timers
 
-import java.awt.Graphics;
-import java.util.TimerTask;
-
-import fkn.dlaskina.packman.panels.MapPanel;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import fkn.dlaskina.packman.panels.MapPanel
+import org.apache.log4j.LogManager
+import java.util.*
 
 /**
  * Этот класс отвечает за движение.
  * @author Vladimir Laskin
  * @version 1.0
  */
-public class TimerTaskRedraw extends TimerTask {
+class TimerTaskRedraw(private val mapPanel: MapPanel) : TimerTask() {
 
-    private static final Logger LOG = LogManager.getLogger(TimerTaskRedraw.class);
-
-    private MapPanel mapPanel;
-    private int frame = 0;
-
-    public TimerTaskRedraw(final MapPanel mapPanel) {
-        this.mapPanel = mapPanel;
+    companion object {
+        private val log = LogManager.getLogger(this::class.java)
     }
 
-    @Override
-    public void run() {
-        final Graphics gr = mapPanel.getGraphics();
+    private var frame = 0
+    override fun run() {
+        val gr = mapPanel.graphics
         if (gr != null) {
-            mapPanel.setRedrawMap(true);
-            mapPanel.setFrame(frame);
-            if (++frame > 39) frame = 0;
-            mapPanel.update(gr);
+            mapPanel.setRedrawMap(true)
+            mapPanel.setFrame(frame)
+            if (++frame > 39) frame = 0
+            mapPanel.update(gr)
         }
     }
+
 }
