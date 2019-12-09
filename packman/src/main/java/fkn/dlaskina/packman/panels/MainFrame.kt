@@ -11,7 +11,11 @@ import org.apache.log4j.LogManager
 import java.awt.AWTEvent
 import java.awt.BorderLayout
 import java.awt.Dimension
-import java.awt.event.*
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
+import java.awt.event.ComponentEvent
+import java.awt.event.ComponentListener
+import javax.swing.JDialog
 import javax.swing.JFrame
 import javax.swing.JMenuBar
 import javax.swing.JSplitPane
@@ -25,7 +29,7 @@ import javax.swing.JToolBar
  */
 object MainFrame : JFrame(), ComponentListener {
 
-    private val log = LogManager.getLogger(MainFrame::class.java)
+    private val log = LogManager.getLogger(this::class.java)
     /** размеры строки состояния.  */
     private val STATUS_BAR_SIZES = intArrayOf(0, 100, 200)
     /** ширина кнопки на главной панели инструментов.  */
@@ -38,76 +42,62 @@ object MainFrame : JFrame(), ComponentListener {
     /** Панель с картой.  */
     val mapPanel = MapPanel()
     /** панель конфигурации.  */
-    val configPanel = ConfigPanel()
+    private val configPanel = ConfigPanel()
     /** Настройка главного меню.  */
     private val menuSetting = arrayOf(
+        SettingMenuItem(
+            "File", "openFile.gif", "", null, arrayOf(
             SettingMenuItem(
-                    "File", "openFile.gif", "", null, arrayOf(
-                    SettingMenuItem(
-                            "Exit", null, "Закрываем приложение", ActionListener { event: ActionEvent? -> jMenuFileExitAction(event) }, null
-                    ))),
+                "Exit", null, "Закрываем приложение", ActionListener { event: ActionEvent? -> jMenuFileExitAction() }, null
+            ))),
+        SettingMenuItem(
+            "Help", "help.gif", "Всякого рода вспоможение", null, arrayOf(
             SettingMenuItem(
-                    "Help", "help.gif", "Всякого рода вспоможение", null, arrayOf(
-                    SettingMenuItem(
-                            "About", "help.gif", "Кто ЭТО сделал!", ActionListener { event: ActionEvent? -> jMenuHelpAboutAction(event) }, null
-                    )
-            ))
+                "About", "help.gif", "Кто ЭТО сделал!", ActionListener { event: ActionEvent? -> jMenuHelpAboutAction() }, null
+            )
+        ))
     )
     /** Настройка главной панели инструментов.  */
     private val toolBarSetting = arrayOf(
-            SettingToolBarItem(
-                    "Помощь", "help.gif", "Help",
-                    TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, ActionListener { event: ActionEvent? -> jMenuHelpAboutAction(event) }),
-/*
-        new SettingToolBarItem(
+        SettingToolBarItem(
+            "Помощь", "help.gif", "Help",
+            TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, ActionListener { jMenuHelpAboutAction() }),
+        SettingToolBarItem(
             "Game Over Dialog", null, "Game Over Dialog",
-            TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, MainFrame.this::jMenuGameOverAction
-        ),
-*/
-            SettingToolBarItem(
-                    "Exit", null, "Exit from programm",
-                    TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, ActionListener { event: ActionEvent? -> jMenuFileExitAction(event) })
-    )
+            TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, ActionListener { jMenuGameOverAction() }),
+        SettingToolBarItem(
+            "Exit", null, "Exit from programm",
+            TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, ActionListener { jMenuFileExitAction() }))
 
     /**
      * File | Exit action performed.
-     *
-     * @param event Action Event
      */
-    private fun jMenuFileExitAction(event: ActionEvent?) { // сохраняем локальную конфигурацию
+    private fun jMenuFileExitAction() {
+        // сохраняем локальную конфигурацию
         System.exit(0)
     }
 
     /**
      * Help | About action performed.
-     * @param event Action Event
      */
-    private fun jMenuHelpAboutAction(event: ActionEvent?) {
-        val dlg = MainFrameAboutBox(this)
-        val dlgSize = dlg.preferredSize
-        val frmSize = size
-        val loc = location
-        dlg.setLocation(
-                (frmSize.width - dlgSize.width) / 2 + loc.x,
-                (frmSize.height - dlgSize.height) / 2 + loc.y
-        )
-        dlg.isModal = true
-        dlg.pack()
-        dlg.isVisible = true
+    private fun jMenuHelpAboutAction() {
+        showDialog(MainFrameAboutBox(this))
     }
 
     /**
      * Help | About action performed.
-     * @param event Action Event
      */
-    private fun jMenuGameOverAction(event: ActionEvent?) {
-        val dlg = GameOverDialog(GameOverException(false, "from menu"))
+    private fun jMenuGameOverAction() {
+        showDialog(GameOverDialog(GameOverException(false, "from menu")))
+    }
+
+    private fun showDialog(dlg: JDialog) {
         val dlgSize = dlg.preferredSize
         val frmSize = size
         val loc = location
         dlg.setLocation(
-                (frmSize.width - dlgSize.width) / 2 + loc.x,
-                (frmSize.height - dlgSize.height) / 2 + loc.y
+            (frmSize.width - dlgSize.width) / 2 + loc.x,
+            (frmSize.height - dlgSize.height) / 2 + loc.y
         )
         dlg.isModal = true
         dlg.pack()

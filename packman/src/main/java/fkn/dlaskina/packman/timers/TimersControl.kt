@@ -11,7 +11,7 @@ import java.util.*
  * @version 1.0
  */
 object TimersControl {
-    private val LOG = LogManager.getLogger(TimersControl::class.java)
+    private val log = LogManager.getLogger(this::class.java)
     private var redrawTimer: Timer? = null
     private var actionTimer: Timer? = null
     //    private static MainFrame mainFrame;

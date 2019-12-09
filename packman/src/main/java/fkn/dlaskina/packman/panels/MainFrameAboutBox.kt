@@ -2,11 +2,19 @@ package fkn.dlaskina.packman.panels
 
 import fkn.dlaskina.util.Util
 import org.apache.log4j.LogManager
-import java.awt.*
+import java.awt.AWTEvent
+import java.awt.BorderLayout
+import java.awt.FlowLayout
+import java.awt.Frame
+import java.awt.GridLayout
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.event.WindowEvent
-import javax.swing.*
+import javax.swing.BorderFactory
+import javax.swing.JButton
+import javax.swing.JDialog
+import javax.swing.JLabel
+import javax.swing.JPanel
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,7 +26,7 @@ class MainFrameAboutBox(parent: Frame?) : JDialog(parent), ActionListener {
     private val button1 = JButton()
 
     companion object {
-        private val log = LogManager.getLogger(MainFrameAboutBox::class.java)
+        private val log = LogManager.getLogger(this::class.java)
     }
 
     /**

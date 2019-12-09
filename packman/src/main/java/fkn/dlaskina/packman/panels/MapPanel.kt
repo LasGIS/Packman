@@ -22,7 +22,7 @@ import javax.swing.JPanel
 class MapPanel : JPanel() {
 
     companion object {
-        private val log = LogManager.getLogger(MapPanel::class.java)
+        private val log = LogManager.getLogger(this::class.java)
         /** серый цвет фона.  */
         val PANEL_GRAY_COLOR = Color(220, 220, 220)
     }
