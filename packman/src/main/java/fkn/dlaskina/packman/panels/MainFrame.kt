@@ -66,7 +66,7 @@ object MainFrame : JFrame(), ComponentListener {
             "Game Over Dialog", null, "Game Over Dialog",
             TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, ActionListener { jMenuGameOverAction() }),
         SettingToolBarItem(
-            "Exit", null, "Exit from programm",
+            "Exit", null, "Exit from program",
             TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT, ActionListener { jMenuFileExitAction() }))
 
     /**
