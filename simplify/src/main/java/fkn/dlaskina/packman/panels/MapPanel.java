@@ -1,19 +1,16 @@
 package fkn.dlaskina.packman.panels;
 
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-
 import fkn.dlaskina.packman.element.MoveType;
 import fkn.dlaskina.packman.element.PackMan;
 import fkn.dlaskina.packman.map.Matrix;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 
 /**
@@ -23,7 +20,7 @@ import org.apache.log4j.Logger;
  */
 public class MapPanel extends JPanel {
 
-    private static final Logger LOG = LogManager.getLogger(MapPanel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MapPanel.class);
 
     /** серый цвет фона. */
     public static final Color PANEL_GRAY_COLOR = new Color(220, 220, 220);
@@ -66,7 +63,7 @@ public class MapPanel extends JPanel {
                 default:
                     break;
             }
-            //LOG.info("keyPressed = " + e.getKeyCode());
+            LOG.info("keyPressed = " + e.getKeyCode());
         }
     };
 

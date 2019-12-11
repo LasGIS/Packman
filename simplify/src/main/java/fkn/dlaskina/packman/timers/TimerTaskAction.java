@@ -1,18 +1,16 @@
 package fkn.dlaskina.packman.timers;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.util.TimerTask;
-
 import fkn.dlaskina.packman.element.ActiveElemental;
 import fkn.dlaskina.packman.map.GameOverException;
 import fkn.dlaskina.packman.map.Matrix;
 import fkn.dlaskina.packman.panels.GameOverDialog;
 import fkn.dlaskina.packman.panels.MainFrame;
 import fkn.dlaskina.packman.panels.MapPanel;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.util.TimerTask;
 
 /**
  * Этот класс отвечает за движение.
@@ -21,7 +19,7 @@ import org.apache.log4j.Logger;
  */
 public class TimerTaskAction extends TimerTask {
 
-    private static final Logger LOG = LogManager.getLogger(TimerTaskAction.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TimerTaskAction.class);
 
     final MainFrame frame;
 

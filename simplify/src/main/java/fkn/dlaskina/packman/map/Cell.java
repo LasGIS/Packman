@@ -1,13 +1,11 @@
 package fkn.dlaskina.packman.map;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.util.Collection;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import fkn.dlaskina.packman.element.Elemental;
 import fkn.dlaskina.packman.element.ElementalType;
+
+import java.awt.*;
+import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static fkn.dlaskina.packman.map.Matrix.CELL_SIZE;
 

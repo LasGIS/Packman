@@ -1,22 +1,17 @@
 package fkn.dlaskina.packman.panels;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import java.awt.AWTEvent;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Point;
+import fkn.dlaskina.packman.map.GameOverException;
+import fkn.dlaskina.packman.map.Matrix;
+import fkn.dlaskina.packman.timers.TimersControl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
-
-import fkn.dlaskina.packman.map.GameOverException;
-import fkn.dlaskina.packman.map.Matrix;
-import fkn.dlaskina.packman.timers.TimersControl;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,7 +21,7 @@ import org.apache.log4j.Logger;
  */
 public class MainFrame extends JFrame implements ComponentListener {
 
-    private static final Logger LOG = LogManager.getLogger(MainFrame.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MainFrame.class);
 
     /** Панель с картой. */
     private MapPanel mapPanel = new MapPanel();

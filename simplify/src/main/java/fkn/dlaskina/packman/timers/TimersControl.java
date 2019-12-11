@@ -1,10 +1,10 @@
 package fkn.dlaskina.packman.timers;
 
-import java.util.Timer;
-
 import fkn.dlaskina.packman.panels.MainFrame;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Timer;
 
 /**
  * The Class TimersControl.
@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class TimersControl {
 
-    private static final Logger LOG = LogManager.getLogger(TimersControl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TimersControl.class);
 
     private static Timer actionTimer;
     private static MainFrame mainFrame;

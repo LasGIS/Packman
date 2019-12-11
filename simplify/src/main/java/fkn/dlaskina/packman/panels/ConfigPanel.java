@@ -1,19 +1,12 @@
 package fkn.dlaskina.packman.panels;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.CENTER;
@@ -25,7 +18,7 @@ import static java.awt.GridBagConstraints.CENTER;
  */
 public class ConfigPanel extends JPanel {
 
-    private static final Logger LOG = LogManager.getLogger(ConfigPanel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigPanel.class);
     private static ConfigPanel singleton;
 
     /** число полученых подарков. */

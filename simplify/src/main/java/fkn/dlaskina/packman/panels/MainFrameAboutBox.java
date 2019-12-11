@@ -1,21 +1,13 @@
 package fkn.dlaskina.packman.panels;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.AWTEvent;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +16,7 @@ import org.apache.log4j.Logger;
  */
 public class MainFrameAboutBox extends JDialog implements ActionListener {
 
-    private static final Logger LOG = LogManager.getLogger(MainFrameAboutBox.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MainFrameAboutBox.class);
 
     private JButton button1 = new JButton();
 

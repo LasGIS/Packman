@@ -8,16 +8,12 @@
 
 package fkn.dlaskina.util;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.Dimension;
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,7 +30,7 @@ import java.io.InputStreamReader;
  */
 public final class Util {
 
-    private static final Logger LOG = LogManager.getLogger(Util.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Util.class);
     private static final int BUFF_SIZE = 1024;
 
     /**

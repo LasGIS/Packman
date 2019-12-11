@@ -1,9 +1,9 @@
 package fkn.dlaskina.packman.element;
 
-import java.awt.*;
-
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
+
+import java.awt.*;
 
 /**
  * Definition of the Enemy class

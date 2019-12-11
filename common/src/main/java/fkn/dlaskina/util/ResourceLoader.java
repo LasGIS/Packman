@@ -8,6 +8,9 @@
 
 package fkn.dlaskina.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,9 +21,6 @@ import java.util.Properties;
 import java.util.Stack;
 import java.util.Vector;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 /**
  * The class for loading text resources from file.
  * @author VLaskin
@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public final class ResourceLoader {
 
-    private final static Logger LOG = LogManager.getLogger(ResourceLoader.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ResourceLoader.class);
 
     /** Avoid to create the instance of class. */
     private ResourceLoader() {

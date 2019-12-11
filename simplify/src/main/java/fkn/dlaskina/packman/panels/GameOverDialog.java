@@ -1,22 +1,14 @@
 package fkn.dlaskina.packman.panels;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.WindowEvent;
-
 import fkn.dlaskina.packman.map.GameOverException;
 import fkn.dlaskina.packman.map.Matrix;
 import fkn.dlaskina.packman.timers.TimersControl;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowEvent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class GameOverDialog extends JDialog {
 
-    private static final Logger LOG = LogManager.getLogger(GameOverDialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GameOverDialog.class);
 
     /**
      * Create and show dialog.

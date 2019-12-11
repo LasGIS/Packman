@@ -1,14 +1,11 @@
 package fkn.dlaskina.packman;
 
-import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import fkn.dlaskina.packman.panels.MainFrame;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * PackMan runs in cells of Peace, with a keyboard controls, eats prizes and dodging enemies.
@@ -17,7 +14,7 @@ import org.apache.log4j.Logger;
  */
 public final class Lunch {
 
-    private static final Logger LOG = LogManager.getLogger(Lunch.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Lunch.class);
 
     /**
      * Construct the application.

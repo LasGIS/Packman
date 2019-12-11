@@ -1,14 +1,12 @@
 package fkn.dlaskina.packman.element;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-
 import fkn.dlaskina.packman.map.Cell;
 import fkn.dlaskina.packman.map.GameOverException;
 import fkn.dlaskina.packman.panels.ConfigPanel;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 
 /**
  * Definition of the PackMan class
@@ -17,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 public class PackMan extends ActiveElemental {
 
-    private static final Logger LOG = LogManager.getLogger(PackMan.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PackMan.class);
 
     private static final Color FILL_COLOR = new Color(0, 255, 0);
     private static final Color BOUND_COLOR = new Color(0, 125, 0);
