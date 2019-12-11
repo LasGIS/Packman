@@ -2,8 +2,10 @@ package fkn.dlaskina.packman.timers
 
 import fkn.dlaskina.packman.panels.MainFrame
 import fkn.dlaskina.packman.panels.MainFrame.mapPanel
-import org.apache.log4j.LogManager
+import mu.KotlinLogging
 import java.util.*
+
+private val log = KotlinLogging.logger{}
 
 /**
  * The Class TimersControl.
@@ -11,7 +13,6 @@ import java.util.*
  * @version 1.0
  */
 object TimersControl {
-    private val log = LogManager.getLogger(this::class.java)
     private var redrawTimer: Timer? = null
     private var actionTimer: Timer? = null
     //    private static MainFrame mainFrame;

@@ -5,7 +5,7 @@ import fkn.dlaskina.packman.map.Matrix
 import fkn.dlaskina.packman.map.Matrix.packMan
 import fkn.dlaskina.packman.map.Matrix.paint
 import fkn.dlaskina.packman.map.Matrix.paintGrid
-import org.apache.log4j.LogManager
+import mu.KotlinLogging
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Graphics
@@ -13,6 +13,8 @@ import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
+
+private val log = KotlinLogging.logger{}
 
 /**
  * Окно вывода карты.
@@ -22,7 +24,6 @@ import javax.swing.JPanel
 class MapPanel : JPanel() {
 
     companion object {
-        private val log = LogManager.getLogger(this::class.java)
         /** серый цвет фона.  */
         val PANEL_GRAY_COLOR = Color(220, 220, 220)
     }

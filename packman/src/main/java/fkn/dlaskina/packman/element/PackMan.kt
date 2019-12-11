@@ -5,10 +5,12 @@ import fkn.dlaskina.packman.map.GameOverException
 import fkn.dlaskina.packman.map.Matrix.createPackManRate
 import fkn.dlaskina.packman.map.Matrix.removeEnemy
 import fkn.dlaskina.packman.panels.ConfigPanel
-import org.apache.log4j.LogManager
+import mu.KotlinLogging
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Rectangle
+
+private val log = KotlinLogging.logger{}
 
 /**
  * Definition of the PackMan class
@@ -18,7 +20,6 @@ import java.awt.Rectangle
 class PackMan(cell: Cell?) : ActiveElemental(ElementalType.PackMan, cell!!) {
 
     companion object {
-        private val log = LogManager.getLogger(this::class.java)
         private val FILL_COLOR = Color(0, 255, 0)
         private val BOUND_COLOR = Color(0, 125, 0)
         private val SPEED_FILL_COLOR = Color(0, 128, 255)

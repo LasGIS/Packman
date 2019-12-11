@@ -7,7 +7,7 @@ import fkn.dlaskina.packman.timers.TimersControl
 import fkn.dlaskina.util.SettingMenuItem
 import fkn.dlaskina.util.SettingToolBarItem
 import fkn.dlaskina.util.Util
-import org.apache.log4j.LogManager
+import mu.KotlinLogging
 import java.awt.AWTEvent
 import java.awt.BorderLayout
 import java.awt.Dimension
@@ -21,6 +21,8 @@ import javax.swing.JMenuBar
 import javax.swing.JSplitPane
 import javax.swing.JToolBar
 
+private val log = KotlinLogging.logger{}
+
 /**
  * Created by IntelliJ IDEA.
  *
@@ -29,7 +31,6 @@ import javax.swing.JToolBar
  */
 object MainFrame : JFrame(), ComponentListener {
 
-    private val log = LogManager.getLogger(this::class.java)
     /** размеры строки состояния.  */
     private val STATUS_BAR_SIZES = intArrayOf(0, 100, 200)
     /** ширина кнопки на главной панели инструментов.  */

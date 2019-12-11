@@ -3,9 +3,11 @@ package fkn.dlaskina.packman.timers
 import fkn.dlaskina.packman.map.GameOverException
 import fkn.dlaskina.packman.map.Matrix
 import fkn.dlaskina.packman.panels.GameOverDialog
-import org.apache.log4j.LogManager
+import mu.KotlinLogging
 import java.util.*
 import javax.swing.JFrame
+
+private val log = KotlinLogging.logger{}
 
 /**
  * Этот класс отвечает за движение.
@@ -13,10 +15,6 @@ import javax.swing.JFrame
  * @version 1.0
  */
 class TimerTaskAction internal constructor(private val frame: JFrame) : TimerTask() {
-
-    companion object {
-        private val log = LogManager.getLogger(this::class.java)
-    }
 
     override fun run() {
         try {

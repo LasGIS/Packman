@@ -1,12 +1,24 @@
 package fkn.dlaskina.packman.map
 
-import fkn.dlaskina.packman.element.*
+import fkn.dlaskina.packman.element.AbstractEnemy
+import fkn.dlaskina.packman.element.ActiveElemental
+import fkn.dlaskina.packman.element.Bones
+import fkn.dlaskina.packman.element.ElementalType
+import fkn.dlaskina.packman.element.Enemy
+import fkn.dlaskina.packman.element.EnemyDummy
+import fkn.dlaskina.packman.element.MedicalBox
+import fkn.dlaskina.packman.element.PackMan
+import fkn.dlaskina.packman.element.Stone
+import fkn.dlaskina.packman.element.Surprise
+import fkn.dlaskina.packman.element.SurpriseType
 import fkn.dlaskina.packman.panels.ConfigPanel
-import org.apache.log4j.LogManager
+import mu.KotlinLogging
 import java.awt.Dimension
 import java.awt.Graphics
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
+
+private val log = KotlinLogging.logger{}
 
 /**
  * Матрица элементов карты.
@@ -15,8 +27,6 @@ import java.util.concurrent.CopyOnWriteArrayList
  * @since 06.06.2010 22:24:26
  */
 object Matrix {
-
-    private val log = LogManager.getLogger(this::class.java)
 
     /** сама матрица.  */
     private lateinit var cells: Array<Array<Cell>>

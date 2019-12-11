@@ -29,6 +29,7 @@
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <checkstyle.plugin.configLocation>C:/packman/CheckStyle/check_style.xml</checkstyle.plugin.configLocation>
         <log4j.version>1.2.17</log4j.version>
+        <logback.version>1.2.3</logback.version>
         <kotlin.version>1.3.60</kotlin.version>
         <maven-jar-plugin.version>2.5</maven-jar-plugin.version>
     </properties>
@@ -52,13 +53,11 @@
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
-<!--
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>${slf.version}</version>
+                <version>1.7.25</version>
             </dependency>
-            &lt;!&ndash; logback &ndash;&gt;
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
@@ -69,7 +68,6 @@
                 <artifactId>logback-core</artifactId>
                 <version>${logback.version}</version>
             </dependency>
--->
 <!--
             <dependency>
                 <groupId>org.json</groupId>
@@ -109,6 +107,11 @@
                 <artifactId>kotlin-test</artifactId>
                 <version>${kotlin.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.github.microutils</groupId>
+                <artifactId>kotlin-logging</artifactId>
+                <version>1.7.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

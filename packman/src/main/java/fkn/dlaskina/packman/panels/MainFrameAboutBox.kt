@@ -1,7 +1,7 @@
 package fkn.dlaskina.packman.panels
 
 import fkn.dlaskina.util.Util
-import org.apache.log4j.LogManager
+import mu.KotlinLogging
 import java.awt.AWTEvent
 import java.awt.BorderLayout
 import java.awt.FlowLayout
@@ -16,6 +16,8 @@ import javax.swing.JDialog
 import javax.swing.JLabel
 import javax.swing.JPanel
 
+private val log = KotlinLogging.logger{}
+
 /**
  * Created by IntelliJ IDEA.
  * @author VLaskin
@@ -24,10 +26,6 @@ import javax.swing.JPanel
 class MainFrameAboutBox(parent: Frame?) : JDialog(parent), ActionListener {
 
     private val button1 = JButton()
-
-    companion object {
-        private val log = LogManager.getLogger(this::class.java)
-    }
 
     /**
      * Component initialization.

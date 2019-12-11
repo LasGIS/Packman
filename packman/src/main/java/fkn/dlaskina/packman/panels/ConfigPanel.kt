@@ -1,10 +1,17 @@
 package fkn.dlaskina.packman.panels
 
-import org.apache.log4j.LogManager
-import java.awt.*
+import mu.KotlinLogging
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Font
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.Insets
 import javax.swing.JButton
 import javax.swing.JLabel
 import javax.swing.JPanel
+
+private val log = KotlinLogging.logger{}
 
 /**
  * Панель конфигурации.
@@ -18,7 +25,6 @@ class ConfigPanel : JPanel() {
     private val lblBonusMax = JLabel("0", JLabel.LEFT)
 
     companion object {
-        private val log = LogManager.getLogger(this::class.java)
         var configPanel: ConfigPanel? = null
         /** число полученых подарков.  */
         private var bonusCount = 0

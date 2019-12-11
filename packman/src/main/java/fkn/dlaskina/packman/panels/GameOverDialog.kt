@@ -3,15 +3,20 @@ package fkn.dlaskina.packman.panels
 import fkn.dlaskina.packman.map.GameOverException
 import fkn.dlaskina.packman.map.Matrix
 import fkn.dlaskina.packman.timers.TimersControl
-import fkn.dlaskina.packman.util.Alog
-import org.apache.log4j.LogManager
-import java.awt.*
+import mu.KotlinLogging
+import java.awt.AWTEvent
+import java.awt.BorderLayout
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.Insets
 import java.awt.event.WindowEvent
 import javax.swing.JButton
 import javax.swing.JDialog
 import javax.swing.JLabel
 import javax.swing.JPanel
 import kotlin.system.exitProcess
+
+private val log = KotlinLogging.logger{}
 
 /**
  * Create and show dialog.
@@ -20,10 +25,6 @@ import kotlin.system.exitProcess
  * @version 1.0
  */
 class GameOverDialog(goExc: GameOverException) : JDialog() {
-
-    companion object {
-        private val log = LogManager.getLogger(this::class.java)
-    }
 
     init {
         log.info("проверка log.info()")
