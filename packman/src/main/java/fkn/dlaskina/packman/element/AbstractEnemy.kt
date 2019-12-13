@@ -13,6 +13,13 @@ import java.awt.Rectangle
  * @version 1.0
  */
 abstract class AbstractEnemy internal constructor(cell: Cell) : ActiveElemental(ElementalType.Enemy, cell) {
+
+    companion object {
+        private val FILL_COLOR = Color(255, 0, 0)
+        private val BOUND_COLOR = Color(125, 0, 0)
+        private const val BORDER = 2
+    }
+
     var dummy = false
     private var xText = 0
     private var yText = 0
@@ -78,12 +85,10 @@ abstract class AbstractEnemy internal constructor(cell: Cell) : ActiveElemental(
         var distance = if (isAggressive) Double.MIN_VALUE else Double.MAX_VALUE
         var ret: AlterCellMove? = null
         for (acm in alterCell) {
-            val distanceCell = acm.cell?.distance(cell)
-            distanceCell?.let {
-                if (if (isAggressive) distanceCell > distance else distanceCell < distance) {
-                    distance = distanceCell
-                    ret = acm
-                }
+            val distanceCell = acm.cell.distance(cell)
+            if (if (isAggressive) distanceCell > distance else distanceCell < distance) {
+                distance = distanceCell
+                ret = acm
             }
         }
         return ret
@@ -126,15 +131,5 @@ abstract class AbstractEnemy internal constructor(cell: Cell) : ActiveElemental(
             }
         }
         return alterCell.size
-    }
-
-    companion object {
-        private val FILL_COLOR = Color(255, 0, 0)
-        private val BOUND_COLOR = Color(125, 0, 0)
-        private const val BORDER = 2
-    }
-
-    init {
-        cellStep = 2.8
     }
 }

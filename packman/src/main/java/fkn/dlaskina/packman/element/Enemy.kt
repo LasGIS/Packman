@@ -11,6 +11,7 @@ import fkn.dlaskina.packman.map.Matrix.removeEnemy
  * @since 26.03.2016.
  */
 class Enemy(cell: Cell?) : AbstractEnemy(cell!!) {
+
     @Throws(GameOverException::class)
     override fun act() {
         if (isCenterCell) {

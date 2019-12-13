@@ -13,30 +13,20 @@ import kotlin.math.abs
  * @param cell ячейка, в которой находится существо
  */
 abstract class ActiveElemental(
-        type: ElementalType,
-        var cell: Cell
+    type: ElementalType,
+    var cell: Cell
 ) : Elemental(type) {
 
     /** ячейка, в которой будет находится существо на следующем шаге  */
-    @JvmField
     var newCell: Cell? = null
     /** координаты существа в ячейке  */
-    @JvmField
     var cellX = 0.0
-    @JvmField
     var cellY = 0.0
     /** шаг животного внутри ячейки.  */
-    @JvmField
-    var cellStep = 0.0
-    /**
-     * установленное перемещение.
-     */
-    @JvmField
+    var cellStep = 2.8
+    /** установленное перемещение. */
     var moveType = MoveType.NONE
-    /**
-     * перемещение внутри ячейки.
-     */
-    @JvmField
+    /** перемещение внутри ячейки. */
     var cellMoveType = MoveType.NONE
 
     /**
@@ -99,9 +89,7 @@ abstract class ActiveElemental(
         }
     }
 
-    /**
-     * Перемещение и взаимодействие
-     */
+    /** Перемещение и взаимодействие */
     @Throws(GameOverException::class)
     abstract fun act()
 

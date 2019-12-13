@@ -5,13 +5,12 @@
  * Description: Program for imitation of evolutions process.
  * Copyright (c) 2012-2013 LasGIS Company. All Rights Reserved.
  */
+package fkn.dlaskina.component
 
-package fkn.dlaskina.component;
-
-import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import java.awt.Dimension;
+import java.awt.Dimension
+import javax.swing.JLabel
+import javax.swing.border.BevelBorder
+import javax.swing.border.Border
 
 /**
  * Элемент status bara.
@@ -20,19 +19,20 @@ import java.awt.Dimension;
  * @version 1.0
  * @since 18.03.2008 : 19:33:57
  */
-public class StatusBarItem extends JLabel {
+class StatusBarItem constructor(str: String, aSize: Int) : JLabel(stringDeNormalize(str)) {
 
-    /** */
-    private Dimension size = null;
+    companion object {
+        /**   */
+        private val border: Border = BevelBorder(BevelBorder.LOWERED)
 
-    /**  */
-    private static Border border = new BevelBorder(BevelBorder.LOWERED);
-
-    /**
-     *
-     */
-    private StatusBarItem() {
-        super();
+        /**
+         * Добавляем пробел спереди для лучшей визуализации.
+         * @param str входная строка
+         * @return ненормализованная выходная строка
+         */
+        fun stringDeNormalize(str: String): String {
+            return " $str"
+        }
     }
 
     /**
@@ -40,37 +40,24 @@ public class StatusBarItem extends JLabel {
      * @param str начальное значение строки
      * @param aSize размер по вертикали
      */
-    public StatusBarItem(String str, int aSize) {
-        super(stringDeNormalize(str));
+    init {
         if (aSize > 0) {
-            this.setBorder(border);
-            this.size = new Dimension(aSize, StatusBar.SIZE_HEIGHT_STATUSBAR);
-        }
-    }
-
-    /**
-     * Добавляем пробел спереди для лучшей визуализации.
-     * @param str входная строка
-     * @return ненормализованная выходная строка
-     */
-    public static String stringDeNormalize(String str) {
-        if (str == null || (str.length() == 0)) {
-            return " ";
-        } else {
-            return " " + str;
+            this.border = Companion.border
+            size = Dimension(aSize, StatusBar.SIZE_HEIGHT_STATUSBAR)
         }
     }
 
     /**
      * Возвращаем предпочтительный размер ячейки (если он есть).
-     * @return the value of the <code>preferredSize</code>
+     * @return the value of the `preferredSize`
      * @see javax.swing.plaf.ComponentUI
      */
-    public Dimension getPreferredSize() {
-        if (size != null) {
-            return size;
+    override fun getPreferredSize(): Dimension {
+        return if (size != null) {
+            size
         } else {
-            return super.getPreferredSize();
+            super.getPreferredSize()
         }
     }
+
 }

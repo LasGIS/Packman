@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import javax.swing.JPanel
 
-private val log = KotlinLogging.logger{}
+private val log = KotlinLogging.logger {}
 
 /**
  * Окно вывода карты.
@@ -28,8 +28,6 @@ class MapPanel : JPanel() {
         val PANEL_GRAY_COLOR = Color(220, 220, 220)
     }
 
-    /** ссылка на MainFrame.  */
-    private var mainFrame: MainFrame? = null
     /** Если true, то будем перегружать.  */
     private var isRedrawMap = true
     /** сохраненное изображение.  */
@@ -42,18 +40,16 @@ class MapPanel : JPanel() {
     private val keyAdapter: KeyAdapter = object : KeyAdapter() {
         override fun keyPressed(e: KeyEvent) {
             val packMan = packMan
-            when (e.keyCode) {
-                KeyEvent.VK_NUMPAD4, KeyEvent.VK_LEFT ->   // влево
-                    packMan.setMove(MoveType.LEFT)
-                KeyEvent.VK_NUMPAD6, KeyEvent.VK_RIGHT ->  // вправо
-                    packMan.setMove(MoveType.RIGHT)
-                KeyEvent.VK_NUMPAD8, KeyEvent.VK_UP ->     // вверх
-                    packMan.setMove(MoveType.UP)
-                KeyEvent.VK_NUMPAD2, KeyEvent.VK_DOWN ->   // вниз
-                    packMan.setMove(MoveType.DOWN)
-                else -> {/*nothing*/}
+            val type = when (e.keyCode) {
+                KeyEvent.VK_NUMPAD4, KeyEvent.VK_LEFT -> MoveType.LEFT
+                KeyEvent.VK_NUMPAD6, KeyEvent.VK_RIGHT -> MoveType.RIGHT
+                KeyEvent.VK_NUMPAD8, KeyEvent.VK_UP -> MoveType.UP
+                KeyEvent.VK_NUMPAD2, KeyEvent.VK_DOWN -> MoveType.DOWN
+                else -> MoveType.NONE
             }
-            //log.info("keyPressed = " + e.getKeyCode());
+            (type !== MoveType.NONE).let { packMan.setMove(type) }
+//            log.info("keyPressed = " + type.name);
+            MainFrame.outStatus(type.name, 1)
         }
     }
 
@@ -84,7 +80,7 @@ class MapPanel : JPanel() {
         } else {
             if (isRedrawMap || grBackgroundImage == null) {
                 grBackgroundImage = BufferedImage(
-                        mDim.width, mDim.height, BufferedImage.TYPE_INT_RGB
+                    mDim.width, mDim.height, BufferedImage.TYPE_INT_RGB
                 )
                 val bckGr = grBackgroundImage!!.graphics
                 bckGr.color = PANEL_GRAY_COLOR
@@ -95,31 +91,12 @@ class MapPanel : JPanel() {
                 requestFocusInWindow()
             }
             gr.drawImage(
-                    grBackgroundImage,
-                    (dim.width - mDim.width) / 2,
-                    (dim.height - mDim.height) / 2,
-                    mDim.width, mDim.height, null
+                grBackgroundImage,
+                (dim.width - mDim.width) / 2,
+                (dim.height - mDim.height) / 2,
+                mDim.width, mDim.height, null
             )
         }
-    }
-
-    /**
-     * Print some message for out in status box.
-     * @param out string for message
-     * @param numItem номер элемента статусной строки
-     */
-    private fun outStatus(out: String, numItem: Int) {
-        if (mainFrame != null) {
-            mainFrame!!.outStatus(out, numItem)
-        }
-    }
-
-    /**
-     * Установить добавить ссылку на главное окно.
-     * @param mainFrame главное окно
-     */
-    fun setMainFrame(mainFrame: MainFrame?) {
-        this.mainFrame = mainFrame
     }
 
     /**

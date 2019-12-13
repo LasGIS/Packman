@@ -32,7 +32,7 @@ private val log = KotlinLogging.logger{}
 object MainFrame : JFrame(), ComponentListener {
 
     /** размеры строки состояния.  */
-    private val STATUS_BAR_SIZES = intArrayOf(0, 100, 200)
+    private val STATUS_BAR_SIZES = intArrayOf(0, 100, 300)
     /** ширина кнопки на главной панели инструментов.  */
     private const val TOOL_BAR_WIDTH = 27
     /** высота кнопки на главной панели инструментов.  */
@@ -110,7 +110,7 @@ object MainFrame : JFrame(), ComponentListener {
      * @param out строка сообщения
      * @param numItem номер элемента статусной строки
      */
-    fun outStatus(out: String?, numItem: Int) {
+    fun outStatus(out: String, numItem: Int) {
         jStatusBar.setText(out, numItem)
     }
 
@@ -149,7 +149,7 @@ object MainFrame : JFrame(), ComponentListener {
             /* разделительная панелька */
             val splitPane = JSplitPane()
             splitPane.isContinuousLayout = true
-            mapPanel.setMainFrame(this)
+//            mapPanel.setMainFrame(this)
             mapPanel.addComponentListener(this)
             contentPane.add(toolBar, BorderLayout.NORTH)
             contentPane.add(jStatusBar, BorderLayout.SOUTH)

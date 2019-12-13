@@ -12,6 +12,7 @@ import fkn.dlaskina.packman.element.Stone
 import fkn.dlaskina.packman.element.Surprise
 import fkn.dlaskina.packman.element.SurpriseType
 import fkn.dlaskina.packman.panels.ConfigPanel
+import fkn.dlaskina.packman.panels.MainFrame
 import mu.KotlinLogging
 import java.awt.Dimension
 import java.awt.Graphics
@@ -124,7 +125,9 @@ object Matrix {
             elements.remove(enemy)
         } else {
             enemy.deleted = true
-            log.info("удаляем врага {$enemy}")
+            val message = "удаляем врага {${enemy.dummy}}"
+            log.info(message)
+            MainFrame.outStatus(message, 2)
             val enemyCell = enemy.cell
             enemyCell.removeElement(enemy)
             elements.remove(enemy)

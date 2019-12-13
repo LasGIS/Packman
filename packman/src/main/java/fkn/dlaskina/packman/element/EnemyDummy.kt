@@ -17,16 +17,20 @@ class EnemyDummy(cell: Cell?) : AbstractEnemy(cell!!) {
         if (isCenterCell) { // альтернативные перемещения
             val alterCell: MutableList<AlterCellMove> = ArrayList()
             val alterCount = findAlternativeCells(alterCell)
-            if (alterCount > 2) { // есть много путей
-                val alterMoveType = findPackMan(alterCell)
-                newCell = alterMoveType!!.cell
-                cellMoveType = alterMoveType.moveType
-            } else if (alterCount > 0) { // только один путь - вперёд!
-                val alterMoveType = alterCell[0]
-                newCell = alterMoveType!!.cell
-                cellMoveType = alterMoveType.moveType
-            } else { // нет выхода
-                newCell = null
+            when {
+                alterCount > 2 -> { // есть много путей
+                    val alterMoveType = findPackMan(alterCell)
+                    newCell = alterMoveType!!.cell
+                    cellMoveType = alterMoveType.moveType
+                }
+                alterCount > 0 -> { // только один путь - вперёд!
+                    val alterMoveType = alterCell[0]
+                    newCell = alterMoveType.cell
+                    cellMoveType = alterMoveType.moveType
+                }
+                else -> { // нет выхода
+                    newCell = null
+                }
             }
         }
         if (isBorderCell) {
