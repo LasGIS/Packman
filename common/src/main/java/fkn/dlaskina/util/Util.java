@@ -30,7 +30,7 @@ import java.io.InputStreamReader;
  */
 public final class Util {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Util.class);
+    private static final Logger log = LoggerFactory.getLogger(Util.class);
     private static final int BUFF_SIZE = 1024;
 
     /**
@@ -80,20 +80,24 @@ public final class Util {
         final StringBuilder sb = new StringBuilder();
         if (in != null) {
             try (InputStreamReader reader = new InputStreamReader(in, "UTF-8")) {
-                final char[] buf = new char[BUFF_SIZE];
-                int count = reader.read(buf, 0, BUFF_SIZE);
-                while (count >= 0) {
-                    sb.append(buf, 0, count);
-                    count = reader.read(buf, 0, BUFF_SIZE);
-                }
-                return sb;
+                return getStringBuilder(sb, reader);
             } catch (final IOException ex) {
-                LOG.error(ex.getMessage(), ex);
+                log.error(ex.getMessage(), ex);
             }
         } else {
-            LOG.error("Файл \"" + name + "\" не найден!");
+            log.error("Файл \"" + name + "\" не найден!");
         }
         return null;
+    }
+
+    private static StringBuilder getStringBuilder(final StringBuilder sb, final InputStreamReader reader) throws IOException {
+        final char[] buf = new char[BUFF_SIZE];
+        int count = reader.read(buf, 0, BUFF_SIZE);
+        while (count >= 0) {
+            sb.append(buf, 0, count);
+            count = reader.read(buf, 0, BUFF_SIZE);
+        }
+        return sb;
     }
 
     /**
@@ -107,17 +111,11 @@ public final class Util {
             InputStreamReader reader = new InputStreamReader(in, "UTF-8");
         ) {
             final StringBuilder sb = new StringBuilder();
-            final char[] buf = new char[BUFF_SIZE];
-            int count = reader.read(buf, 0, BUFF_SIZE);
-            while (count >= 0) {
-                sb.append(buf, 0, count);
-                count = reader.read(buf, 0, BUFF_SIZE);
-            }
-            return sb;
+            return getStringBuilder(sb, reader);
         } catch (final FileNotFoundException ex) {
-            LOG.error("Файл \"" + fileName + "\" не найден!");
+            log.error("Файл \"" + fileName + "\" не найден!");
         } catch (final IOException ex) {
-            LOG.error(ex.getMessage(), ex);
+            log.error(ex.getMessage(), ex);
         }
         return null;
     }
@@ -147,7 +145,7 @@ public final class Util {
             try {
                 button.setIcon(Util.loadImageIcon(iconName));
             } catch (final IOException e) {
-                LOG.error(e.getMessage());
+                log.error(e.getMessage());
             }
         }
 //        button.setMaximumSize(new Dimension(width, height));
@@ -172,7 +170,7 @@ public final class Util {
             try {
                 button.setIcon(Util.loadImageIcon(set.getImage()));
             } catch (final IOException e) {
-                LOG.error(e.getMessage());
+                log.error(e.getMessage());
             }
         }
         final Dimension dim = new Dimension(set.getWidth(), set.getHeight());
@@ -200,7 +198,7 @@ public final class Util {
                 try {
                     menu.setIcon(Util.loadImageIcon(set.getImage()));
                 } catch (final IOException e) {
-                    LOG.error(e.getMessage());
+                    log.error(e.getMessage());
                 }
             }
             menu.setToolTipText(set.getToolTip());
@@ -214,7 +212,7 @@ public final class Util {
                 try {
                     menu.setIcon(Util.loadImageIcon(set.getImage()));
                 } catch (final IOException e) {
-                    LOG.error(e.getMessage());
+                    log.error(e.getMessage());
                 }
             }
             menu.setToolTipText(set.getToolTip());
