@@ -5,11 +5,10 @@
  * Description: Program for imitation of evolutions process.
  * Copyright (c) 2012-2013 LasGIS Company. All Rights Reserved.
  */
+package fkn.dlaskina.util
 
-package fkn.dlaskina.util;
-
-import java.io.FilenameFilter;
-import java.io.File;
+import java.io.File
+import java.io.FilenameFilter
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,45 +16,44 @@ import java.io.File;
  * @version 1.0
  * @since 14.09.2005 17:23:43
  */
-public class LGFilenameFilter implements FilenameFilter {
-
-    /** расширение файла. */
-    private String ext = null;
-
-    /**
-     * Constructor.
-     * @param aMask маска файла
-     */
-    public LGFilenameFilter(String aMask) {
-        int lastPnt = aMask.lastIndexOf('.');
-        if (lastPnt > 0) {
-            ext = aMask.substring(lastPnt);
-        }
-    } // LGFilenameFilter(String aMask)
+class LGFilenameFilter(aMask: String) : FilenameFilter {
+    /** расширение файла.  */
+    private var ext: String? = null
 
     /**
      * Tests if a specified file should be included in a file list.
      *
      * @param   dir    the directory in which the file was found.
      * @param   name   the name of the file.
-     * @return  <code>true</code> if and only if the name should be
-     * included in the file list; <code>false</code> otherwise.
+     * @return  `true` if and only if the name should be
+     * included in the file list; `false` otherwise.
      */
-    public boolean accept(File dir, String name) {
-        if (dir.isDirectory()) {
-            return false;
+    override fun accept(dir: File, name: String): Boolean {
+        if (dir.isDirectory) {
+            return false
         }
         if (ext != null) {
-            String fileName = dir.getName();
-            String relExt = null;
-            int lastPnt = fileName.lastIndexOf('.');
+            val fileName = dir.name
+            var relExt: String? = null
+            val lastPnt = fileName.lastIndexOf('.')
             if (lastPnt > 0) {
-                relExt = fileName.substring(lastPnt);
+                relExt = fileName.substring(lastPnt)
             }
-            if ((relExt != null) && (relExt.equalsIgnoreCase(ext))) {
-                return true;
+            if (relExt != null && relExt.equals(ext, ignoreCase = true)) {
+                return true
             }
         }
-        return false;
+        return false
+    }
+
+    /**
+     * Constructor.
+     * @param aMask маска файла
+     */
+    init {
+        val lastPnt = aMask.lastIndexOf('.')
+        if (lastPnt > 0) {
+            ext = aMask.substring(lastPnt)
+        }
     }
 }

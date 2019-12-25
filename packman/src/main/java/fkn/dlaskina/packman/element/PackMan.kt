@@ -10,7 +10,7 @@ import java.awt.Color
 import java.awt.Graphics
 import java.awt.Rectangle
 
-private val log = KotlinLogging.logger{}
+private val log = KotlinLogging.logger {}
 
 /**
  * Definition of the PackMan class

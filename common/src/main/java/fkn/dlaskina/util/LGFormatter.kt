@@ -5,14 +5,13 @@
  * Description: Program for imitation of evolutions process.
  * Copyright (c) 2012-2013 LasGIS Company. All Rights Reserved.
  */
-package fkn.dlaskina.util;
+package fkn.dlaskina.util
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * The Class LGFormatter. Преобразование десятичного числа или даты в строку.
@@ -21,41 +20,34 @@ import java.util.TimeZone;
  * @version 1.0
  * @since 02.01.13 23:48
  */
-public final class LGFormatter {
-
+object LGFormatter {
     /**
      * Полное число с секундами.
      */
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("DD HH:mm:ss");
-    static {
-        DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
+    val DATE_FORMAT = SimpleDateFormat("DD HH:mm:ss")
     /**
      * Формат даты, используемый для логгирования.
      */
-    public static final SimpleDateFormat LOG_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SS");
+    val LOG_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SS")
     /**
      * Вывод десятичного числа.
      */
-    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat(
-        "###0.000", new DecimalFormatSymbols(Locale.ENGLISH)
-    );
-
-    private LGFormatter() {
-    }
+    val DECIMAL_FORMAT: NumberFormat = DecimalFormat(
+        "###0.000", DecimalFormatSymbols(Locale.ENGLISH)
+    )
 
     /**
      * Форматированный вывод десятичного числа.
      * @param val значение для вывода
      * @return строка
      */
-    public static String format(final double val) {
-        String ret = DECIMAL_FORMAT.format(val);
-        final int ind = ret.lastIndexOf(".000");
+    fun format(`val`: Double): String {
+        var ret = DECIMAL_FORMAT.format(`val`)
+        val ind = ret.lastIndexOf(".000")
         if (ind > -1) {
-            ret = ret.substring(0, ind);
+            ret = ret.substring(0, ind)
         }
-        return ret;
+        return ret
     }
 
     /**
@@ -63,8 +55,11 @@ public final class LGFormatter {
      * @param val значение для вывода
      * @return строка
      */
-    public static String formatLog(final double val) {
-        return DECIMAL_FORMAT.format(val);
+    fun formatLog(`val`: Double): String {
+        return DECIMAL_FORMAT.format(`val`)
     }
 
+    init {
+        DATE_FORMAT.timeZone = TimeZone.getTimeZone("GMT")
+    }
 }
