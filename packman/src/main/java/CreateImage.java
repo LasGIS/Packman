@@ -13,7 +13,7 @@ import java.io.IOException;
 public class CreateImage {
     /**
      * Главный запуск программы.
-     * @param args аргументы командной строки
+     * @param args аргументы командной строкина
      */
     public static void main(final String[] args) {
 
