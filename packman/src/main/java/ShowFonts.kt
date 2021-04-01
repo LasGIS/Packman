@@ -6,9 +6,8 @@ import java.io.IOException
 
 /**
  * Главный запуск программы.
- * @param args аргументы командной строки
  */
-fun main(args: Array<String>) {
+fun main() {
     try {
         val ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
         // поиск доступных шрифтов

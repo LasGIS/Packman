@@ -46,9 +46,8 @@ class Lunch() {
 
 /**
  * Главный запуск программы.
- * @param args аргументы командной строки
  */
-fun main(args: Array<String>) {
+fun main() {
     try {
         JFrame.setDefaultLookAndFeelDecorated(true)
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())

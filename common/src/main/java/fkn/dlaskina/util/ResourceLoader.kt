@@ -18,8 +18,10 @@ import java.util.*
  */
 object ResourceLoader {
     private val LOG = LoggerFactory.getLogger(ResourceLoader::class.java)
+
     /** Уровень вложенности.  */
     private const val DEPTH = 4
+
     /** признак чтения системных свойств.  */
     const val EXTEND_SYS_PROPERTIES = true
     /**
@@ -27,7 +29,7 @@ object ResourceLoader {
      * @return глобальные свойства
      */
     /** Global Properties.  */
-    val properties = loadProperties()
+    private val properties = loadProperties()
 
     /**
      * Loads properties.
@@ -417,9 +419,9 @@ object ResourceLoader {
                 if (sizeLoaded != sizefile) {
                     throw IOException(
                         "Число прочитанных байт(" + sizeLoaded
-                            + ") не соответствует размеру файла \"" + name
-                            + "\"(" + sizeLoaded
-                            + ")!"
+                                + ") не соответствует размеру файла \"" + name
+                                + "\"(" + sizeLoaded
+                                + ")!"
                     )
                 }
                 imageData

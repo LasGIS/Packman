@@ -24,15 +24,15 @@ object LGFormatter {
     /**
      * Полное число с секундами.
      */
-    val DATE_FORMAT = SimpleDateFormat("DD HH:mm:ss")
+    private val DATE_FORMAT = SimpleDateFormat("DD HH:mm:ss")
     /**
      * Формат даты, используемый для логгирования.
      */
-    val LOG_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SS")
+    private val LOG_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SS")
     /**
      * Вывод десятичного числа.
      */
-    val DECIMAL_FORMAT: NumberFormat = DecimalFormat(
+    private val DECIMAL_FORMAT: NumberFormat = DecimalFormat(
         "###0.000", DecimalFormatSymbols(Locale.ENGLISH)
     )
 
